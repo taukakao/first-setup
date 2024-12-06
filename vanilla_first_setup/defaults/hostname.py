@@ -65,11 +65,19 @@ class VanillaDefaultHostname(Adw.Bin):
         self.__verify_continue()
 
     def __validate_hostname(self, hostname):
-        if len(hostname) > 50:
+        if len(hostname) > 64:
             return False
 
-        allowed = re.compile(r"(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
-        return all(allowed.match(x) for x in hostname.split("."))
+        lower_ascii = re.compile(r"[a-z]+$")
+
+        dot_parts = hostname.split(".")
+        for dot_part in dot_parts:
+            hyphen_parts = dot_part.split("-")
+            for hyphen_part in hyphen_parts:
+                if not lower_ascii.match(hyphen_part):
+                    return False
+
+        return True
 
     def __verify_continue(self):
         ready = self.hostname != ""

@@ -27,7 +27,7 @@
                         <style>
                           <class name="error"/>
                         </style>
-                        <property name="label" translatable="yes">Hostname cannot contain special characters. Please choose another hostname.</property>
+                        <property name="label" translatable="yes">Hostname can only contain up to 64 English lowercase letters with hyphens in-between.</property>
                         <property name="opacity">0</property>
                       </object>
                     </child>
