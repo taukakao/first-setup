@@ -36,6 +36,15 @@
                         <property name="input-purpose">name</property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkLabel" id="hostname_error">
+                        <style>
+                          <class name="error"/>
+                        </style>
+                        <property name="label" translatable="yes">Hostname cannot contain special characters. Please choose another hostname.</property>
+                        <property name="opacity">0</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>

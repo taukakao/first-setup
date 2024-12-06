@@ -15,11 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from gettext import gettext as _
-from gi.repository import Gtk, Adw, GLib
-
-import subprocess
-
-from vanilla_first_setup.utils.recipe import RecipeLoader
+from gi.repository import Gtk, Adw
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/done.ui")
@@ -49,14 +45,9 @@ class VanillaDone(Adw.Bin):
         self.__fail_description = fail_description
         self.__init_mode = init_mode
 
-        if not title and not description:
-            self.status_page.set_description(
-                _("You're ready to start experiencing {}.").format(
-                    self.__window.recipe["distro_name"]
-                )
-            )
-        else:
+        if title:
             self.status_page.set_title(title)
+        if description:
             self.status_page.set_description(description)
 
         self.btn_reboot.set_visible(False)
@@ -69,22 +60,6 @@ class VanillaDone(Adw.Bin):
         self.btn_close.connect("clicked", self.__on_close_clicked)
         self.btn_logs.connect("clicked", self.__on_logs_clicked)
         self.btn_reboot.connect("clicked", self.__on_reboot_clicked)
-
-    def set_reboot(self):
-        recipe = RecipeLoader()
-        if recipe.raw.get("reboot_condition"):
-            condition = subprocess.run(recipe.raw["reboot_condition"].split())
-            if condition.returncode == 0:
-                self.status_page.set_description(
-                    ("Restart your device to enjoy your {} experience.").format(
-                        self.__window.recipe["distro_name"]
-                    )
-                )
-                self.btn_reboot.set_visible(True)
-                self.btn_close.set_visible(False)
-            else:
-                self.btn_reboot.set_visible(False)
-                self.btn_close.set_visible(True)
 
     def set_result(self, result, terminal=None):
         out = terminal.get_text()[0] if terminal else ""
@@ -102,18 +77,12 @@ class VanillaDone(Adw.Bin):
             self.btn_close.set_visible(True)
 
     def __on_reboot_clicked(self, *args):
-        subprocess.run(self.__window.recipe["reboot_command"].split())
+        # TODO: Exit session
+        # Maybe with "loginctl terminate-user <username>"
+        return
 
     def __on_close_clicked(self, *args):
-        if self.__init_mode == 1:
-            recipe = RecipeLoader()
-            if recipe.raw.get("tour_app"):
-                GLib.spawn_async(
-                    [recipe.raw["tour_app"]],
-                    flags=GLib.SpawnFlags.SEARCH_PATH,
-                )
-        else:
-            subprocess.run(self.__window.recipe["close_command"].split())
+        # TODO: Launch tour
 
         self.__window.close()
 

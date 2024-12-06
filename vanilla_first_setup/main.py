@@ -26,10 +26,8 @@ from gi.repository import Gtk, Gdk, Gio, GLib, Adw
 import os
 import sys
 import logging
-import json
 from gettext import gettext as _
 from vanilla_first_setup.window import VanillaWindow
-from vanilla_first_setup.utils.recipe import recipe_path
 import subprocess
 
 logger = logging.getLogger("FirstSetup::Main")
@@ -38,16 +36,8 @@ class FirstSetupApplication(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        # here we create a temporary file to store the output of the commands
-        # the log path is defined in the recipe
-        with open(recipe_path, 'r') as file:
-            recipe = json.load(file)
 
-        if "log_file" not in recipe:
-            logger.critical("Missing 'log_file' in the recipe.")
-            sys.exit(1)
-
-        log_path = recipe["log_file"]
+        log_path = "/tmp/first-setup.log"
 
         if not os.path.exists(log_path):
             try:
@@ -66,15 +56,41 @@ class FirstSetupApplication(Adw.Application):
             application_id="org.vanillaos.FirstSetup",
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
         )
-        self.post_script = None
         self.user = os.environ.get("USER")
-        self.new_user = False
+        self.create_new_user = False
 
-        self.create_action("quit", self.close, ["<primary>q"])
         self.__register_arguments()
 
+    def __register_arguments(self):
+        """Register the command line arguments."""
+        self.add_main_option(
+            "create-new-user",
+            ord("n"),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _("Create a new user and log out"),
+            None,
+        )
+
+    def do_command_line(self, command_line):
+        """Handle command line arguments."""
+        options = command_line.get_options_dict()
+
+        if options.contains("create-new-user"):
+            logger.info("Creating a new user")
+            self.create_new_user = options.lookup_value("create-new-user")
+
+        self.activate()
+
+    def do_activate(self):
+        """
+        Called when the application is activated.
+        We raise the application's main window, creating it if
+        necessary.
+        """
         # disable the lock screen and password for the default user
-        if self.user == "vanilla":
+        if self.create_new_user:
+            logging.info("disabling screen saver and lock screen")
             subprocess.run(
                 [
                     "/usr/bin/gsettings",
@@ -94,51 +110,6 @@ class FirstSetupApplication(Adw.Application):
                 ]
             )
 
-    def __register_arguments(self):
-        """Register the command line arguments."""
-        self.add_main_option(
-            "run-post-script",
-            ord("p"),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.STRING,
-            _("Run a post script"),
-            None,
-        )
-        self.add_main_option(
-            "new-user",
-            ord("p"),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _("Run as a new user"),
-            None,
-        )
-
-    def do_command_line(self, command_line):
-        """Handle command line arguments."""
-        options = command_line.get_options_dict()
-
-        if options.contains("run-post-script"):
-            logger.info("Running post script")
-            self.post_script = options.lookup_value("run-post-script").get_string()
-
-        # FIXME: this is a workaround to avoid running as a new user when the user is not vanilla
-        # this should simply never happen. Anyway we are already working on a new backend for the
-        # first setup, so this is just a temporary fix
-        if self.user == "vanilla":
-            self.new_user = True
-            logger.warning("Detected user vanilla, creating new user")
-        else:
-            self.new_user = False
-            logger.info("Detected new user, not creating new one")
-
-        self.activate()
-
-    def do_activate(self):
-        """
-        Called when the application is activated.
-        We raise the application's main window, creating it if
-        necessary.
-        """
         provider = Gtk.CssProvider()
         provider.load_from_resource("/org/vanillaos/FirstSetup/style.css")
         Gtk.StyleContext.add_provider_for_display(
@@ -150,26 +121,10 @@ class FirstSetupApplication(Adw.Application):
         if not win:
             win = VanillaWindow(
                 application=self,
-                post_script=self.post_script,
                 user=self.user,
-                new_user=self.new_user,
+                create_new_user=self.create_new_user,
             )
         win.present()
-
-    def create_action(self, name, callback, shortcuts=None):
-        """Add an application action.
-
-        Args:
-            name: the name of the action
-            callback: the function to be called when the action is
-              activated
-            shortcuts: an optional list of accelerators
-        """
-        action = Gio.SimpleAction.new(name, None)
-        action.connect("activate", callback)
-        self.add_action(action)
-        if shortcuts:
-            self.set_accels_for_action(f"app.{name}", shortcuts)
 
     def close(self, *args):
         """Close the application."""
@@ -183,4 +138,5 @@ def main(version):
         sys.exit(0)
 
     app = FirstSetupApplication()
+
     return app.run(sys.argv)
