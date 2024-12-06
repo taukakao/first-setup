@@ -21,6 +21,7 @@ from gi.repository import Gtk, Adw, GLib
 
 from vanilla_first_setup.views.logout import VanillaLogout
 from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
+from vanilla_first_setup.defaults.user import VanillaDefaultUser
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
@@ -48,8 +49,6 @@ class VanillaWindow(Adw.ApplicationWindow):
 
         self.__build_ui()
         self.__connect_signals()
-
-        self.btn_back.set_visible(True)
 
     def set_ready(self, ready: bool = True):
         self.__loading_indicator(False)
@@ -89,9 +88,11 @@ class VanillaWindow(Adw.ApplicationWindow):
                 self.carousel.remove(page)
 
         self.__view_hostname = VanillaDefaultHostname(self)
+        self.__view_user = VanillaDefaultUser(self)
         self.__view_logout = VanillaLogout(self)
 
         self.carousel.append(self.__view_hostname)
+        self.carousel.append(self.__view_user)
         self.carousel.append(self.__view_logout)
 
         self.current_page = self.carousel.get_nth_page(0)
