@@ -45,6 +45,8 @@ class VanillaLogout(Adw.Bin):
     def __on_login_clicked(self, *args):
         # TODO: Exit session in backend
         # Maybe with "loginctl terminate-user <username>"
+        import sys
+        sys.exit(0)
         return
 
     def __on_logs_clicked(self, *args):
