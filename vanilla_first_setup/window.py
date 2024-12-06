@@ -17,17 +17,9 @@
 import threading
 
 from gettext import gettext as _
-from gi.repository import Gtk, GObject, Adw, GLib
+from gi.repository import Gtk, Adw, GLib
 
-import contextlib
-import getpass
-
-# from vanilla_first_setup.utils.parser import Parser
-# from vanilla_first_setup.utils.processor import Processor
-
-# from vanilla_first_setup.views.progress import VanillaProgress
 from vanilla_first_setup.views.logout import VanillaLogout
-# from vanilla_first_setup.views.post_script import VanillaPostScript
 from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
 
 
