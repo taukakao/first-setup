@@ -39,6 +39,7 @@ class VanillaDefaultHostname(Adw.Bin):
         self.reactivate()
 
     def reactivate(self):
+        self.hostname_entry.grab_focus()
         self.__verify_continue()
 
     def finish(self):

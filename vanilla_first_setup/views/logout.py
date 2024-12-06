@@ -40,7 +40,7 @@ class VanillaLogout(Adw.Bin):
         self.btn_login.connect("clicked", self.__on_login_clicked)
 
     def reactivate(self):
-        return
+        self.btn_login.grab_focus()
 
     def __on_login_clicked(self, *args):
         # TODO: Exit session in backend
