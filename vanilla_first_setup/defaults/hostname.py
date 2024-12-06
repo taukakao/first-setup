@@ -28,6 +28,7 @@ class VanillaDefaultHostname(Adw.Bin):
     hostname_error = Gtk.Template.Child()
 
     hostname = ""
+    __can_continue = False
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -37,6 +38,11 @@ class VanillaDefaultHostname(Adw.Bin):
         # signals
         self.btn_next.connect("clicked", self.__on_btn_next_clicked)
         self.hostname_entry.connect("changed", self.__on_hostname_entry_changed)
+        self.hostname_entry.connect("entry-activated", self.__on_activate)
+
+    def __on_activate(self, widget):
+        if self.__can_continue:
+            self.__window.next()
 
     def __on_btn_next_clicked(self, widget):
         # TODO: call backend with hostname
@@ -65,4 +71,5 @@ class VanillaDefaultHostname(Adw.Bin):
         return all(allowed.match(x) for x in hostname.split("."))
 
     def __verify_continue(self):
-        self.btn_next.set_sensitive(self.hostname != "")
+        self.__can_continue = self.hostname != ""
+        self.btn_next.set_sensitive(self.__can_continue)
