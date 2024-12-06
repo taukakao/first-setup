@@ -23,30 +23,31 @@ from gi.repository import Gtk, Adw
 class VanillaDefaultHostname(Adw.Bin):
     __gtype_name__ = "VanillaDefaultHostname"
 
-    btn_next = Gtk.Template.Child()
     hostname_entry = Gtk.Template.Child()
     hostname_error = Gtk.Template.Child()
 
     hostname = ""
-    __can_continue = False
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
-        self.__verify_continue()
 
         # signals
-        self.btn_next.connect("clicked", self.__on_btn_next_clicked)
         self.hostname_entry.connect("changed", self.__on_hostname_entry_changed)
         self.hostname_entry.connect("entry-activated", self.__on_activate)
 
-    def __on_activate(self, widget):
-        if self.__can_continue:
-            self.__window.next()
+        self.reactivate()
 
-    def __on_btn_next_clicked(self, widget):
+    def reactivate(self):
+        self.__verify_continue()
+
+    def finish(self):
         # TODO: call backend with hostname
-        self.__window.next()
+        import time
+        time.sleep(0.5)
+
+    def __on_activate(self, widget):
+        self.__window.finish_step()
 
     def __on_hostname_entry_changed(self, *args):
         _hostname = self.hostname_entry.get_text()
@@ -71,5 +72,5 @@ class VanillaDefaultHostname(Adw.Bin):
         return all(allowed.match(x) for x in hostname.split("."))
 
     def __verify_continue(self):
-        self.__can_continue = self.hostname != ""
-        self.btn_next.set_sensitive(self.__can_continue)
+        ready = self.hostname != ""
+        self.__window.set_ready(ready)

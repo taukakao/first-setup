@@ -39,6 +39,46 @@
                     </style>
                   </object>
                 </child>
+                <child type="overlay">
+                  <object class="GtkButton" id="btn_next">
+                    <property name="visible">true</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="icon-name">go-next-symbolic</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="tooltip-text" translatable="yes">Next</property>
+                    <property name="sensitive">False</property>
+                    <style>
+                      <class name="circular"/>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
+                <child type="overlay">
+                  <object class="GtkButton" id="btn_next_spinner">
+                    <property name="visible">false</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="icon-name">go-next-symbolic</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="tooltip-text" translatable="yes">Next</property>
+                    <property name="sensitive">True</property>
+                    <style>
+                      <class name="circular"/>
+                      <class name="suggested-action"/>
+                    </style>
+                    <child>
+                      <object class="GtkSpinner">
+                        <property name="spinning">true</property>
+                        <property name="margin-start">8</property>
+                        <property name="margin-end">8</property>
+                        <property name="visible">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkBox">
                     <property name="orientation">horizontal</property>

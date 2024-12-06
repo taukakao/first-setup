@@ -39,6 +39,9 @@ class VanillaLogout(Adw.Bin):
         self.btn_logs.connect("clicked", self.__on_logs_clicked)
         self.btn_login.connect("clicked", self.__on_login_clicked)
 
+    def reactivate(self):
+        return
+
     def __on_login_clicked(self, *args):
         # TODO: Exit session in backend
         # Maybe with "loginctl terminate-user <username>"
