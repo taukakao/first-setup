@@ -21,6 +21,9 @@ import sys
 import signal
 import locale
 import gettext
+import subprocess
+
+from gi.repository import Gio
 
 VERSION = 'testing'
 
@@ -35,8 +38,13 @@ locale.textdomain('vanilla_first_setup')
 gettext.install('vanilla_first_setup', localedir)
 
 if __name__ == '__main__':
-    from gi.repository import Gio
-    resource = Gio.Resource.load(os.path.join(pkgdatadir, 'vanilla-first-setup.gresource'))
+    resource_file = os.path.join(path_of_this_file, "localbuild/vanilla-first-setup.gresource")
+    if not os.path.exists(os.path.dirname(resource_file)):
+        os.makedirs(os.path.dirname(resource_file))
+    command = ["glib-compile-resources", f"--sourcedir={pkgdatadir}", f"--target={resource_file}", f"{pkgdatadir}/vanilla-first-setup.gresource.xml"]
+    subprocess.run(command, check=True)
+
+    resource = Gio.Resource.load(resource_file)
     resource._register()
 
     from vanilla_first_setup import main
