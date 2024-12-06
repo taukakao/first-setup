@@ -20,6 +20,7 @@
                       <object class="AdwEntryRow" id="hostname_entry">
                         <property name="title" translatable="yes">Device Name</property>
                         <property name="input-purpose">name</property>
+                        <property name="max-length">64</property>
                       </object>
                     </child>
                     <child>
