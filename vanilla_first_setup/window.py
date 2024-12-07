@@ -96,11 +96,12 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.carousel.append(self.__view_logout)
 
         self.current_page = self.carousel.get_nth_page(0)
+        self.__on_page_changed()
 
     def __on_page_changed(self, *args):
         current_index = self.carousel.get_position()
         self.current_page = self.carousel.get_nth_page(current_index)
-        self.current_page.reactivate()
+        self.current_page.set_page_active()
     
     def __on_btn_next_clicked(self, widget):
         self.finish_step()
@@ -117,8 +118,10 @@ class VanillaWindow(Adw.ApplicationWindow):
         GLib.idle_add(self.__next_page)
 
     def __next_page(self):
+        old_current_page = self.current_page
         target_index = self.carousel.get_position() + 1
         self.__scroll_page(target_index)
+        old_current_page.set_page_inactive()
 
     def __last_page(self):
         target_index = self.carousel.get_position() - 1
@@ -127,9 +130,13 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __scroll_page(self, target_index: int):
         self.set_ready(False)
 
+        old_current_page = self.current_page
+
         max_page_index = self.carousel.get_n_pages()-1
         self.btn_back.set_visible(target_index != 0)
         self.btn_next.set_visible(target_index != max_page_index)
 
         page = self.carousel.get_nth_page(target_index)
         self.carousel.scroll_to(page, True)
+
+        old_current_page.set_page_inactive()

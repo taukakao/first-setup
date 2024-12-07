@@ -36,11 +36,12 @@ class VanillaDefaultHostname(Adw.Bin):
         self.hostname_entry.connect("changed", self.__on_hostname_entry_changed)
         self.hostname_entry.connect("entry-activated", self.__on_activate)
 
-        self.reactivate()
-
-    def reactivate(self):
+    def set_page_active(self):
         self.hostname_entry.grab_focus()
         self.__verify_continue()
+
+    def set_page_inactive(self):
+        return
 
     def finish(self):
         # TODO: call backend with hostname

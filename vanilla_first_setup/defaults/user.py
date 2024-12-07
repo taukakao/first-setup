@@ -48,12 +48,13 @@ class VanillaDefaultUser(Adw.Bin):
 
         self.existing_users = subprocess.Popen("getent passwd | cut -d: -f1", shell=True,
                                           stdout=subprocess.PIPE).stdout.read().decode().splitlines()
-        
-        self.reactivate()
 
-    def reactivate(self):
+    def set_page_active(self):
         self.fullname_entry.grab_focus()
         self.__verify_continue()
+
+    def set_page_inactive(self):
+        return
 
     def finish(self):
         # TODO: call backend with user
