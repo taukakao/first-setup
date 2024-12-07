@@ -27,6 +27,7 @@ class VanillaDefaultConnCheck(Adw.Bin):
     __gtype_name__ = "VanillaDefaultConnCheck"
 
     status_page = Gtk.Template.Child()
+    btn_settings = Gtk.Template.Child()
 
     __network_monitor = None
     __active = False
@@ -39,6 +40,7 @@ class VanillaDefaultConnCheck(Adw.Bin):
         self.__network_monitor = Gio.NetworkMonitor.get_default()
 
         self.__network_monitor.connect("network-changed", self.__check_network_status)
+        self.btn_settings.connect("clicked", self.__on_btn_settings_clicked)
 
     def set_page_active(self):
         self.__active = True
@@ -66,12 +68,18 @@ class VanillaDefaultConnCheck(Adw.Bin):
         self.status_page.set_icon_name("network-wired-disconnected-symbolic")
         self.status_page.set_title(_("No Internet Connection!"))
         self.status_page.set_description(_("First Setup requires an active internet connection"))
+        self.btn_settings.set_visible(True)
 
     def __set_network_connected(self):
         logger.info("Internet connection not avaiable.")
         self.status_page.set_icon_name("emblem-default-symbolic")
         self.status_page.set_title(_("Connection available"))
         self.status_page.set_description(_("You have a working internet connection"))
+        self.btn_settings.set_visible(False)
         if not self.__already_skipped:
             self.__already_skipped = True
             GLib.idle_add(self.__window.finish_step)
+
+    def __on_btn_settings_clicked(self, widget):
+        # TODO: Open settings with backend
+        return
