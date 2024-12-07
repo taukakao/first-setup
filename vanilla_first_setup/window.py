@@ -22,6 +22,7 @@ from gi.repository import Gtk, Adw, GLib
 from vanilla_first_setup.views.logout import VanillaLogout
 from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
 from vanilla_first_setup.defaults.user import VanillaDefaultUser
+from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
@@ -87,10 +88,12 @@ class VanillaWindow(Adw.ApplicationWindow):
                 page = self.carousel.get_nth_page(page_index)
                 self.carousel.remove(page)
 
+        self.__view_welcome = VanillaDefaultWelcome(self)
         self.__view_hostname = VanillaDefaultHostname(self)
         self.__view_user = VanillaDefaultUser(self)
         self.__view_logout = VanillaLogout(self)
 
+        self.carousel.append(self.__view_welcome)
         self.carousel.append(self.__view_hostname)
         self.carousel.append(self.__view_user)
         self.carousel.append(self.__view_logout)
@@ -110,6 +113,11 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__last_page()
 
     def __loading_indicator(self, waiting: bool = True):
+        if self.carousel.get_position() == 0:
+            self.btn_next.set_visible(False)
+            self.btn_next_spinner.set_visible(False)
+            return
+
         self.btn_next.set_visible(not waiting)
         self.btn_next_spinner.set_visible(waiting)
 
@@ -131,12 +139,12 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.set_ready(False)
 
         old_current_page = self.current_page
+        target_page = self.carousel.get_nth_page(target_index)
 
         max_page_index = self.carousel.get_n_pages()-1
         self.btn_back.set_visible(target_index != 0)
-        self.btn_next.set_visible(target_index != max_page_index)
+        self.btn_next.set_visible(target_index != max_page_index and target_index != 0)
 
-        page = self.carousel.get_nth_page(target_index)
-        self.carousel.scroll_to(page, True)
+        self.carousel.scroll_to(target_page, True)
 
         old_current_page.set_page_inactive()
