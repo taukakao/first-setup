@@ -44,6 +44,8 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     current_page = None
 
+    __currently_scrolling = False
+
     def __init__(self, user: str, create_new_user: bool = False, **kwargs):
         super().__init__(**kwargs)
 
@@ -108,14 +110,20 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__on_page_changed()
 
     def __on_page_changed(self, *args):
+        self.__currently_scrolling = False
+
         current_index = self.carousel.get_position()
         self.current_page = self.carousel.get_nth_page(current_index)
         self.current_page.set_page_active()
     
     def __on_btn_next_clicked(self, widget):
+        if self.__currently_scrolling:
+            return
         self.finish_step()
 
     def __on_btn_back_clicked(self, widget):
+        if self.__currently_scrolling:
+            return
         self.__last_page()
 
     def __loading_indicator(self, waiting: bool = True):
@@ -140,6 +148,7 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__scroll_page(target_index)
 
     def __scroll_page(self, target_index: int):
+        self.__currently_scrolling = True
         self.set_ready(False)
 
         old_current_page = self.current_page
