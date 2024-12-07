@@ -83,6 +83,7 @@ class VanillaApplicationsDialog(Adw.Window):
             if "active" in app:
                 app_switch.set_active(app["active"])
             app_switch.set_valign(Gtk.Align.CENTER)
+            app_switch.set_focusable(False)
             app_switch.connect("state-set", self.__on_switch_state_change, app["id"])
 
             apps_action_row.add_suffix(app_switch)
