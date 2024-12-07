@@ -38,6 +38,7 @@
   <gresource prefix="/org/vanillaos/FirstSetup">
     <file>assets/theme-default.svg</file>
     <file>assets/theme-dark.svg</file>
+    <file>assets/background_replacement.png</file>
 
     <file>assets/bundle-app-icons/com.github.flxzt.rnote.png</file>
     <file>assets/bundle-app-icons/com.github.tchx84.Flatseal.png</file>

@@ -8,20 +8,6 @@
     <child>
       <object class="GtkOverlay">
         <property name="valign">center</property>
-        <child type="overlay">
-          <object class="GtkButton" id="btn_next">
-            <property name="margin-end">12</property>
-            <property name="margin-start">12</property>
-            <property name="icon-name">go-next-symbolic</property>
-            <property name="halign">end</property>
-            <property name="valign">center</property>
-            <property name="tooltip-text" translatable="yes">Next</property>
-            <style>
-              <class name="circular" />
-              <class name="suggested-action" />
-            </style>
-          </object>
-        </child>
         <child>
           <object class="AdwStatusPage">
             <property name="title" translatable="yes">Color Scheme</property>
@@ -89,7 +75,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="default_label">
-                                    <property name="label" translatable="yes">Default</property>
+                                    <property name="label" translatable="yes">Light</property>
                                     <layout>
                                       <property name="column">0</property>
                                       <property name="row">1</property>

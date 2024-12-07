@@ -23,6 +23,7 @@ from vanilla_first_setup.views.logout import VanillaLogout
 from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
 from vanilla_first_setup.defaults.user import VanillaDefaultUser
 from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
+from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
@@ -92,8 +93,10 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_hostname = VanillaDefaultHostname(self)
         self.__view_user = VanillaDefaultUser(self)
         self.__view_logout = VanillaLogout(self)
+        self.__view_theme = VanillaDefaultTheme(self)
 
         self.carousel.append(self.__view_welcome)
+        self.carousel.append(self.__view_theme)
         self.carousel.append(self.__view_hostname)
         self.carousel.append(self.__view_user)
         self.carousel.append(self.__view_logout)
