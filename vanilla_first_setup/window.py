@@ -129,10 +129,8 @@ class VanillaWindow(Adw.ApplicationWindow):
         GLib.idle_add(self.__next_page)
 
     def __next_page(self):
-        old_current_page = self.current_page
         target_index = self.carousel.get_position() + 1
         self.__scroll_page(target_index)
-        old_current_page.set_page_inactive()
 
     def __last_page(self):
         target_index = self.carousel.get_position() - 1
