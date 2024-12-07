@@ -108,13 +108,8 @@ class VanillaLayoutApplications(Adw.Bin):
         apply_button.set_label(_("Apply"))
         apply_button.add_css_class("suggested-action")
 
-        cancel_button = Gtk.Button()
-        cancel_button.set_label(_("Cancel"))
-
         apply_button.connect("clicked", hide)
-        cancel_button.connect("clicked", hide)
 
-        header_bar.pack_start(cancel_button)
         header_bar.pack_end(apply_button)
 
         box.append(header_bar)
@@ -153,6 +148,7 @@ class VanillaLayoutApplications(Adw.Bin):
             app_switch.set_valign(Gtk.Align.CENTER)
 
             apps_action_row.add_suffix(app_switch)
+            apps_action_row.set_activatable_widget(app_switch)
 
             apps_list.add(apps_action_row)
 
