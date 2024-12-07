@@ -15,202 +15,145 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk, Adw
+from gettext import gettext as _
 
-from vanilla_first_setup.dialog import VanillaDialog
-
+# TODO: get this from file
+apps = {'core': [{'name': 'Calculator', 'id': 'org.gnome.Calculator'}, {'name': 'Calendar', 'id': 'org.gnome.Calendar'}, {'name': 'Characters', 'id': 'org.gnome.Characters'}, {'name': 'Clocks', 'id': 'org.gnome.clocks'}, {'name': 'Connections', 'id': 'org.gnome.Connections'}, {'name': 'Contacts', 'id': 'org.gnome.Contacts'}, {'name': 'Disk Usage Analyzer', 'id': 'org.gnome.baobab'}, {'name': 'Document Scanner', 'id': 'org.gnome.SimpleScan'}, {'name': 'Document Viewer', 'id': 'org.gnome.Evince'}, {'name': 'File Roller', 'id': 'org.gnome.FileRoller'}, {'name': 'Fonts', 'id': 'org.gnome.font-viewer'}, {'name': 'Image Viewer', 'id': 'org.gnome.Loupe'}, {'name': 'Logs', 'id': 'org.gnome.Logs'}, {'name': 'Maps', 'id': 'org.gnome.Maps'}, {'name': 'Music', 'id': 'org.gnome.Music'}, {'name': 'Photos', 'id': 'org.gnome.Photos'}, {'name': 'Snapshot', 'id': 'org.gnome.Snapshot'}, {'name': 'Text Editor', 'id': 'org.gnome.TextEditor'}, {'name': 'Videos', 'id': 'org.gnome.Totem'}, {'name': 'Weather', 'id': 'org.gnome.Weather'}], 'office': [{'name': 'LibreOffice', 'id': 'org.libreoffice.LibreOffice'}], 'utilities': [{'name': 'Bottles', 'id': 'com.usebottles.bottles'}, {'name': 'Extension Manager', 'id': 'com.mattjakeman.ExtensionManager'}, {'name': 'Heroic Games Launcher', 'id': 'com.heroicgameslauncher.hgl'}, {'name': 'Lutris', 'id': 'net.lutris.Lutris'}, {'name': 'Boxes', 'id': 'org.gnome.Boxes'}, {'name': 'Déjà Dup Backups', 'id': 'org.gnome.DejaDup'}, {'name': 'Flatseal', 'id': 'com.github.tchx84.Flatseal'}, {'name': 'Metadata Cleaner', 'id': 'fr.romainvigier.MetadataCleaner'}, {'name': 'Rnote', 'id': 'com.github.flxzt.rnote'}, {'name': 'Shortwave', 'id': 'de.haeckerfelix.Shortwave'}, {'name': 'Sound Recorder', 'id': 'org.gnome.SoundRecorder'}, {'name': 'Warehouse', 'id': 'io.github.flattool.Warehouse'}], 'browsers': [{'name': 'Firefox', 'id': 'org.mozilla.firefox'}, {'name': 'Google Chrome', 'id': 'com.google.Chrome', 'active': False}, {'name': 'Chromium', 'id': 'org.chromium.Chromium', 'active': False}, {'name': 'Brave Browser', 'id': 'com.brave.Browser', 'active': False}, {'name': 'Microsoft Edge', 'id': 'com.microsoft.Edge', 'active': False}, {'name': 'Vivaldi', 'id': 'com.vivaldi.Vivaldi', 'active': False}, {'name': 'GNOME Web', 'id': 'org.gnome.Epiphany', 'active': False}]}
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/layout-applications.ui")
 class VanillaLayoutApplications(Adw.Bin):
     __gtype_name__ = "VanillaLayoutApplications"
 
-    status_page = Gtk.Template.Child()
     bundles_list = Gtk.Template.Child()
-    btn_next = Gtk.Template.Child()
+    core_switch = Gtk.Template.Child()
+    core_button = Gtk.Template.Child()
+    browsers_switch = Gtk.Template.Child()
+    browsers_button = Gtk.Template.Child()
+    utilities_switch = Gtk.Template.Child()
+    utilities_button = Gtk.Template.Child()
+    office_switch = Gtk.Template.Child()
+    office_button = Gtk.Template.Child()
 
-    def __init__(self, window, distro_info, key, step, **kwargs):
+    dialogs = {}
+
+    def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
-        self.__distro_info = distro_info
-        self.__key = key
-        self.__step = step
-        self.__register_widgets = []
-        self.__build_ui()
 
-        # signals
-        self.btn_next.connect("clicked", self.__next_step)
-        self.__window.connect("page-changed", self.__on_page_changed)
+        self.core_switch.connect("state-set", self.__on_core_switch_state_change)
+        self.browsers_switch.connect("state-set", self.__on_browsers_switch_state_change)
+        self.utilities_switch.connect("state-set", self.__on_utilities_switch_state_change)
+        self.office_switch.connect("state-set", self.__on_office_switch_state_change)
 
-    @property
-    def step_id(self):
-        return self.__key
+        self.core_button.connect("clicked", self.__on_customize_button_clicked, "core")
+        self.browsers_button.connect("clicked", self.__on_customize_button_clicked, "browsers")
+        self.utilities_button.connect("clicked", self.__on_customize_button_clicked, "utilities")
+        self.office_button.connect("clicked", self.__on_customize_button_clicked, "office")
 
-    def __build_ui(self):
-        self.status_page.set_icon_name(self.__step["icon"])
-        self.status_page.set_title(self.__step["title"])
-        self.status_page.set_description(self.__step["description"])
-        selection_dialogs = []
-        _index = 0
+    def set_page_active(self):
+        return
 
-        def present_customize(_, dialog, apps_list, item):
-            for app in item["applications"]:
-                # use flatpak as default if no package manager is selected
-                package_manager = "flatpak"
+    def set_page_inactive(self):
+        return
 
-                if app.get("apps_action_row", None) is not None:
-                    apps_list.remove(app["apps_action_row"])
-                else:
-                    try:
-                        if self.__window.builder.get_temp_finals("packages")["vars"][
-                            "flatpak"
-                        ]:
-                            package_manager = "flatpak"
-                        elif self.__window.builder.get_temp_finals("packages")["vars"][
-                            "snap"
-                        ]:
-                            package_manager = "snap"
-                        else:
-                            continue
-                    except TypeError:
-                        pass
+    def finish(self):
+        # TODO: hand apps over to the backend
+        return
+    
+    def __on_core_switch_state_change(self, widget, state):
+        self.core_button.set_sensitive(state)
 
-                try:
-                    if app[package_manager]:
-                        _apps_action_row = Adw.ActionRow(
-                            title=app["name"],
-                        )
-                        _app_icon = Gtk.Image.new_from_resource(
-                            "/org/vanillaos/FirstSetup/assets/bundle-app-icons/"
-                            + app["icon"]
-                            + ".png"
-                        )
-                        _app_icon.set_icon_size(Gtk.IconSize.LARGE)
-                        _app_icon.add_css_class("lowres-icon")
-                        _apps_action_row.add_prefix(_app_icon)
-                        _app_switcher = Gtk.Switch()
-                        _app_switcher.set_active(True)
-                        _app_switcher.set_valign(Gtk.Align.CENTER)
-                        _apps_action_row.add_suffix(_app_switcher)
-                        apps_list.add(_apps_action_row)
-                        app["apps_action_row"] = _apps_action_row
-                        app["switch"] = _app_switcher
-                        try:
-                            app["switch"].set_active(app["active"])
-                        except KeyError:
-                            pass
-                except KeyError:
-                    continue
-            dialog.show()
+    def __on_browsers_switch_state_change(self, widget, state):
+        self.browsers_button.set_sensitive(state)
 
-        def close_customize(widget, dialog):
-            dialog.hide()
+    def __on_utilities_switch_state_change(self, widget, state):
+        self.utilities_button.set_sensitive(state)
 
-        def apply_preferences(widget, dialog, apps_list, item):
-            for app in item["applications"]:
-                app["active"] = app["switch"].get_active()
-            dialog.hide()
+    def __on_office_switch_state_change(self, widget, state):
+        self.office_button.set_sensitive(state)
 
-        for item in self.__step["bundles"]:
-            _selection_dialog = VanillaDialog(
-                self.__window,
-                "Select Applications",
-                "Description",
+    def __on_customize_button_clicked(self, widget, app_type: str):
+        if not app_type in self.dialogs:
+            self.dialogs[app_type] = self.__create_dialog(app_type)
+            self.dialogs[app_type].show()
+            return
+
+        self.dialogs[app_type].set_visible(True)
+
+    def __create_dialog(self, app_type: str) -> Adw.Window:
+        selection_dialog = Adw.Window()
+        selection_dialog.set_transient_for(self.__window)
+        selection_dialog.set_title(_("Select Applications"))
+
+        def hide(action, callback=None):
+            # TODO: save applications somewhere
+            selection_dialog.set_visible(False)
+
+        shortcut_controller = Gtk.ShortcutController.new()
+        shortcut_controller.add_shortcut(
+            Gtk.Shortcut.new(
+                Gtk.ShortcutTrigger.parse_string("Escape"), Gtk.CallbackAction.new(hide)
             )
+        )
 
-            _cancel_button = Gtk.Button()
-            _apply_button = Gtk.Button()
-            _cancel_button.set_label("Cancel")
-            _apply_button.set_label("Apply")
-            _apply_button.add_css_class("suggested-action")
+        selection_dialog.add_controller(shortcut_controller)
 
-            _header_bar = Adw.HeaderBar()
-            _header_bar.pack_start(_cancel_button)
-            _header_bar.pack_end(_apply_button)
-            _header_bar.set_show_end_title_buttons(False)
-            _header_bar.set_show_start_title_buttons(False)
+        box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
-            _apps_list = Adw.PreferencesGroup()
-            _apps_list.set_description(
-                "The following list includes only applications available in your preferred package manager."
+        header_bar = Adw.HeaderBar()
+        header_bar.set_show_end_title_buttons(False)
+        header_bar.set_show_start_title_buttons(False)
+
+        apply_button = Gtk.Button()
+        apply_button.set_label(_("Apply"))
+        apply_button.add_css_class("suggested-action")
+
+        cancel_button = Gtk.Button()
+        cancel_button.set_label(_("Cancel"))
+
+        apply_button.connect("clicked", hide)
+        cancel_button.connect("clicked", hide)
+
+        header_bar.pack_start(cancel_button)
+        header_bar.pack_end(apply_button)
+
+        box.append(header_bar)
+
+        apps_list = Adw.PreferencesGroup()
+        apps_list.set_description(
+            _("Select the applications you want to install")
+        )
+
+        apps_page = Adw.PreferencesPage()
+        apps_page.add(apps_list)
+
+        box.append(apps_page)
+        
+        selection_dialog.set_default_size(500, 600)
+        selection_dialog.set_content(box)
+
+        for app in apps[app_type]:
+            apps_action_row = Adw.ActionRow(
+                title=app["name"],
             )
-            _apps_page = Adw.PreferencesPage()
-            _apps_page.add(_apps_list)
-
-            _box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-            _box.append(_header_bar)
-            _box.append(_apps_page)
-
-            _selection_dialog.set_content(_box)
-            _selection_dialog.set_default_size(500, 600)
-            selection_dialogs.append(_selection_dialog)
-
-            _action_row = Adw.ActionRow(
-                title=item["title"], subtitle=item.get("subtitle", "")
+            app_icon = Gtk.Image.new_from_resource(
+                "/org/vanillaos/FirstSetup/assets/bundle-app-icons/"
+                + app["id"]
+                + ".png"
             )
-            _switcher = Gtk.Switch()
-            _switcher.set_active(item.get("default", False))
-            _switcher.set_valign(Gtk.Align.CENTER)
-            _action_row.add_suffix(_switcher)
+            app_icon.set_icon_size(Gtk.IconSize.LARGE)
+            app_icon.add_css_class("lowres-icon")
+            
+            apps_action_row.add_prefix(app_icon)
 
-            _customize = Gtk.Button()
-            _customize.set_icon_name("go-next-symbolic")
-            _customize.set_valign(Gtk.Align.CENTER)
-            _customize.add_css_class("flat")
-            _action_row.add_suffix(_customize)
+            app_switch = Gtk.Switch()
+            app_switch.set_active(True)
+            if "active" in app:
+                app_switch.set_active(app["active"])
+            app_switch.set_valign(Gtk.Align.CENTER)
 
-            _customize.connect(
-                "clicked", present_customize, selection_dialogs[-1], _apps_list, item
-            )
-            _cancel_button.connect("clicked", close_customize, selection_dialogs[-1])
-            _apply_button.connect(
-                "clicked", apply_preferences, selection_dialogs[-1], _apps_list, item
-            )
+            apps_action_row.add_suffix(app_switch)
 
-            self.bundles_list.add(_action_row)
+            apps_list.add(apps_action_row)
 
-            self.__register_widgets.append((item["id"], _switcher, _index))
-            _index += 1
-
-    def __on_page_changed(self, widget, page):
-        if page == self.__key:
-            tmp_finals = self.__window.builder.get_temp_finals("packages")
-
-            # if no package manager is selected, use Flatpak as default
-            if tmp_finals is None:
-                self.bundles_list.set_sensitive(True)
-                return
-
-            packages_vars = tmp_finals["vars"]
-            has_flatpak = packages_vars.get("flatpak", False)
-            has_snap = packages_vars.get("snap", False)
-            self.bundles_list.set_sensitive(has_flatpak or has_snap)
-
-    def __next_step(self, *args):
-        self.__window.next()
-
-    def get_finals(self):
-        finals = {"vars": {}, "funcs": [x for x in self.__step["final"]]}
-
-        try:
-            if self.__window.builder.get_temp_finals("packages")["vars"]["flatpak"]:
-                package_manager = "flatpak"
-            elif self.__window.builder.get_temp_finals("packages")["vars"]["snap"]:
-                package_manager = "snap"
-            else:
-                package_manager = None
-        except TypeError:
-            # use flatpak as default
-            package_manager = "flatpak"
-
-        for _, switcher, index in self.__register_widgets:
-            if switcher.get_active():
-                for app in self.__step["bundles"][index]["applications"]:
-                    if package_manager not in app.keys():
-                        app["active"] = False
-                    if "active" not in app.keys():
-                        app["active"] = True
-                    finals["vars"][app["name"]] = app["active"]
-            else:
-                for app in self.__step["bundles"][index]["applications"]:
-                    finals["vars"][app["name"]] = False
-
-        return finals
+        return selection_dialog
