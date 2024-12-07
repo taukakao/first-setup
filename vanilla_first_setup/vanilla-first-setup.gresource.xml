@@ -27,6 +27,7 @@
     <file>gtk/layout-preferences.ui</file>
     <file>gtk/layout-yes-no.ui</file>
     <file>gtk/layout-applications.ui</file>
+    <file>gtk/applications-dialog.ui</file>
   </gresource>
   <gresource prefix="/org/vanillaos/FirstSetup/icons/scalable/actions">
     <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/background-app-ghost-symbolic.svg</file>
