@@ -42,6 +42,7 @@ class VanillaWindow(Adw.ApplicationWindow):
     can_continue = False
 
     pages = []
+    __current_page_index = 0
 
     def __init__(self, user: str, create_new_user: bool = False, **kwargs):
         super().__init__(**kwargs)
@@ -97,10 +98,10 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.pages.append(self.__view_user)
         self.pages.append(self.__view_logout)
 
-        for index, page in enumerate(self.pages):
-            self.stack.add_named(page, str(index))
+        for page in self.pages:
+            self.stack.add_child(page)
 
-        self.stack.set_visible_child_name("0")
+        self.stack.set_visible_child(self.__view_welcome)
 
         self.__on_page_changed()
 
@@ -115,7 +116,7 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__last_page()
 
     def __loading_indicator(self, waiting: bool = True):
-        if self.__get_current_index_child_index() == 0:
+        if self.__current_page_index == 0:
             self.btn_next.set_visible(False)
             self.btn_next_spinner.set_visible(False)
             return
@@ -128,27 +129,25 @@ class VanillaWindow(Adw.ApplicationWindow):
         GLib.idle_add(self.__next_page)
 
     def __next_page(self):
-        target_index = self.__get_current_index_child_index() + 1
+        target_index = self.__current_page_index + 1
         self.__scroll_page(target_index)
 
     def __last_page(self):
-        target_index = self.__get_current_index_child_index() - 1
+        target_index = self.__current_page_index - 1
         self.__scroll_page(target_index)
 
     def __scroll_page(self, target_index: int):
         self.set_ready(False)
 
         old_current_page = self.stack.get_visible_child()
-        target_page = self.stack.get_child_by_name(str(target_index))
+        target_page = self.pages[target_index]
 
         max_page_index = len(self.pages)-1
         self.btn_back.set_visible(target_index != 0)
         self.btn_next.set_visible(target_index != max_page_index and target_index != 0)
 
         self.stack.set_visible_child(target_page)
+        self.__current_page_index = target_index
 
         old_current_page.set_page_inactive()
         self.__on_page_changed()
-
-    def __get_current_index_child_index(self):
-        return int(self.stack.get_visible_child_name())
