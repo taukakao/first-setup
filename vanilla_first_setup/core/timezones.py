@@ -19,10 +19,12 @@ all_country_codes: list[str] = []
 all_country_codes_by_region: dict[str, list[str]] = {}
 all_timezones_by_country_code: dict[str, list[str]] = {}
 all_country_names_by_code: dict[str, str] = {}
-user_location = None
-user_country = None
-user_city = None
-user_timezone = None
+user_location: GWeather.Location|None = None
+user_country: str|None = None
+user_country_code: str|None = None
+user_city: str|None = None
+user_timezone: str|None = None
+user_region: str|None = None
 
 def register_location_callback(callback):
     if user_location:
@@ -58,12 +60,17 @@ __location_callbacks = []
 def __update_user_location(location):
     global user_location
     global user_country
+    global user_country_code
     global user_city
     global user_timezone
+    global user_region
     user_location = location
     user_country = location.get_country_name()
     user_city = location.get_city_name()
     user_timezone = location.get_timezone().get_identifier()
+    user_region = user_timezone.split("/")[0]
+    if location.get_country() in all_country_codes:
+        user_country_code = location.get_country()
 
     for callback in __location_callbacks:
         GLib.idle_add(callback, location)

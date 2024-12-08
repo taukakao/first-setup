@@ -21,6 +21,7 @@
     <file>gtk/default-timezone.ui</file>
     <file>gtk/wireless-row.ui</file>
     <file>gtk/widget-language.ui</file>
+    <file>gtk/widget-timezone-list-page.ui</file>
     <file>gtk/widget-keyboard.ui</file>
 
     <file>gtk/layout-preferences.ui</file>

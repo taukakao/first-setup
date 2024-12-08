@@ -19,6 +19,7 @@ import re
 import threading
 import unicodedata
 from gettext import gettext as _
+import copy
 
 from gi.repository import Adw, GLib, Gtk
 
@@ -26,6 +27,58 @@ import vanilla_first_setup.core.timezones as tz
 
 logger = logging.getLogger("VanillaInstaller::Timezone")
 
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/widget-timezone-list-page.ui")
+class VanillaTimezoneListPage(Adw.Bin):
+    __gtype_name__ = "VanillaTimezoneListPage"
+
+    pref_group = Gtk.Template.Child()
+
+    def __init__(self, items: list[str], display_names: list[str], button_callback, active_item: str, **kwargs):
+        super().__init__(**kwargs)
+
+        self.__items = items
+        self.__button_callback = button_callback
+        self.__display_names = display_names
+        self.__active_item = active_item
+
+        self.__build_ui()
+
+    def __build_ui(self):
+        first_button = None
+
+        for index, item in enumerate(self.__items):
+            region_row = Adw.ActionRow()
+            region_row.set_use_markup(False)
+            region_row.set_title(self.__display_names[index])
+
+            button = Gtk.CheckButton()
+            button.set_valign(Gtk.Align.CENTER)
+            button.connect("activate", self.__on_button_activated, item)
+            button.set_focusable(False)
+            if item == self.__active_item:
+                button.set_active(True)
+
+            button_active = item == self.__active_item
+            button = create_check_button(self.__on_button_activated, item, button_active)
+
+            if first_button:
+                button.set_group(first_button)
+            else:
+                first_button = button
+
+            region_row.add_prefix(button)
+            region_row.set_activatable_widget(button)
+
+            self.pref_group.add(region_row)
+
+    def __on_button_activated(self, widget, item):
+        if len(self.__items) == 1:
+            widget.set_active(True)
+        self.__button_callback(widget, item)
+
+    # def update_time_preview(self, *args):
+    #     tz_time, tz_date = get_timezone_preview(self.tz_name)
+    #     self.set_subtitle(f"{tz_time} • {tz_date}")
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-timezone.ui")
 class VanillaDefaultTimezone(Adw.Bin):
@@ -36,7 +89,12 @@ class VanillaDefaultTimezone(Adw.Bin):
     region_group = Gtk.Template.Child()
 
     search_controller = Gtk.EventControllerKey.new()
-    selected_timezone = {}
+    
+    selected_region = ""
+    selected_country_code = ""
+    selected_timezone = ""
+
+    __built_already = False
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -44,11 +102,16 @@ class VanillaDefaultTimezone(Adw.Bin):
 
         self.search_controller.connect("key-released", self.__on_search_key_pressed)
         self.entry_search_timezone.add_controller(self.search_controller)
-
-        self.__build_ui()
+        tz.register_location_callback(self.__user_location_received)
 
     def set_page_active(self):
-        return
+        if self.selected_timezone != "":
+            self.__window.set_ready(True)
+        
+        if self.__built_already:
+            return
+        self.__built_already = True
+        self.__build_ui()
 
     def set_page_inactive(self):
         return
@@ -57,113 +120,70 @@ class VanillaDefaultTimezone(Adw.Bin):
         # TODO: call backend with timezone
         return
     
+    def __user_location_received(self, location):
+        self.selected_region = tz.user_region
+        self.selected_country_code = tz.user_country_code
+        self.selected_timezone = tz.user_timezone
+        self.__window.set_ready(True)
+    
     def __build_ui(self):
+        first_button = None
+
         for region in tz.all_country_codes_by_region:
             region_row = Adw.ActionRow()
             region_row.set_use_markup(False)
             region_row.set_title(region)
 
-            button = Gtk.Button()
-            button.add_css_class("flat")
-            button.set_valign(Gtk.Align.CENTER)
-            button.set_icon_name("go-next-symbolic")
-            button.connect("clicked", self.__on_region_button_clicked, region)
-            button.set_focusable(False)
-
-            region_row.add_suffix(button)
-            region_row.set_activatable_widget(button)
-
-            self.region_group.add(region_row)
-
-    def __on_region_button_clicked(self, widget, region):
-        self.__build_country_page(region)
-    
-    def __build_country_page(self, region):
-        country_page = Adw.NavigationPage()
-        country_page.set_title(_("Country"))
-
-        country_group = Adw.PreferencesGroup()
-
-        for country_code in tz.all_country_codes_by_region[region]:
-            country_row = Adw.ActionRow()
-            country_row.set_use_markup(False)
-            country_row.set_title(tz.all_country_names_by_code[country_code])
-
-            button = Gtk.Button()
-            button.add_css_class("flat")
-            button.set_valign(Gtk.Align.CENTER)
-            button.set_icon_name("go-next-symbolic")
-            button.connect("clicked", self.__on_country_button_clicked, country_code)
-            button.set_focusable(False)
-
-            country_row.add_suffix(button)
-            country_row.set_activatable_widget(button)
-
-            country_group.add(country_row)
-
-        country_page.set_child(country_group)
-
-        self.navigation.push(country_page)
-
-    def __on_country_button_clicked(self, widget, country_code):
-        self.__build_timezones_page(country_code)
-
-    def __build_timezones_page(self, country_code):
-        timezones_page = Adw.NavigationPage()
-        timezones_page.set_title(_("Timezones"))
-
-        timezones_group = Adw.PreferencesGroup()
-
-        first_button = None
-
-        for timezone in tz.all_timezones_by_country_code[country_code]:
-            timezones_row = Adw.ActionRow()
-            timezones_row.set_use_markup(False)
-            timezones_row.set_title(timezone)
-
-            button = Gtk.CheckButton()
-            button.set_valign(Gtk.Align.CENTER)
-            button.connect("activate", self.__on_timezones_button_clicked, timezone)
-            button.set_focusable(False)
+            button_active = region == self.selected_region
+            button = create_check_button(self.__on_region_button_clicked, region, button_active)
 
             if first_button:
                 button.set_group(first_button)
             else:
                 first_button = button
 
-            timezones_row.add_prefix(button)
-            timezones_row.set_activatable_widget(button)
+            region_row.add_prefix(button)
+            region_row.set_activatable_widget(button)
 
-            timezones_group.add(timezones_row)
+            self.region_group.add(region_row)
 
-        timezones_page.set_child(timezones_group)
+    def __on_region_button_clicked(self, widget, region):
+        self.selected_region = region
+        self.__build_country_page(region)
+    
+    def __build_country_page(self, region):
+        country_page = Adw.NavigationPage()
+        country_page.set_title(_("Country"))
 
-        self.navigation.push(timezones_page)
+        country_codes = tz.all_country_codes_by_region[region]
+        countries = copy.deepcopy(country_codes)
+        for idx, country_code in enumerate(countries):
+            countries[idx] = tz.all_country_names_by_code[country_code]
+
+        countries_page = VanillaTimezoneListPage(country_codes, countries, self.__on_country_button_clicked, self.selected_country_code)
+
+        country_page.set_child(countries_page)
+
+        self.navigation.push(country_page)
+
+    def __on_country_button_clicked(self, widget, country_code):
+        self.selected_country_code = country_code
+        self.__build_timezones_page(country_code)
+
+    def __build_timezones_page(self, country_code):
+        timezones_view_page = Adw.NavigationPage()
+        timezones_view_page.set_title(_("Timezone"))
+
+        timezones = tz.all_timezones_by_country_code[country_code]
+        timezones_page = VanillaTimezoneListPage(timezones, timezones, self.__on_timezones_button_clicked, self.selected_timezone)
+
+        timezones_view_page.set_child(timezones_page)
+
+        self.navigation.push(timezones_view_page)
 
     def __on_timezones_button_clicked(self, widget, timezone):
+        self.selected_timezone = timezone
         print("clicked on:", timezone)
-
-    # def timezone_verify(self, carousel=None, idx=None):
-    #     if idx is not None and idx != self.__step_num:
-    #         return
-
-    #     def timezone_verify_callback(result, *args):
-    #         if result:
-    #             current_city = result.get_city_name()
-    #             current_country = result.get_country_name()
-    #             for entry in self.__tz_entries:
-    #                 if (
-    #                     current_city == entry.title
-    #                     and current_country == entry.subtitle
-    #                 ):
-    #                     self.selected_timezone["zone"] = current_city
-    #                     self.selected_timezone["region"] = current_country
-    #                     entry.select_button.set_active(True)
-    #                     return
-    #             self.btn_next.set_sensitive(True)
-
-    #     thread = threading.Thread(target=get_location, args=(timezone_verify_callback,))
-    #     thread.start()
 
     # def get_finals(self):
     #     try:
@@ -261,6 +281,11 @@ class VanillaDefaultTimezone(Adw.Bin):
     #             self.__expanders.append(expander)
     #             GLib.idle_add(__populate_expander, expander, region, country)
 
-    # @property
-    # def step_id(self):
-    #     return self.__key
+def create_check_button(callback, item: str, active: bool) -> Gtk.CheckButton:
+    button = Gtk.CheckButton()
+    button.set_valign(Gtk.Align.CENTER)
+    button.connect("activate", callback, item)
+    button.set_focusable(False)
+    button.set_active(active)
+
+    return button

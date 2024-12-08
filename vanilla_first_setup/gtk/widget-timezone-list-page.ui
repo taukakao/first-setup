@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="VanillaTimezoneListPage" parent="AdwBin">
+    <child>
+      <object class="AdwToolbarView">
+        <property name="top-bar-style">flat</property>
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="show-end-title-buttons">false</property>
+            <property name="show-start-title-buttons">false</property>
+          </object>
+        </child>
+        <property name="content">
+          <object class="AdwPreferencesGroup" id="pref_group"></object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>
