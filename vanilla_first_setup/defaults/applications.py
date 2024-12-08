@@ -131,6 +131,7 @@ class VanillaLayoutApplications(Adw.Bin):
 
     def set_page_active(self):
         self.__window.set_ready(True)
+        self.__window.set_focus_on_next()
 
     def set_page_inactive(self):
         return

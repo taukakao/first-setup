@@ -42,8 +42,8 @@ class VanillaDefaultTheme(Adw.Bin):
         self.btn_dark.connect("toggled", self.__set_theme, "dark")
 
     def set_page_active(self):
-        self.btn_dark.grab_focus()
         self.__window.set_ready()
+        self.__window.set_focus_on_next()
 
     def set_page_inactive(self):
         return

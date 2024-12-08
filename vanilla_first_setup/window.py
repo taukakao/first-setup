@@ -72,6 +72,9 @@ class VanillaWindow(Adw.ApplicationWindow):
         toast.props.timeout = timeout
         self.toasts.add_toast(toast)
 
+    def set_focus_on_next(self):
+        self.btn_next.grab_focus()
+
     def __connect_signals(self):
         self.btn_back.connect("clicked", self.__on_btn_back_clicked)
         self.btn_next.connect("clicked", self.__on_btn_next_clicked)
