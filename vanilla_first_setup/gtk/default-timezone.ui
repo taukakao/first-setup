@@ -27,16 +27,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="AdwNavigationView" id="navigation">
-                            <child>
-                              <object class="AdwNavigationPage">
-                                <property name="title" translatable="true">Region</property>
-                                <child>
-                                  <object class="AdwPreferencesGroup" id="region_group"/>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
+                          <object class="AdwNavigationView" id="navigation"></object>
                         </child>
                       </object>
                     </child>
