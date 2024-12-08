@@ -32,9 +32,7 @@ from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
 class VanillaWindow(Adw.ApplicationWindow):
     __gtype_name__ = "VanillaWindow"
 
-    carousel = Gtk.Template.Child()
-    carousel_indicator_dots = Gtk.Template.Child()
-    headerbar = Gtk.Template.Child()
+    stack = Gtk.Template.Child()
     btn_back = Gtk.Template.Child()
     btn_next = Gtk.Template.Child()
     btn_next_spinner = Gtk.Template.Child()
@@ -43,9 +41,7 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     can_continue = False
 
-    current_page = None
-
-    __currently_scrolling = False
+    pages = []
 
     def __init__(self, user: str, create_new_user: bool = False, **kwargs):
         super().__init__(**kwargs)
@@ -76,23 +72,12 @@ class VanillaWindow(Adw.ApplicationWindow):
         toast.props.timeout = timeout
         self.toasts.add_toast(toast)
 
-    def rebuild_ui(self):
-        self.__build_ui(rebuild=True)
-
     def __connect_signals(self):
         self.btn_back.connect("clicked", self.__on_btn_back_clicked)
         self.btn_next.connect("clicked", self.__on_btn_next_clicked)
-        self.carousel.connect("page-changed", self.__on_page_changed)
         return
 
-    def __build_ui(self, rebuild=False):
-        if rebuild:
-            self.carousel.scroll_to(self.carousel.get_nth_page(0), False)
-            max_page_index = self.carousel.get_n_pages() - 1
-            for page_index in range(max_page_index, -1, -1):
-                page = self.carousel.get_nth_page(page_index)
-                self.carousel.remove(page)
-
+    def __build_ui(self):
         self.__view_welcome = VanillaDefaultWelcome(self)
         self.__view_hostname = VanillaDefaultHostname(self)
         self.__view_user = VanillaDefaultUser(self)
@@ -101,36 +86,33 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_conn_check = VanillaDefaultConnCheck(self)
         self.__view_apps = VanillaLayoutApplications(self)
 
-        self.carousel.append(self.__view_welcome)
-        self.carousel.append(self.__view_apps)
-        self.carousel.append(self.__view_conn_check)
-        self.carousel.append(self.__view_theme)
-        self.carousel.append(self.__view_hostname)
-        self.carousel.append(self.__view_user)
-        self.carousel.append(self.__view_logout)
+        self.pages.append(self.__view_welcome)
+        self.pages.append(self.__view_apps)
+        self.pages.append(self.__view_conn_check)
+        self.pages.append(self.__view_theme)
+        self.pages.append(self.__view_hostname)
+        self.pages.append(self.__view_user)
+        self.pages.append(self.__view_logout)
 
-        self.current_page = self.carousel.get_nth_page(0)
+        for index, page in enumerate(self.pages):
+            self.stack.add_named(page, str(index))
+
+        self.stack.set_visible_child_name("0")
+
         self.__on_page_changed()
 
     def __on_page_changed(self, *args):
-        self.__currently_scrolling = False
-
-        current_index = self.carousel.get_position()
-        self.current_page = self.carousel.get_nth_page(current_index)
-        self.current_page.set_page_active()
+        current_page = self.stack.get_visible_child()
+        current_page.set_page_active()
     
     def __on_btn_next_clicked(self, widget):
-        if self.__currently_scrolling:
-            return
         self.finish_step()
 
     def __on_btn_back_clicked(self, widget):
-        if self.__currently_scrolling:
-            return
         self.__last_page()
 
     def __loading_indicator(self, waiting: bool = True):
-        if self.carousel.get_position() == 0:
+        if self.__get_current_index_child_index() == 0:
             self.btn_next.set_visible(False)
             self.btn_next_spinner.set_visible(False)
             return
@@ -139,28 +121,31 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.btn_next_spinner.set_visible(waiting)
 
     def __finish_step_thread(self):
-        self.current_page.finish()
+        self.stack.get_visible_child().finish()
         GLib.idle_add(self.__next_page)
 
     def __next_page(self):
-        target_index = self.carousel.get_position() + 1
+        target_index = self.__get_current_index_child_index() + 1
         self.__scroll_page(target_index)
 
     def __last_page(self):
-        target_index = self.carousel.get_position() - 1
+        target_index = self.__get_current_index_child_index() - 1
         self.__scroll_page(target_index)
 
     def __scroll_page(self, target_index: int):
-        self.__currently_scrolling = True
         self.set_ready(False)
 
-        old_current_page = self.current_page
-        target_page = self.carousel.get_nth_page(target_index)
+        old_current_page = self.stack.get_visible_child()
+        target_page = self.stack.get_child_by_name(str(target_index))
 
-        max_page_index = self.carousel.get_n_pages()-1
+        max_page_index = len(self.pages)-1
         self.btn_back.set_visible(target_index != 0)
         self.btn_next.set_visible(target_index != max_page_index and target_index != 0)
 
-        self.carousel.scroll_to(target_page, True)
+        self.stack.set_visible_child(target_page)
 
         old_current_page.set_page_inactive()
+        self.__on_page_changed()
+
+    def __get_current_index_child_index(self):
+        return int(self.stack.get_visible_child_name())
