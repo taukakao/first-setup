@@ -22,7 +22,6 @@
     <file>gtk/wireless-row.ui</file>
     <file>gtk/widget-language.ui</file>
     <file>gtk/widget-keyboard.ui</file>
-    <file>gtk/widget-timezone.ui</file>
 
     <file>gtk/layout-preferences.ui</file>
     <file>gtk/layout-yes-no.ui</file>
