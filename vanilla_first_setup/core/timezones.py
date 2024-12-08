@@ -16,6 +16,7 @@ world = GWeather.Location.get_world()
 base = world
 
 all_country_codes: list[str] = []
+all_country_codes_by_region: dict[str, list[str]] = {}
 all_timezones_by_country_code: dict[str, list[str]] = {}
 all_country_names_by_code: dict[str, str] = {}
 user_location = None
@@ -37,14 +38,20 @@ def get_timezone_preview(tzname):
     )
     return now_str
 
-
 for country_code in pytz.country_timezones:
     timezones = pytz.country_timezones[country_code]
-    country = world.find_by_country_code(country_code)
-    country_name = country.get_country_name() if country else "Other"
-    all_timezones_by_country_code[country_code] = timezones
-    all_country_names_by_code[country_code] = country_name
+    country_name = pytz.country_names[country_code]
+    region = timezones[0].split("/")[0]
+
     all_country_codes.append(country_code)
+    
+    if region not in all_country_codes_by_region:
+        all_country_codes_by_region[region] = []
+    all_country_codes_by_region[region].append(country_code)
+
+    all_timezones_by_country_code[country_code] = timezones
+
+    all_country_names_by_code[country_code] = country_name
 
 __location_callbacks = []
 
