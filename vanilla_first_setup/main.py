@@ -28,14 +28,13 @@ import sys
 import logging
 from gettext import gettext as _
 from vanilla_first_setup.window import VanillaWindow
-import subprocess
 
 logger = logging.getLogger("FirstSetup::Main")
 
 class FirstSetupApplication(Adw.Application):
     """The main application singleton class."""
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
 
         log_path = "/tmp/first-setup.log"
 
@@ -53,10 +52,11 @@ class FirstSetupApplication(Adw.Application):
 
 
         super().__init__(
+            *args,
             application_id="org.vanillaos.FirstSetup",
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
+            **kwargs
         )
-        self.user = os.environ.get("USER")
         self.create_new_user = False
 
         self.__register_arguments()
@@ -79,8 +79,9 @@ class FirstSetupApplication(Adw.Application):
         if options.contains("create-new-user"):
             logger.info("Creating a new user")
             self.create_new_user = options.lookup_value("create-new-user")
-
+            
         self.activate()
+        return 0
 
     def do_activate(self):
         """
@@ -88,27 +89,28 @@ class FirstSetupApplication(Adw.Application):
         We raise the application's main window, creating it if
         necessary.
         """
-        # disable the lock screen and password for the default user
-        if self.create_new_user:
-            logging.info("disabling screen saver and lock screen")
-            subprocess.run(
-                [
-                    "/usr/bin/gsettings",
-                    "set",
-                    "org.gnome.desktop.lockdown",
-                    "disable-lock-screen",
-                    "true",
-                ]
-            )
-            subprocess.run(
-                [
-                    "/usr/bin/gsettings",
-                    "set",
-                    "org.gnome.desktop.screensaver",
-                    "lock-enabled",
-                    "false",
-                ]
-            )
+        # TODO: maybe do this in the installer or the default user?
+        # # disable the lock screen and password for the default user
+        # if self.create_new_user:
+        #     logging.info("disabling screen saver and lock screen")
+        #     subprocess.run(
+        #         [
+        #             "/usr/bin/gsettings",
+        #             "set",
+        #             "org.gnome.desktop.lockdown",
+        #             "disable-lock-screen",
+        #             "true",
+        #         ]
+        #     )
+        #     subprocess.run(
+        #         [
+        #             "/usr/bin/gsettings",
+        #             "set",
+        #             "org.gnome.desktop.screensaver",
+        #             "lock-enabled",
+        #             "false",
+        #         ]
+        #     )
 
         provider = Gtk.CssProvider()
         provider.load_from_resource("/org/vanillaos/FirstSetup/style.css")
@@ -121,7 +123,6 @@ class FirstSetupApplication(Adw.Application):
         if not win:
             win = VanillaWindow(
                 application=self,
-                user=self.user,
                 create_new_user=self.create_new_user,
             )
         win.present()
@@ -133,10 +134,5 @@ class FirstSetupApplication(Adw.Application):
 
 def main(version):
     """The application's entry point."""
-    if os.environ.get("USERNAME") in ["ubuntu", "vanillaos", "vanilla-os"]:
-        logging.warning("Running in Live mode, closing...")
-        sys.exit(0)
-
     app = FirstSetupApplication()
-
     return app.run(sys.argv)

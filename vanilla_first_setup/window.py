@@ -44,10 +44,9 @@ class VanillaWindow(Adw.ApplicationWindow):
     pages = []
     __current_page_index = 0
 
-    def __init__(self, user: str, create_new_user: bool = False, **kwargs):
+    def __init__(self, create_new_user: bool = False, **kwargs):
         super().__init__(**kwargs)
 
-        self.__user = user
         self.__create_new_user = create_new_user
 
         self.__build_ui()
