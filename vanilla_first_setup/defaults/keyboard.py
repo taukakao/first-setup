@@ -237,6 +237,15 @@ class VanillaDefaultKeyboard(Adw.Bin):
                 if search_term.replace(" ", "_").lower() in name.lower():
                     keyboards_filtered.append(keyboard)
                     keyboards_filtered_names.append(name)
+        
+        for idx, keyboard in enumerate(kbd.keyboards_layouts_without_region):
+            if len(keyboards_filtered) > max_results:
+                list_shortened = True
+                break
+            name = kbd.keyboards_layout_names_without_region[idx]
+            if search_term.replace(" ", "_").lower() in name.lower():
+                keyboards_filtered.append(keyboard)
+                keyboards_filtered_names.append(name)
 
         if len(keyboards_filtered) > max_results:
             list_shortened = True
