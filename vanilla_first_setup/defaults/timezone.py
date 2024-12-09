@@ -134,14 +134,9 @@ class VanillaDefaultTimezone(Adw.Bin):
     def set_page_active(self):
         if self.selected_timezone != "":
             self.__window.set_ready(True)
-        
-        if self.__regions_page:
-            regions = []
-            for region in tz.all_country_codes_by_region:
-                regions.append(region)
-            self.__regions_page.rebuild(regions, regions, self.selected_region)
-        else:
-            self.__build_ui()
+
+        region_page = self.__build_ui()
+        self.navigation.replace([region_page])
 
     def set_page_inactive(self):
         return
@@ -156,7 +151,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.selected_timezone = tz.user_timezone
         self.__window.set_ready(True)
     
-    def __build_ui(self):
+    def __build_ui(self) -> Adw.NavigationPage:
         timezones_view_page = Adw.NavigationPage()
         timezones_view_page.set_title(_("Region"))
 
@@ -167,7 +162,7 @@ class VanillaDefaultTimezone(Adw.Bin):
 
         timezones_view_page.set_child(self.__regions_page)
 
-        self.navigation.push(timezones_view_page)
+        return timezones_view_page
 
     def __on_region_button_clicked(self, widget, region):
         self.selected_region = region
