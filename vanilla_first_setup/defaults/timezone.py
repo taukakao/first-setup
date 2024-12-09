@@ -103,6 +103,8 @@ class VanillaDefaultTimezone(Adw.Bin):
     entry_search_timezone = Gtk.Template.Child()
     navigation = Gtk.Template.Child()
     search_warning_label = Gtk.Template.Child()
+    current_timezone_label = Gtk.Template.Child()
+    current_time_label = Gtk.Template.Child()
     
     selected_region = ""
     selected_country_code = ""
@@ -125,6 +127,10 @@ class VanillaDefaultTimezone(Adw.Bin):
 
         region_page = self.__build_ui()
         self.navigation.replace([region_page])
+
+        if self.selected_timezone:
+            self.current_timezone_label.set_label(self.selected_timezone)
+            self.current_time_label.set_label(tz.get_timezone_preview(self.selected_timezone)[0])
 
     def set_page_inactive(self):
         return
@@ -247,6 +253,10 @@ class VanillaDefaultTimezone(Adw.Bin):
         max_results = 50
 
         search_term: str = self.entry_search_timezone.get_text().strip()
+        
+        if search_term == "":
+            self.navigation.pop()
+            return
 
         timezones_filtered = []
 

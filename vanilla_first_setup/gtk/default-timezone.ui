@@ -4,47 +4,73 @@
   <template class="VanillaDefaultTimezone" parent="AdwBin">
     <property name="hexpand">true</property>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">1</property>
-        <child>
-          <object class="GtkOverlay">
-            <property name="valign">3</property>
+      <object class="AdwToolbarView">
+        <property name="content">
+          <object class="AdwStatusPage">
+            <property name="icon-name">preferences-system-time-symbolic</property>
+            <property name="title" translatable="true">Date &amp; Time</property>
+            <property name="description" translatable="true">Select your preferred timezone</property>
             <child>
-              <object class="AdwStatusPage">
-                <property name="icon-name">preferences-system-time-symbolic</property>
-                <property name="title" translatable="true">Date &amp; Time</property>
-                <property name="description" translatable="true">Select your preferred timezone</property>
+              <object class="AdwClamp">
+                <property name="maximum-size">600</property>
                 <child>
-                  <object class="AdwClamp">
-                    <property name="maximum-size">600</property>
+                  <object class="GtkBox">
+                    <property name="orientation">1</property>
                     <child>
-                      <object class="GtkBox">
-                        <property name="orientation">1</property>
-                        <child>
-                          <object class="GtkSearchEntry" id="entry_search_timezone">
-                            <property name="hexpand">true</property>
-                            <property name="placeholder-text" translatable="true">Search timezones</property>
-                            <property name="search-delay">250</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwNavigationView" id="navigation"></object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="search_warning_label">
+                      <object class="GtkSearchEntry" id="entry_search_timezone">
+                        <property name="hexpand">true</property>
+                        <property name="placeholder-text" translatable="true">Search timezones</property>
+                        <property name="search-delay">250</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwNavigationView" id="navigation"></object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="search_warning_label">
                             <property name="label" translatable="yes">The search results are incomplete. Try refining your query.</property>
                             <property name="wrap">True</property>
                             <property name="wrap-mode">word-char</property>
-                            <property name="tooltip-text">warning</property>
-                            <property name="visible">false</property>
-                            <style>
-                              <class name="warning"/>
-                            </style>
-                          </object>
-                        </child>
+                        <property name="tooltip-text">warning</property>
+                        <property name="visible">false</property>
+                        <style>
+                          <class name="warning"/>
+                        </style>
                       </object>
                     </child>
                   </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+        <child type="bottom">
+          <object class="GtkActionBar">
+            <property name="revealed">true</property>
+            <property name="valign">2</property>
+            <style>
+              <class name="toolbar"/>
+            </style>
+            <child type="center">
+              <object class="GtkBox">
+                <property name="orientation">0</property>
+                <property name="halign">3</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="true">Current timezone:</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="current_timezone_label">
+                    <property name="label" translatable="true">not set</property>
+                    <style>
+                      <class name="heading"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="current_time_label"></object>
                 </child>
               </object>
             </child>
