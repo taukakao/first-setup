@@ -142,7 +142,36 @@ class VanillaDefaultTimezone(Adw.Bin):
     def finish(self):
         # TODO: call backend with timezone
         return
-    
+    # def get_finals(self):
+    #     try:
+    #         return {
+    #             "vars": {"setTimezone": True},
+    #             "funcs": [
+    #                 {
+    #                     "if": "setTimezone",
+    #                     "type": "command",
+    #                     "commands": [
+    #                         f'echo "{self.selected_timezone["region"]}/{self.selected_timezone["zone"]}" > /etc/timezone',
+    #                         f"ln -sf /usr/share/zoneinfo/{self.selected_timezone['region']}/{self.selected_timezone['zone']} /etc/localtime",
+    #                     ],
+    #                 }
+    #             ],
+    #         }
+    #     except IndexError:
+    #         return {
+    #             "vars": {"setTimezone": True},
+    #             "funcs": [
+    #                 {
+    #                     "if": "setTimezone",
+    #                     "type": "command",
+    #                     "commands": [
+    #                         f'echo "Europe/London" > /etc/timezone',
+    #                         f"ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime",
+    #                     ],
+    #                 }
+    #             ],
+    #         }
+
     def __user_location_received(self, location):
         self.selected_region = tz.user_region
         self.selected_country_code = tz.user_country_code
@@ -218,38 +247,7 @@ class VanillaDefaultTimezone(Adw.Bin):
     def __set_region_from_timezone(self, timezone):
         self.selected_region = tz.region_from_timezone(timezone)
 
-    # def get_finals(self):
-    #     try:
-    #         return {
-    #             "vars": {"setTimezone": True},
-    #             "funcs": [
-    #                 {
-    #                     "if": "setTimezone",
-    #                     "type": "command",
-    #                     "commands": [
-    #                         f'echo "{self.selected_timezone["region"]}/{self.selected_timezone["zone"]}" > /etc/timezone',
-    #                         f"ln -sf /usr/share/zoneinfo/{self.selected_timezone['region']}/{self.selected_timezone['zone']} /etc/localtime",
-    #                     ],
-    #                 }
-    #             ],
-    #         }
-    #     except IndexError:
-    #         return {
-    #             "vars": {"setTimezone": True},
-    #             "funcs": [
-    #                 {
-    #                     "if": "setTimezone",
-    #                     "type": "command",
-    #                     "commands": [
-    #                         f'echo "Europe/London" > /etc/timezone',
-    #                         f"ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime",
-    #                     ],
-    #                 }
-    #             ],
-    #         }
-
     def __on_popped(self, nag_view, page, *args):
-        print(page.get_title())
         if page == self.__search_results_nav_page:
             self.__search_results_list_page.clear_items()
             self.search_warning_label.set_visible(False)
