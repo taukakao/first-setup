@@ -44,9 +44,10 @@ def region_from_timezone(tzname):
     return tzname.split("/")[0]
 
 def region_from_country_code(country_code) -> str:
-    for region, tz_country_code in all_country_codes_by_region.items():
-        if country_code == tz_country_code:
-            return region
+    for region, tz_country_codes in all_country_codes_by_region.items():
+        for tz_country_code in tz_country_codes:
+            if country_code == tz_country_code:
+                return region
     return None
         
 def country_code_from_timezone(timezone) -> str:
