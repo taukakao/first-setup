@@ -50,13 +50,15 @@ class VanillaTimezoneListPage(Adw.Bin):
             self.pref_group.remove(row)
         self.__all_rows.clear()
 
-    def rebuild(self, items: list[str], display_names: list[str], active_item: str, suffixes: list[str]|None = None):
+    def rebuild(self, items: list[str], display_names: list[str], active_item: str, suffixes: list[str]|None = None, radio_buttons: bool = True, multiple_active_items: list[str] = None):
         self.clear_items()
 
         self.__items = items
         self.__display_names = display_names
         self.__active_item = active_item
         self.__suffixes = suffixes
+        self.__radio_buttons = radio_buttons
+        self.__multiple_active_items = multiple_active_items
 
         self.__build_ui()
 

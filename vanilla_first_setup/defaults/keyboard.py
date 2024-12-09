@@ -206,6 +206,7 @@ class VanillaDefaultKeyboard(Adw.Bin):
             selected_country_code = "Extra"
 
         self.__show_location(selected_region, selected_country_code)
+        self.search_warning_label.set_visible(False)
         
 
     def __on_popped(self, nag_view, page, *args):
@@ -214,55 +215,46 @@ class VanillaDefaultKeyboard(Adw.Bin):
             self.search_warning_label.set_visible(False)
 
     def __on_search_field_changed(self, *args):
-        return
-        # max_results = 50
+        max_results = 50
 
-        # search_term: str = self.entry_search_keyboard.get_text().strip()
+        search_term: str = self.entry_search_keyboard.get_text().strip()
         
-        # if search_term == "":
-        #     self.navigation.pop()
-        #     return
+        if search_term == "":
+            self.navigation.pop()
+            return
 
-        # keyboards_filtered = []
+        keyboards_filtered = []
+        keyboards_filtered_names = []
 
-        # list_shortened = False
+        list_shortened = False
 
-        # for country_codes, keyboards in tz.all_keyboards_by_country_code.items():
-        #     if len(keyboards_filtered) > max_results:
-        #         list_shortened = True
-        #         break
-        #     for keyboard in keyboards:
-        #         if search_term.replace(" ", "_").lower() in keyboard.lower():
-        #             keyboards_filtered.append(keyboard)
+        for country_code, keyboards in kbd.all_keyboard_layouts_by_country_code.items():
+            if len(keyboards_filtered) > max_results:
+                list_shortened = True
+                break
+            for index, keyboard in enumerate(keyboards):
+                name = kbd.all_keyboard_layout_names_by_country_code[country_code][index]
+                if search_term.replace(" ", "_").lower() in name.lower():
+                    keyboards_filtered.append(keyboard)
+                    keyboards_filtered_names.append(name)
 
-        # for country_code, country_name in tz.all_country_names_by_code.items():
-        #     if len(keyboards_filtered) > max_results:
-        #         list_shortened = True
-        #         break
-        #     if search_term.lower() in country_name.lower():
-        #         for keyboard in tz.all_keyboards_by_country_code[country_code]:
-        #             if keyboard not in keyboards_filtered:
-        #                 keyboards_filtered.append(keyboard)
+        if len(keyboards_filtered) > max_results:
+            list_shortened = True
+            keyboards_filtered = keyboards_filtered[0:max_results]
 
-        # if len(keyboards_filtered) > max_results:
-        #     list_shortened = True
-        #     keyboards_filtered = keyboards_filtered[0:max_results]
+        if self.__search_results_list_page:
+            self.__search_results_list_page.clear_items()
+            self.__search_results_list_page.rebuild(keyboards_filtered,  keyboards_filtered_names, "", keyboards_filtered, radio_buttons=False, multiple_active_items=self.all_selected_keyboards)
+        else:
+            self.__search_results_nav_page = Adw.NavigationPage()
+            self.__search_results_nav_page.set_title(_("Search results"))
+            self.__search_results_list_page = VanillaTimezoneListPage(keyboards_filtered, keyboards_filtered_names, self.__on_keyboards_button_clicked, "", keyboards_filtered, radio_buttons=False, multiple_active_items=self.all_selected_keyboards)
+            self.__search_results_nav_page.set_child(self.__search_results_list_page)
 
-        # time_previes = [tz.get_keyboard_preview(keyboard)[0] for keyboard in keyboards_filtered]
+        if self.navigation.get_visible_page() != self.__search_results_nav_page:
+            self.navigation.push(self.__search_results_nav_page)
 
-        # if self.__search_results_list_page:
-        #     self.__search_results_list_page.clear_items()
-        #     self.__search_results_list_page.rebuild(keyboards_filtered,  keyboards_filtered, self.selected_keyboard, time_previes)
-        # else:
-        #     self.__search_results_nav_page = Adw.NavigationPage()
-        #     self.__search_results_nav_page.set_title(_("Search results"))
-        #     self.__search_results_list_page = VanillakeyboardListPage(keyboards_filtered, keyboards_filtered, self.__on_keyboards_button_clicked, self.selected_keyboard, time_previes)
-        #     self.__search_results_nav_page.set_child(self.__search_results_list_page)
-
-        # if self.navigation.get_visible_page() != self.__search_results_nav_page:
-        #     self.navigation.push(self.__search_results_nav_page)
-
-        # self.search_warning_label.set_visible(list_shortened)
+        self.search_warning_label.set_visible(list_shortened)
 
     # def __set_keyboard_layout(self, layout, variant=None):
     #     value = layout
