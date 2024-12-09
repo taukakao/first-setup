@@ -64,13 +64,6 @@ class VanillaTimezoneListPage(Adw.Bin):
             region_row.set_use_markup(False)
             region_row.set_title(self.__display_names[index])
 
-            button = Gtk.CheckButton()
-            button.set_valign(Gtk.Align.CENTER)
-            button.connect("activate", self.__on_button_activated, item)
-            button.set_focusable(False)
-            if item == self.__active_item:
-                button.set_active(True)
-
             button_active = item == self.__active_item
             button = self.__create_check_button(self.__on_button_activated, item, button_active)
 
