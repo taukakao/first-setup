@@ -48,14 +48,14 @@ def region_from_country_code(country_code) -> str:
         for tz_country_code in tz_country_codes:
             if country_code == tz_country_code:
                 return region
-    return None
+    return ""
         
 def country_code_from_timezone(timezone) -> str:
     for country_code, tzcc_timezones in all_timezones_by_country_code.items():
         for tzcc_timezone in tzcc_timezones:
             if timezone == tzcc_timezone:
                 return country_code
-    return None
+    return ""
 
 __user_prefers_layout = False
 __user_preferred_region: str|None = None
@@ -68,7 +68,9 @@ def has_user_preferred_location() -> bool:
 def get_user_preferred_location() -> tuple[str, str, str]:
     return (__user_preferred_region, __user_preferred_country_code, __user_preferred_timezone)
 
-def set_user_preferred_location(region=None, country_code=None, timezone=None):
+def set_user_preferred_location(region, country_code=None, timezone=None):
+    if not region:
+        return
     global __user_prefers_layout
     global __user_preferred_region
     global __user_preferred_country_code

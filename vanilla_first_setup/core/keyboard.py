@@ -25,9 +25,9 @@ def country_code_from_keyboard(keyboard) -> str:
         for e_keyboard in e_keyboards:
             if keyboard == e_keyboard:
                 return country_code
-    return None
+    return ""
 
-__keyboards_layouts_without_region: list[str] = copy.deepcopy(all_keyboard_layouts)
+keyboards_layouts_without_region: list[str] = copy.deepcopy(all_keyboard_layouts)
 
 for country_code in tz.all_country_codes:
     layouts = xkb.get_layouts_for_country(country_code)
@@ -37,8 +37,8 @@ for country_code in tz.all_country_codes:
         continue
 
     for layout in layouts:
-        if layout in __keyboards_layouts_without_region:
-            __keyboards_layouts_without_region.remove(layout)
+        if layout in keyboards_layouts_without_region:
+            keyboards_layouts_without_region.remove(layout)
 
     region = tz.region_from_country_code(country_code)
     if region not in all_country_codes_by_region:
@@ -48,5 +48,3 @@ for country_code in tz.all_country_codes:
     all_country_codes_by_region[region].append(country_code)
     default_keyboard_layouts_by_country_code[country_code] = layouts
     all_keyboard_layouts_by_country_code[country_code] = layouts
-
-print(__keyboards_layouts_without_region)
