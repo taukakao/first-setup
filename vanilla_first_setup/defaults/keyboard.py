@@ -171,11 +171,11 @@ class VanillaDefaultKeyboard(Adw.Bin):
 
         if country_code == "Extra":
             keyboards = kbd.keyboards_layouts_without_region
-            keyboard_names = keyboards
+            keyboard_names = kbd.keyboards_layout_names_without_region
         else:
             keyboards = kbd.all_keyboard_layouts_by_country_code[country_code]
-            keyboard_names = keyboards
-        keyboards_page = VanillaTimezoneListPage(keyboards, keyboard_names, self.__on_keyboards_button_clicked, "", radio_buttons=False, multiple_active_items=self.all_selected_keyboards)
+            keyboard_names = kbd.all_keyboard_layout_names_by_country_code[country_code]
+        keyboards_page = VanillaTimezoneListPage(keyboards, keyboard_names, self.__on_keyboards_button_clicked, "", suffixes=keyboards, radio_buttons=False, multiple_active_items=self.all_selected_keyboards)
 
         keyboards_view_page.set_child(keyboards_page)
 
