@@ -117,8 +117,6 @@ class VanillaDefaultTimezone(Adw.Bin):
     selected_country_code = ""
     selected_timezone = ""
 
-    __regions_page: VanillaTimezoneListPage|None = None
-
     __search_results_list_page: VanillaTimezoneListPage|None = None
     __search_results_nav_page: Adw.NavigationPage|None = None
 
@@ -158,10 +156,9 @@ class VanillaDefaultTimezone(Adw.Bin):
         regions = []
         for region in tz.all_country_codes_by_region:
             regions.append(region)
-        self.__regions_page = VanillaTimezoneListPage(regions, regions, self.__on_region_button_clicked, self.selected_region)
+        regions_page = VanillaTimezoneListPage(regions, regions, self.__on_region_button_clicked, self.selected_region)
 
-        timezones_view_page.set_child(self.__regions_page)
-
+        timezones_view_page.set_child(regions_page)
         return timezones_view_page
 
     def __on_region_button_clicked(self, widget, region):
@@ -203,7 +200,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.__set_country_code_from_timezone(timezone)
         self.__set_region_from_timezone(timezone)
         self.selected_timezone = timezone
-        print("clicked on:", timezone)
+        self.__window.finish_step()
 
     def __set_region_from_country_code(self, country_code):
         for region, tz_country_code in tz.all_country_codes_by_region.items():
