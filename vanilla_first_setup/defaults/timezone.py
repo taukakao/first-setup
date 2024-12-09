@@ -229,6 +229,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.__set_country_code_from_timezone(timezone)
         self.__set_region_from_timezone(timezone)
         self.selected_timezone = timezone
+        self.__window.set_ready()
         self.__window.finish_step()
 
     def __set_region_from_country_code(self, country_code):
