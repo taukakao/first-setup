@@ -30,12 +30,13 @@ class VanillaTimezoneListPage(Adw.Bin):
 
     pref_group = Gtk.Template.Child()
 
-    def __init__(self, items: list[str], display_names: list[str], button_callback, active_item: str, **kwargs):
+    def __init__(self, items: list[str], display_names: list[str], button_callback, active_item: str, suffixes: list[str]|None = None, **kwargs):
         super().__init__(**kwargs)
 
         self.__items = items
         self.__button_callback = button_callback
         self.__display_names = display_names
+        self.__suffixes = suffixes
         self.__active_item = active_item
 
         self.__all_rows = []
@@ -47,12 +48,13 @@ class VanillaTimezoneListPage(Adw.Bin):
             self.pref_group.remove(row)
         self.__all_rows.clear()
 
-    def rebuild(self, items: list[str], display_names: list[str], active_item: str):
+    def rebuild(self, items: list[str], display_names: list[str], active_item: str, suffixes: list[str]|None = None):
         self.clear_items()
 
         self.__items = items
         self.__display_names = display_names
         self.__active_item = active_item
+        self.__suffixes = suffixes
 
         self.__build_ui()
 
@@ -63,6 +65,10 @@ class VanillaTimezoneListPage(Adw.Bin):
             region_row = Adw.ActionRow()
             region_row.set_use_markup(False)
             region_row.set_title(self.__display_names[index])
+            if self.__suffixes:
+                label = Gtk.Label()
+                label.set_label(self.__suffixes[index])
+                region_row.add_suffix(label)
 
             button_active = item == self.__active_item
             button = self.__create_check_button(self.__on_button_activated, item, button_active)
@@ -91,10 +97,6 @@ class VanillaTimezoneListPage(Adw.Bin):
         button.set_active(active)
 
         return button
-
-    # def update_time_preview(self, *args):
-    #     tz_time, tz_date = get_timezone_preview(self.tz_name)
-    #     self.set_subtitle(f"{tz_time} • {tz_date}")
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-timezone.ui")
 class VanillaDefaultTimezone(Adw.Bin):
@@ -215,7 +217,9 @@ class VanillaDefaultTimezone(Adw.Bin):
         timezones_view_page.set_title(_("Timezone"))
 
         timezones = tz.all_timezones_by_country_code[country_code]
-        timezones_page = VanillaTimezoneListPage(timezones, timezones, self.__on_timezones_button_clicked, self.selected_timezone)
+        city_names = [" ".join(timezone.split("/")[1:]) for timezone in timezones]
+        time_previes = [tz.get_timezone_preview(timezone)[0] for timezone in timezones]
+        timezones_page = VanillaTimezoneListPage(timezones, city_names, self.__on_timezones_button_clicked, self.selected_timezone, time_previes)
 
         timezones_view_page.set_child(timezones_page)
 
@@ -283,13 +287,15 @@ class VanillaDefaultTimezone(Adw.Bin):
             list_shortened = True
             timezones_filtered = timezones_filtered[0:max_results]
 
+        time_previes = [tz.get_timezone_preview(timezone)[0] for timezone in timezones_filtered]
+
         if self.__search_results_list_page:
             self.__search_results_list_page.clear_items()
-            self.__search_results_list_page.rebuild(timezones_filtered,  timezones_filtered, self.selected_timezone)
+            self.__search_results_list_page.rebuild(timezones_filtered,  timezones_filtered, self.selected_timezone, time_previes)
         else:
             self.__search_results_nav_page = Adw.NavigationPage()
             self.__search_results_nav_page.set_title(_("Search results"))
-            self.__search_results_list_page = VanillaTimezoneListPage(timezones_filtered, timezones_filtered, self.__on_timezones_button_clicked, self.selected_timezone)
+            self.__search_results_list_page = VanillaTimezoneListPage(timezones_filtered, timezones_filtered, self.__on_timezones_button_clicked, self.selected_timezone, time_previes)
             self.__search_results_nav_page.set_child(self.__search_results_list_page)
 
         if self.navigation.get_visible_page() != self.__search_results_nav_page:
