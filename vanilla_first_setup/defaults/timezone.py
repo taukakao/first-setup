@@ -180,11 +180,11 @@ class VanillaDefaultTimezone(Adw.Bin):
     def __show_location(self):
         if not self.selected_region:
             return
-        self.__on_region_button_clicked(None, self.selected_region)
+        self.__build_country_page(self.selected_region)
         
         if not self.selected_country_code:
             return
-        self.__on_country_button_clicked(None, self.selected_country_code)
+        self.__build_timezones_page(self.selected_country_code)
 
     def __user_location_received(self, location):
         self.selected_region = tz.user_region
