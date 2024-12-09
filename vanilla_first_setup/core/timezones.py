@@ -73,12 +73,9 @@ def set_user_preferred_location(region=None, country_code=None, timezone=None):
     global __user_preferred_region
     global __user_preferred_country_code
     global __user_preferred_timezone
-    if region:
-        __user_preferred_region = region
-    if country_code:
-        __user_preferred_country_code = country_code
-    if timezone:
-        __user_preferred_timezone = timezone
+    __user_preferred_region = region
+    __user_preferred_country_code = country_code
+    __user_preferred_timezone = timezone
     __user_prefers_layout = True
 
 for country_code in pytz.country_timezones:
