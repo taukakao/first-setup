@@ -40,10 +40,13 @@ def get_timezone_preview(tzname):
     )
     return now_str
 
+def region_from_timezone(tzname):
+    return tzname.split("/")[0]
+
 for country_code in pytz.country_timezones:
     timezones = pytz.country_timezones[country_code]
     country_name = pytz.country_names[country_code]
-    region = timezones[0].split("/")[0]
+    region = region_from_timezone(timezones[0])
 
     all_country_codes.append(country_code)
     
@@ -68,7 +71,7 @@ def __update_user_location(location):
     user_country = location.get_country_name()
     user_city = location.get_city_name()
     user_timezone = location.get_timezone().get_identifier()
-    user_region = user_timezone.split("/")[0]
+    user_region = region_from_timezone(user_timezone)
     if location.get_country() in all_country_codes:
         user_country_code = location.get_country()
 

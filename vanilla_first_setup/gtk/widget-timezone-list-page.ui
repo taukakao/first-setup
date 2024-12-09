@@ -5,6 +5,7 @@
     <child>
       <object class="AdwToolbarView">
         <property name="top-bar-style">flat</property>
+        <property name="height-request">350</property>
         <child type="top">
           <object class="AdwHeaderBar">
             <property name="show-end-title-buttons">false</property>

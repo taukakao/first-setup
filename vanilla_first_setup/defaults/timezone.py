@@ -38,6 +38,22 @@ class VanillaTimezoneListPage(Adw.Bin):
         self.__display_names = display_names
         self.__active_item = active_item
 
+        self.__all_rows = []
+
+        self.__build_ui()
+
+    def clear_items(self):
+        for row in self.__all_rows:
+            self.pref_group.remove(row)
+        self.__all_rows.clear()
+
+    def rebuild(self, items: list[str], display_names: list[str], active_item: str):
+        self.clear_items()
+
+        self.__items = items
+        self.__display_names = display_names
+        self.__active_item = active_item
+
         self.__build_ui()
 
     def __build_ui(self):
@@ -67,6 +83,7 @@ class VanillaTimezoneListPage(Adw.Bin):
             region_row.set_activatable_widget(button)
 
             self.pref_group.add(region_row)
+            self.__all_rows.append(region_row)
 
     def __on_button_activated(self, widget, item):
         if len(self.__items) == 1:
@@ -92,6 +109,7 @@ class VanillaDefaultTimezone(Adw.Bin):
 
     entry_search_timezone = Gtk.Template.Child()
     navigation = Gtk.Template.Child()
+    search_warning_label = Gtk.Template.Child()
 
     search_controller = Gtk.EventControllerKey.new()
     
@@ -99,12 +117,16 @@ class VanillaDefaultTimezone(Adw.Bin):
     selected_country_code = ""
     selected_timezone = ""
 
-    __built_already = False
+    __regions_page: VanillaTimezoneListPage|None = None
+
+    __search_results_list_page: VanillaTimezoneListPage|None = None
+    __search_results_nav_page: Adw.NavigationPage|None = None
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
 
+        self.navigation.connect("popped", self.__on_popped)
         self.search_controller.connect("key-released", self.__on_search_key_pressed)
         self.entry_search_timezone.add_controller(self.search_controller)
         tz.register_location_callback(self.__user_location_received)
@@ -113,10 +135,13 @@ class VanillaDefaultTimezone(Adw.Bin):
         if self.selected_timezone != "":
             self.__window.set_ready(True)
         
-        if self.__built_already:
-            return
-        self.__built_already = True
-        self.__build_ui()
+        if self.__regions_page:
+            regions = []
+            for region in tz.all_country_codes_by_region:
+                regions.append(region)
+            self.__regions_page.rebuild(regions, regions, self.selected_region)
+        else:
+            self.__build_ui()
 
     def set_page_inactive(self):
         return
@@ -138,9 +163,9 @@ class VanillaDefaultTimezone(Adw.Bin):
         regions = []
         for region in tz.all_country_codes_by_region:
             regions.append(region)
-        timezones_page = VanillaTimezoneListPage(regions, regions, self.__on_region_button_clicked, self.selected_region)
+        self.__regions_page = VanillaTimezoneListPage(regions, regions, self.__on_region_button_clicked, self.selected_region)
 
-        timezones_view_page.set_child(timezones_page)
+        timezones_view_page.set_child(self.__regions_page)
 
         self.navigation.push(timezones_view_page)
 
@@ -164,6 +189,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.navigation.push(country_page)
 
     def __on_country_button_clicked(self, widget, country_code):
+        self.__set_region_from_country_code(country_code)
         self.selected_country_code = country_code
         self.__build_timezones_page(country_code)
 
@@ -179,8 +205,26 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.navigation.push(timezones_view_page)
 
     def __on_timezones_button_clicked(self, widget, timezone):
+        self.__set_country_code_from_timezone(timezone)
+        self.__set_region_from_timezone(timezone)
         self.selected_timezone = timezone
         print("clicked on:", timezone)
+
+    def __set_region_from_country_code(self, country_code):
+        for region, tz_country_code in tz.all_country_codes_by_region.items():
+            if country_code == tz_country_code:
+                self.selected_region = region
+                return
+            
+    def __set_country_code_from_timezone(self, timezone):
+        for country_code, tzcc_timezones in tz.all_timezones_by_country_code.items():
+            for tzcc_timezone in tzcc_timezones:
+                if timezone == tzcc_timezone:
+                    self.selected_country_code = country_code
+                    return
+            
+    def __set_region_from_timezone(self, timezone):
+        self.selected_region = tz.region_from_timezone(timezone)
 
     # def get_finals(self):
     #     try:
@@ -212,68 +256,53 @@ class VanillaDefaultTimezone(Adw.Bin):
     #             ],
     #         }
 
+    def __on_popped(self, nag_view, page, *args):
+        print(page.get_title())
+        if page == self.__search_results_nav_page:
+            self.__search_results_list_page.clear_items()
+            self.search_warning_label.set_visible(False)
+
+
     def __on_search_key_pressed(self, *args):
-        return
-        # def remove_accents(msg: str):
-        #     out = (
-        #         unicodedata.normalize("NFD", msg)
-        #         .encode("ascii", "ignore")
-        #         .decode("utf-8")
-        #     )
-        #     return str(out)
+        max_results = 50
 
-        # search_entry = self.entry_search_timezone.get_text().lower()
-        # keywords = remove_accents(search_entry)
+        search_term: str = self.entry_search_timezone.get_text().strip()
 
-        # if len(keywords) <= 1:
-        #     for expander in self.__expanders:
-        #         expander.set_visible(True)
-        #         expander.set_expanded(False)
-        #     return
+        timezones_filtered = []
 
-        # current_expander = 0
-        # current_country = self.__tz_entries[0].subtitle
-        # visible_entries = 0
-        # for entry in self.__tz_entries:
-        #     row_title = remove_accents(entry.get_title().lower())
-        #     match = re.search(keywords, row_title, re.IGNORECASE) is not None
-        #     entry.set_visible(match)
-        #     if entry.subtitle != current_country:
-        #         self.__expanders[current_expander].set_expanded(True)
-        #         self.__expanders[current_expander].set_visible(visible_entries != 0)
-        #         visible_entries = 0
-        #         current_country = entry.subtitle
-        #         current_expander += 1
-        #     visible_entries += match
+        list_shortened = False
 
-    # def __on_row_toggle(self, __check_button, widget):
-    #     tz_split = widget.tz_name.split("/", 1)
-    #     self.selected_timezone["region"] = tz_split[0]
-    #     self.selected_timezone["zone"] = tz_split[1]
-    #     self.current_tz_label.set_label(widget.tz_name)
-    #     self.current_location_label.set_label(
-    #         _("(at %s, %s)") % (widget.title, widget.subtitle)
-    #     )
-    #     self.btn_next.set_sensitive(True)
+        for country_codes, timezones in tz.all_timezones_by_country_code.items():
+            if len(timezones_filtered) > max_results:
+                list_shortened = True
+                break
+            for timezone in timezones:
+                if search_term.replace(" ", "_").lower() in timezone.lower():
+                    timezones_filtered.append(timezone)
 
-    # def __generate_timezone_list_widgets(self):
-    #     def __populate_expander(expander, region, country, *args):
-    #         for city, tzname in all_timezones[region][country].items():
-    #             timezone_row = TimezoneRow(
-    #                 city, country, tzname, self.__on_row_toggle, expander
-    #             )
-    #             self.__tz_entries.append(timezone_row)
-    #             if len(self.__tz_entries) > 0:
-    #                 timezone_row.select_button.set_group(
-    #                     self.__tz_entries[0].select_button
-    #                 )
-    #             expander.add_row(timezone_row)
+        for country_code, country_name in tz.all_country_names_by_code.items():
+            if len(timezones_filtered) > max_results:
+                list_shortened = True
+                break
+            if search_term.lower() in country_name.lower():
+                for timezone in tz.all_timezones_by_country_code[country_code]:
+                    if timezone not in timezones_filtered:
+                        timezones_filtered.append(timezone)
 
-    #     for country, region in self.expanders_list.items():
-    #         if len(all_timezones[region][country]) > 0:
-    #             expander = Adw.ExpanderRow.new()
-    #             expander.set_title(country)
-    #             expander.set_subtitle(region)
-    #             self.all_timezones_group.add(expander)
-    #             self.__expanders.append(expander)
-    #             GLib.idle_add(__populate_expander, expander, region, country)
+        if len(timezones_filtered) > max_results:
+            list_shortened = True
+            timezones_filtered = timezones_filtered[0:max_results]
+
+        if self.__search_results_list_page:
+            self.__search_results_list_page.clear_items()
+            self.__search_results_list_page.rebuild(timezones_filtered,  timezones_filtered, self.selected_timezone)
+        else:
+            self.__search_results_nav_page = Adw.NavigationPage()
+            self.__search_results_nav_page.set_title(_("Search results"))
+            self.__search_results_list_page = VanillaTimezoneListPage(timezones_filtered, timezones_filtered, self.__on_timezones_button_clicked, self.selected_timezone)
+            self.__search_results_nav_page.set_child(self.__search_results_list_page)
+
+        if self.navigation.get_visible_page() != self.__search_results_nav_page:
+            self.navigation.push(self.__search_results_nav_page)
+
+        self.search_warning_label.set_visible(list_shortened)
