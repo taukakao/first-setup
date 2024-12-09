@@ -108,9 +108,9 @@ class VanillaDefaultTimezone(Adw.Bin):
     current_timezone_label = Gtk.Template.Child()
     current_time_label = Gtk.Template.Child()
     
-    selected_region = ""
-    selected_country_code = ""
-    selected_timezone = ""
+    selected_region = None
+    selected_country_code = None
+    selected_timezone = None
 
     __search_results_list_page: VanillaTimezoneListPage|None = None
     __search_results_nav_page: Adw.NavigationPage|None = None
@@ -124,6 +124,9 @@ class VanillaDefaultTimezone(Adw.Bin):
         tz.register_location_callback(self.__user_location_received)
 
     def set_page_active(self):
+        if tz.has_user_preferred_location():
+            self.selected_region, self.selected_country_code, self.selected_timezone = tz.get_user_preferred_location()
+
         if self.selected_timezone != "":
             self.__window.set_ready(True)
 
@@ -133,11 +136,15 @@ class VanillaDefaultTimezone(Adw.Bin):
         if self.selected_timezone:
             self.current_timezone_label.set_label(self.selected_timezone)
             self.current_time_label.set_label(tz.get_timezone_preview(self.selected_timezone)[0])
+        
+        if tz.has_user_preferred_location():
+            self.__show_location()
 
     def set_page_inactive(self):
         return
 
     def finish(self):
+        tz.set_user_preferred_location(self.selected_region, self.selected_country_code, self.selected_timezone)
         # TODO: call backend with timezone
         return
     # def get_finals(self):
@@ -169,6 +176,15 @@ class VanillaDefaultTimezone(Adw.Bin):
     #                 }
     #             ],
     #         }
+
+    def __show_location(self):
+        if not self.selected_region:
+            return
+        self.__on_region_button_clicked(None, self.selected_region)
+        
+        if not self.selected_country_code:
+            return
+        self.__on_country_button_clicked(None, self.selected_country_code)
 
     def __user_location_received(self, location):
         self.selected_region = tz.user_region

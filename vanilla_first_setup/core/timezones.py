@@ -43,6 +43,31 @@ def get_timezone_preview(tzname):
 def region_from_timezone(tzname):
     return tzname.split("/")[0]
 
+
+__user_prefers_layout = False
+__user_preferred_region: str|None = None
+__user_preferred_country_code: str|None = None
+__user_preferred_timezone: str|None = None
+
+def has_user_preferred_location() -> bool:
+    return __user_prefers_layout
+
+def get_user_preferred_location() -> tuple[str, str, str]:
+    return (__user_preferred_region, __user_preferred_country_code, __user_preferred_timezone)
+
+def set_user_preferred_location(region=None, country_code=None, timezone=None):
+    global __user_prefers_layout
+    global __user_preferred_region
+    global __user_preferred_country_code
+    global __user_preferred_timezone
+    if region:
+        __user_preferred_region = region
+    if country_code:
+        __user_preferred_country_code = country_code
+    if timezone:
+        __user_preferred_timezone = timezone
+    __user_prefers_layout = True
+
 for country_code in pytz.country_timezones:
     timezones = pytz.country_timezones[country_code]
     country_name = pytz.country_names[country_code]
