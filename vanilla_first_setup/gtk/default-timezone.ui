@@ -24,6 +24,7 @@
                           <object class="GtkSearchEntry" id="entry_search_timezone">
                             <property name="hexpand">true</property>
                             <property name="placeholder-text" translatable="true">Search timezones</property>
+                            <property name="search-delay">250</property>
                           </object>
                         </child>
                         <child>

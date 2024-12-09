@@ -103,8 +103,6 @@ class VanillaDefaultTimezone(Adw.Bin):
     entry_search_timezone = Gtk.Template.Child()
     navigation = Gtk.Template.Child()
     search_warning_label = Gtk.Template.Child()
-
-    search_controller = Gtk.EventControllerKey.new()
     
     selected_region = ""
     selected_country_code = ""
@@ -118,8 +116,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.__window = window
 
         self.navigation.connect("popped", self.__on_popped)
-        self.search_controller.connect("key-released", self.__on_search_key_pressed)
-        self.entry_search_timezone.add_controller(self.search_controller)
+        self.entry_search_timezone.connect("search_changed", self.__on_search_field_changed)
         tz.register_location_callback(self.__user_location_received)
 
     def set_page_active(self):
@@ -246,7 +243,7 @@ class VanillaDefaultTimezone(Adw.Bin):
             self.search_warning_label.set_visible(False)
 
 
-    def __on_search_key_pressed(self, *args):
+    def __on_search_field_changed(self, *args):
         max_results = 50
 
         search_term: str = self.entry_search_timezone.get_text().strip()
