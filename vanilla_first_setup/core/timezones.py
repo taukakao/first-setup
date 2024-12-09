@@ -43,6 +43,18 @@ def get_timezone_preview(tzname):
 def region_from_timezone(tzname):
     return tzname.split("/")[0]
 
+def region_from_country_code(country_code) -> str:
+    for region, tz_country_code in all_country_codes_by_region.items():
+        if country_code == tz_country_code:
+            return region
+    return None
+        
+def country_code_from_timezone(timezone) -> str:
+    for country_code, tzcc_timezones in all_timezones_by_country_code.items():
+        for tzcc_timezone in tzcc_timezones:
+            if timezone == tzcc_timezone:
+                return country_code
+    return None
 
 __user_prefers_layout = False
 __user_preferred_region: str|None = None

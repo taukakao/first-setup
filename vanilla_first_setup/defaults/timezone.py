@@ -224,7 +224,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.navigation.push(country_page)
 
     def __on_country_button_clicked(self, widget, country_code):
-        self.__set_region_from_country_code(country_code)
+        self.selected_region = tz.region_from_country_code(country_code)
         self.selected_country_code = country_code
         self.__build_timezones_page(country_code)
 
@@ -242,27 +242,11 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.navigation.push(timezones_view_page)
 
     def __on_timezones_button_clicked(self, widget, timezone):
-        self.__set_country_code_from_timezone(timezone)
-        self.__set_region_from_timezone(timezone)
+        self.selected_country_code = tz.country_code_from_timezone(timezone)
+        self.selected_region = tz.region_from_timezone(timezone)
         self.selected_timezone = timezone
         self.__window.set_ready()
         self.__window.finish_step()
-
-    def __set_region_from_country_code(self, country_code):
-        for region, tz_country_code in tz.all_country_codes_by_region.items():
-            if country_code == tz_country_code:
-                self.selected_region = region
-                return
-            
-    def __set_country_code_from_timezone(self, timezone):
-        for country_code, tzcc_timezones in tz.all_timezones_by_country_code.items():
-            for tzcc_timezone in tzcc_timezones:
-                if timezone == tzcc_timezone:
-                    self.selected_country_code = country_code
-                    return
-            
-    def __set_region_from_timezone(self, timezone):
-        self.selected_region = tz.region_from_timezone(timezone)
 
     def __on_popped(self, nag_view, page, *args):
         if page == self.__search_results_nav_page:
