@@ -30,7 +30,7 @@ class VanillaTimezoneListPage(Adw.Bin):
 
     pref_group = Gtk.Template.Child()
 
-    def __init__(self, items: list[str], display_names: list[str], button_callback, active_item: str, suffixes: list[str]|None = None, **kwargs):
+    def __init__(self, items: list[str], display_names: list[str], button_callback, active_item: str, suffixes: list[str]|None = None, radio_buttons: bool = True, multiple_active_items: list[str] = None, **kwargs):
         super().__init__(**kwargs)
 
         self.__items = items
@@ -38,6 +38,8 @@ class VanillaTimezoneListPage(Adw.Bin):
         self.__display_names = display_names
         self.__suffixes = suffixes
         self.__active_item = active_item
+        self.__radio_buttons = radio_buttons
+        self.__multiple_active_items = multiple_active_items
 
         self.__all_rows = []
 
@@ -71,12 +73,15 @@ class VanillaTimezoneListPage(Adw.Bin):
                 region_row.add_suffix(label)
 
             button_active = item == self.__active_item
+            if self.__multiple_active_items:
+                button_active = item in self.__multiple_active_items
             button = self.__create_check_button(self.__on_button_activated, item, button_active)
 
-            if first_button:
-                button.set_group(first_button)
-            else:
-                first_button = button
+            if self.__radio_buttons:
+                if first_button:
+                    button.set_group(first_button)
+                else:
+                    first_button = button
 
             region_row.add_prefix(button)
             region_row.set_activatable_widget(button)

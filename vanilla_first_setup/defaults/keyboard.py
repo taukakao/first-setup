@@ -14,254 +14,251 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import gi
+import copy
 
 gi.require_version("GnomeDesktop", "4.0")
 
-import contextlib
-import os
-import re
-import subprocess
+from gi.repository import Adw, Gtk
+from gettext import gettext as _
 
-from gi.repository import Adw, Gio, GLib, Gtk
-
-from vanilla_first_setup.core.keymaps import KeyMaps
-
-
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/widget-keyboard.ui")
-class KeyboardRow(Adw.ActionRow):
-    __gtype_name__ = "KeyboardRow"
-
-    select_button = Gtk.Template.Child()
-    suffix_bin = Gtk.Template.Child()
-
-    def __init__(
-        self, title, subtitle, layout, variant, key, selected_keyboard, toggled_callback, **kwargs
-    ):
-        super().__init__(**kwargs)
-        self.__title = title
-        self.__subtitle = subtitle
-        self.__layout = layout
-        self.__variant = variant
-        self.__key = key
-        self.__selected_keyboard = selected_keyboard
-
-        self.set_title(title)
-        self.set_subtitle(subtitle)
-        self.suffix_bin.set_label(key)
-
-        self.select_button.connect("toggled", toggled_callback, self)
+from vanilla_first_setup.defaults.timezone import VanillaTimezoneListPage
+import vanilla_first_setup.core.keyboard as kbd
+import vanilla_first_setup.core.timezones as tz
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-keyboard.ui")
 class VanillaDefaultKeyboard(Adw.Bin):
     __gtype_name__ = "VanillaDefaultKeyboard"
 
-    btn_next = Gtk.Template.Child()
-    entry_test = Gtk.Template.Child()
     entry_search_keyboard = Gtk.Template.Child()
-    all_keyboards_group = Gtk.Template.Child()
-    selected_keyboard = {"layout": None, "model": "pc105", "variant": None}
+    navigation = Gtk.Template.Child()
+    search_warning_label = Gtk.Template.Child()
 
-    search_controller = Gtk.EventControllerKey.new()
-    test_focus_controller = Gtk.EventControllerFocus.new()
+    selected_region = ""
+    selected_country_code = ""
+    selected_keyboard = ""
+    all_selected_keyboards = []
 
-    match_regex = re.compile(r"[^a-zA-Z0-9 ]")
+    __search_results_list_page: VanillaTimezoneListPage|None = None
+    __search_results_nav_page: Adw.NavigationPage|None = None
 
-    def __init__(self, window, distro_info, key, step, **kwargs):
+    def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
-        self.__distro_info = distro_info
-        self.__key = key
-        self.__step = step
-        self.__keymaps = KeyMaps()
 
-        self.__keyboard_rows = self.__generate_keyboard_list_widgets(
-            self.selected_keyboard
-        )
-        for i, widget in enumerate(self.__keyboard_rows):
-            self.all_keyboards_group.append(widget)
+        self.navigation.connect("popped", self.__on_popped)
+        self.entry_search_keyboard.connect("search_changed", self.__on_search_field_changed)
+        tz.register_location_callback(self.__user_location_received)
 
-        # controllers
-        self.entry_search_keyboard.add_controller(self.search_controller)
-        self.entry_test.add_controller(self.test_focus_controller)
+    def set_page_active(self):
+        show_location = False
+        if tz.has_user_preferred_location():
+            selected_region, selected_country_code, timezone = tz.get_user_preferred_location()
+            if selected_region in kbd.all_country_codes_by_region and selected_country_code in kbd.all_country_codes:
+                show_location = True
+                self.selected_region = selected_region
+                self.selected_country_code = selected_country_code
 
-        # signals
-        self.btn_next.connect("clicked", self.__next)
-        self.all_keyboards_group.connect(
-            "selected-rows-changed", self.__keyboard_verify
-        )
-        self.all_keyboards_group.connect("row-selected", self.__keyboard_verify)
-        self.all_keyboards_group.connect("row-activated", self.__keyboard_verify)
-        self.__window.carousel.connect("page-changed", self.__keyboard_verify)
+        if self.selected_keyboard:
+            self.__window.set_ready(True)
 
-        self.search_controller.connect("key-released", self.__on_search_key_pressed)
-        if "VANILLA_NO_APPLY_XKB" not in os.environ:
-            self.test_focus_controller.connect("enter", self.__apply_layout)
+        region_page = self.__build_ui()
+        self.navigation.replace([region_page])
 
-    def __keyboard_verify(self, *args):
-        if self.selected_keyboard["layout"] is not None:
-            self.btn_next.set_sensitive(True)
-        else:
-            self.btn_next.set_sensitive(False)
+        if show_location:
+            self.__show_location()
 
-    def __next(self, *args):
-        self.__window.next()
+    def set_page_inactive(self):
+        return
 
-    def get_finals(self):
-        variant = self.selected_keyboard["variant"]
+    def finish(self):
+        # TODO: call backend with keyboard layout
+        return
+    # def get_finals(self):
+    #     variant = self.selected_keyboard["variant"]
 
-        # NOTE: we use BACKSPACE=guess here by default
-        # Ref: <https://manpages.ubuntu.com/manpages/bionic/en/man5/keyboard.5.htmlZ
-        if variant is None:
-            return {
-                "vars": {"confKeyboard": True},
-                "funcs": [
-                    {
-                        "if": "confKeyboard",
-                        "type": "command",
-                        "commands": [
-                            f'echo XKBMODEL="pc105" >> /etc/default/keyboard',
-                            f'echo XKBLAYOUT="{self.selected_keyboard["layout"]}" >> /etc/default/keyboard',
-                            f'echo BACKSPACE="guess" >> /etc/default/keyboard',
-                        ],
-                    }
-                ],
-            }  # fallback
-        return {
-            "vars": {"confKeyboard": True},
-            "funcs": [
-                {
-                    "if": "confKeyboard",
-                    "type": "command",
-                    "commands": [
-                        f'echo XKBMODEL="pc105" >> /etc/default/keyboard',
-                        f'echo XKBLAYOUT="{self.selected_keyboard["layout"]}" >> /etc/default/keyboard',
-                        f'echo XKBVARIANT="{self.selected_keyboard["variant"]}" >> /etc/default/keyboard',
-                        f'echo BACKSPACE="guess" >> /etc/default/keyboard',
-                    ],
-                }
-            ],
-        }
+    #     # NOTE: we use BACKSPACE=guess here by default
+    #     # Ref: <https://manpages.ubuntu.com/manpages/bionic/en/man5/keyboard.5.htmlZ
+    #     if variant is None:
+    #         return {
+    #             "vars": {"confKeyboard": True},
+    #             "funcs": [
+    #                 {
+    #                     "if": "confKeyboard",
+    #                     "type": "command",
+    #                     "commands": [
+    #                         f'echo XKBMODEL="pc105" >> /etc/default/keyboard',
+    #                         f'echo XKBLAYOUT="{self.selected_keyboard["layout"]}" >> /etc/default/keyboard',
+    #                         f'echo BACKSPACE="guess" >> /etc/default/keyboard',
+    #                     ],
+    #                 }
+    #             ],
+    #         }  # fallback
+    #     return {
+    #         "vars": {"confKeyboard": True},
+    #         "funcs": [
+    #             {
+    #                 "if": "confKeyboard",
+    #                 "type": "command",
+    #                 "commands": [
+    #                     f'echo XKBMODEL="pc105" >> /etc/default/keyboard',
+    #                     f'echo XKBLAYOUT="{self.selected_keyboard["layout"]}" >> /etc/default/keyboard',
+    #                     f'echo XKBVARIANT="{self.selected_keyboard["variant"]}" >> /etc/default/keyboard',
+    #                     f'echo BACKSPACE="guess" >> /etc/default/keyboard',
+    #                 ],
+    #             }
+    #         ],
+    #     }
 
-    def __generate_keyboard_list_widgets(self, selected_keyboard):
-        keyboard_widgets = []
-        current_layout, current_variant = self.__get_current_layout()
-
-        all_keyboard_layouts = {
-            value["display_name"]: {
-                "key": key,
-                "country": country,
-                "layout": value["xkb_layout"],
-                "variant": value["xkb_variant"],
-            }
-            for country in self.__keymaps.list_all.keys()
-            for key, value in self.__keymaps.list_all[country].items()
-        }
-
-        # Changed display_name as this charchter string is causing gtk markup error
-        if all_keyboard_layouts.get("Czech (with <\|> key)"):
-            all_keyboard_layouts["Czech (bksl)"] = all_keyboard_layouts.pop(
-                "Czech (with <\|> key)"
-            )
-
-        for keyboard_title, content in all_keyboard_layouts.items():
-            keyboard_key = content["key"]
-            keyboard_country = content["country"]
-            keyboard_layout = content["layout"]
-            keyboard_variant = content["variant"]
-            keyboard_row = KeyboardRow(
-                keyboard_title,
-                keyboard_country,
-                keyboard_layout,
-                keyboard_variant,
-                keyboard_key,
-                selected_keyboard,
-                self.__on_check_button_toggled,
-            )
-
-            if len(keyboard_widgets) > 0:
-                keyboard_row.select_button.set_group(keyboard_widgets[0].select_button)
-            keyboard_widgets.append(keyboard_row)
-
-            # set up current keyboard
-            if (
-                current_layout == keyboard_layout
-                and current_variant == keyboard_variant
-            ):
-                keyboard_row.select_button.set_active(True)
-                self.selected_keyboard["layout"] = current_layout
-                self.selected_keyboard["variant"] = current_variant
-
-        return keyboard_widgets
-
-    def __get_current_layout(self):
-        res = subprocess.run(
-            ["setxkbmap", "-query"], capture_output=True, text=True
-        ).stdout.splitlines()
-
-        current_layout = [
-            line.split(": ")[1] for line in res if line.startswith("layout")
-        ][0]
-        current_variant = None
-
-        if "," in current_layout:
-            current_layout = current_layout.split(",")[0].strip()
-
-        with contextlib.suppress(IndexError):
-            current_variant = [
-                line.split(": ")[1] for line in res if line.startswith("variant")
-            ][0]
-            if "," in current_variant:
-                current_variant = current_variant.split(",")[0].strip()
-
-        return current_layout, current_variant
-
-    def __apply_layout(self, *args):
-        layout = self.selected_keyboard["layout"]
-        variant = self.selected_keyboard["variant"]
-
-        if variant is None:
+    def __show_location(self):
+        if not self.selected_region:
             return
+        self.__build_country_page(self.selected_region)
+        
+        if not self.selected_country_code:
+            return
+        self.__build_keyboards_page(self.selected_country_code)
 
-        # set the layout
-        self.__set_keyboard_layout(layout, variant)
+    def __build_ui(self) -> Adw.NavigationPage:
+        keyboards_view_page = Adw.NavigationPage()
+        keyboards_view_page.set_title(_("Region"))
 
-    def __on_search_key_pressed(self, *args):
-        keywords = self.match_regex.sub(
-            "", self.entry_search_keyboard.get_text().lower()
-        )
+        regions = []
+        for region in kbd.all_country_codes_by_region:
+            regions.append(region)
+        regions_page = VanillaTimezoneListPage(regions, regions, self.__on_region_button_clicked, self.selected_region)
 
-        for row in self.all_keyboards_group:
-            row_title = self.match_regex.sub("", row.get_title().lower())
-            row_subtitle = self.match_regex.sub("", row.get_subtitle().lower())
-            row_label = self.match_regex.sub("", row.suffix_bin.get_label().lower())
+        keyboards_view_page.set_child(regions_page)
+        return keyboards_view_page
 
-            search_text = row_title + " " + row_subtitle + " " + row_label
-            row.set_visible(re.search(keywords, search_text, re.IGNORECASE) is not None)
+    def __on_region_button_clicked(self, widget, region):
+        self.selected_region = region
+        self.__build_country_page(region)
+    
+    def __build_country_page(self, region):
+        country_page = Adw.NavigationPage()
+        country_page.set_title(_("Country"))
 
-    def __set_keyboard_layout(self, layout, variant=None):
-        value = layout
+        country_codes_unfiltered = kbd.all_country_codes_by_region[region]
+        country_codes = []
+        for country_code in country_codes_unfiltered:
+            if country_code in kbd.all_keyboard_layouts_by_country_code:
+                country_codes.append(country_code)
+        countries = copy.deepcopy(country_codes)
+        for idx, country_code in enumerate(countries):
+            countries[idx] = tz.all_country_names_by_code[country_code]
 
-        if variant != "":
-            value = layout + "+" + variant
+        countries_page = VanillaTimezoneListPage(country_codes, countries, self.__on_country_button_clicked, self.selected_country_code)
 
-        Gio.Settings.new("org.gnome.desktop.input-sources").set_value(
-            "sources",
-            GLib.Variant.new_array(
-                GLib.VariantType("(ss)"),
-                [
-                    GLib.Variant.new_tuple(
-                        GLib.Variant.new_string("xkb"), GLib.Variant.new_string(value)
-                    )
-                ],
-            ),
-        )
+        country_page.set_child(countries_page)
 
-    @property
-    def step_id(self):
-        return self.__key
+        self.navigation.push(country_page)
 
-    def __on_check_button_toggled(self, __radio_button, widget):
-        self.selected_keyboard["layout"] = widget._KeyboardRow__layout
-        self.selected_keyboard["variant"] = widget._KeyboardRow__variant
-        self.btn_next.set_sensitive(True)
+    def __on_country_button_clicked(self, widget, country_code):
+        self.selected_region = tz.region_from_country_code(country_code)
+        self.selected_country_code = country_code
+        self.__build_keyboards_page(country_code)
+
+    def __build_keyboards_page(self, country_code):
+        keyboards_view_page = Adw.NavigationPage()
+        keyboards_view_page.set_title(_("Keyboard Layout"))
+
+        keyboards = kbd.all_keyboard_layouts_by_country_code[country_code]
+        keyboard_names = keyboards
+        keyboards_page = VanillaTimezoneListPage(keyboards, keyboard_names, self.__on_keyboards_button_clicked, self.selected_keyboard, radio_buttons=False, multiple_active_items=self.all_selected_keyboards)
+
+        keyboards_view_page.set_child(keyboards_page)
+
+        self.navigation.push(keyboards_view_page)
+
+    def __on_keyboards_button_clicked(self, widget, keyboard):
+        self.selected_region = kbd.region_from_keyboard(keyboard)
+        self.selected_country_code = kbd.country_code_from_keyboard(keyboard)
+        if keyboard in self.all_selected_keyboards:
+            widget.set_active(False)
+            self.all_selected_keyboards.remove(keyboard)
+            self.selected_keyboard = ""
+            self.__window.set_ready(len(self.all_selected_keyboards) > 0)
+        else:
+            self.all_selected_keyboards.append(keyboard)
+            self.selected_keyboard = keyboard
+            self.__window.set_ready()
+        
+    def __user_location_received(self, location):
+        self.selected_region = tz.user_region
+        self.selected_country_code = tz.user_country_code
+        self.__window.set_ready(True)
+
+    def __on_popped(self, nag_view, page, *args):
+        if page == self.__search_results_nav_page:
+            self.__search_results_list_page.clear_items()
+            self.search_warning_label.set_visible(False)
+
+    def __on_search_field_changed(self, *args):
+        return
+        # max_results = 50
+
+        # search_term: str = self.entry_search_keyboard.get_text().strip()
+        
+        # if search_term == "":
+        #     self.navigation.pop()
+        #     return
+
+        # keyboards_filtered = []
+
+        # list_shortened = False
+
+        # for country_codes, keyboards in tz.all_keyboards_by_country_code.items():
+        #     if len(keyboards_filtered) > max_results:
+        #         list_shortened = True
+        #         break
+        #     for keyboard in keyboards:
+        #         if search_term.replace(" ", "_").lower() in keyboard.lower():
+        #             keyboards_filtered.append(keyboard)
+
+        # for country_code, country_name in tz.all_country_names_by_code.items():
+        #     if len(keyboards_filtered) > max_results:
+        #         list_shortened = True
+        #         break
+        #     if search_term.lower() in country_name.lower():
+        #         for keyboard in tz.all_keyboards_by_country_code[country_code]:
+        #             if keyboard not in keyboards_filtered:
+        #                 keyboards_filtered.append(keyboard)
+
+        # if len(keyboards_filtered) > max_results:
+        #     list_shortened = True
+        #     keyboards_filtered = keyboards_filtered[0:max_results]
+
+        # time_previes = [tz.get_keyboard_preview(keyboard)[0] for keyboard in keyboards_filtered]
+
+        # if self.__search_results_list_page:
+        #     self.__search_results_list_page.clear_items()
+        #     self.__search_results_list_page.rebuild(keyboards_filtered,  keyboards_filtered, self.selected_keyboard, time_previes)
+        # else:
+        #     self.__search_results_nav_page = Adw.NavigationPage()
+        #     self.__search_results_nav_page.set_title(_("Search results"))
+        #     self.__search_results_list_page = VanillakeyboardListPage(keyboards_filtered, keyboards_filtered, self.__on_keyboards_button_clicked, self.selected_keyboard, time_previes)
+        #     self.__search_results_nav_page.set_child(self.__search_results_list_page)
+
+        # if self.navigation.get_visible_page() != self.__search_results_nav_page:
+        #     self.navigation.push(self.__search_results_nav_page)
+
+        # self.search_warning_label.set_visible(list_shortened)
+
+    # def __set_keyboard_layout(self, layout, variant=None):
+    #     value = layout
+
+    #     if variant != "":
+    #         value = layout + "+" + variant
+
+    #     Gio.Settings.new("org.gnome.desktop.input-sources").set_value(
+    #         "sources",
+    #         GLib.Variant.new_array(
+    #             GLib.VariantType("(ss)"),
+    #             [
+    #                 GLib.Variant.new_tuple(
+    #                     GLib.Variant.new_string("xkb"), GLib.Variant.new_string(value)
+    #                 )
+    #             ],
+    #         ),
+    #     )
