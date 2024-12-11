@@ -110,6 +110,7 @@ for country_code in pytz.country_timezones:
 
     all_country_names_by_code[country_code] = country_name
 
+all_regions.sort()
 for region in all_regions:
     if region in __region_translations:
         all_region_names.append(__region_translations[region])

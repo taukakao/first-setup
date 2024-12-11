@@ -172,12 +172,12 @@ class VanillaDefaultTimezone(Adw.Bin):
     def __show_location(self, region, country_code):
         if not region:
             return
-        country_page = self.__build_country_page(self.selected_region)
+        country_page = self.__build_country_page(region)
         self.navigation.push(country_page)
         
         if not country_code:
             return
-        timezones_page = self.__build_timezones_page(self.selected_country_code)
+        timezones_page = self.__build_timezones_page(country_code)
         self.navigation.push(timezones_page)
 
     def __user_location_received(self, location):
