@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="VanillaTimezoneListPage" parent="AdwBin">
-    <child>
+  <template class="VanillaTimezoneListPage" parent="AdwNavigationPage">
+    <property name="title">No Title</property>
+    <property name="child">
       <object class="AdwToolbarView">
         <property name="top-bar-style">flat</property>
         <property name="height-request">350</property>
@@ -16,6 +17,6 @@
           <object class="AdwPreferencesGroup" id="pref_group"></object>
         </property>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

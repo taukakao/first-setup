@@ -5,6 +5,8 @@ gi.require_version("GWeather", "4.0")
 from datetime import datetime
 import logging
 import threading
+import copy
+from gettext import gettext as _
 
 import requests
 from gi.repository import GLib, GWeather
@@ -16,6 +18,8 @@ world = GWeather.Location.get_world()
 base = world
 
 all_country_codes: list[str] = []
+all_regions: list[str] = []
+all_region_names: list[str] = []
 all_country_codes_by_region: dict[str, list[str]] = {}
 all_timezones_by_country_code: dict[str, list[str]] = {}
 all_country_names_by_code: dict[str, str] = {}
@@ -57,6 +61,13 @@ def country_code_from_timezone(timezone) -> str:
                 return country_code
     return ""
 
+def retrieve_country_names_by_region(region) -> list[str]:
+    country_codes = all_country_codes_by_region[region]
+    countries = copy.deepcopy(country_codes)
+    for idx, country_code in enumerate(countries):
+        countries[idx] = all_country_names_by_code[country_code]
+    return countries
+
 __user_prefers_layout = False
 __user_preferred_region: str|None = None
 __user_preferred_country_code: str|None = None
@@ -80,6 +91,9 @@ def set_user_preferred_location(region, country_code=None, timezone=None):
     __user_preferred_timezone = timezone
     __user_prefers_layout = True
 
+__region_translations = {'Europe': _('Europe'), 'Asia': _('Asia'), 'America': _('America'), 'Africa': _('Africa'), 'Antarctica': _('Antarctica'), 'Pacific': _('Pacific Ocean'), 'Australia': _('Australia'), 'Atlantic': _('Atlantic Ocean'), 'Indian': _('Indian Ocean'), 'Arctic': _('Arctic')}
+__location_callbacks = []
+
 for country_code in pytz.country_timezones:
     timezones = pytz.country_timezones[country_code]
     country_name = pytz.country_names[country_code]
@@ -89,13 +103,59 @@ for country_code in pytz.country_timezones:
     
     if region not in all_country_codes_by_region:
         all_country_codes_by_region[region] = []
+        all_regions.append(region)
     all_country_codes_by_region[region].append(country_code)
 
     all_timezones_by_country_code[country_code] = timezones
 
     all_country_names_by_code[country_code] = country_name
 
-__location_callbacks = []
+for region in all_regions:
+    if region in __region_translations:
+        all_region_names.append(__region_translations[region])
+
+def search_timezones_by_country(search_term: str, limit: int) -> tuple[list[str], bool]:
+    '''
+        search_countries looks for all country names with substring search_term and returns their time zones
+
+        search is not case sensitive
+    
+        returns a list of all time zones for the countries that have matching names and a bool if the list is shortened due to the limit
+    '''
+    clean_search_term = search_term.lower()
+
+    timezones_filtered = []
+    list_shortened = False
+
+    for country_code, country_name in all_country_names_by_code.items():
+        if len(timezones_filtered) > limit:
+            list_shortened = True
+            break
+        if clean_search_term in country_name.lower():
+            timezones_filtered += all_timezones_by_country_code[country_code]
+    
+    return (timezones_filtered, list_shortened)
+
+def search_timezones(search_term: str, limit: int) -> tuple[list[str], bool]:
+    '''
+        search_timezones looks for all time zones with substring search_term
+
+        search is not case sensitive
+    
+        returns a list of all matching time zones and a bool if the list is shortened due to the limit
+    '''
+    clean_search_term = search_term.lower().replace(" ", "_") 
+
+    timezones_filtered = []
+    list_shortened = False
+    for country_codes, timezones in all_timezones_by_country_code.items():
+        if len(timezones_filtered) > limit:
+            list_shortened = True
+            break
+        for timezone in timezones:
+            if clean_search_term in timezone.lower():
+                timezones_filtered.append(timezone)
+    return (timezones_filtered, list_shortened)
 
 def __update_user_location(location):
     global user_location
