@@ -84,10 +84,10 @@ class VanillaDefaultKeyboard(Adw.Bin):
     def __build_ui(self) -> VanillaTimezoneListPage:
         regions = kbd.all_regions
         region_names = kbd.all_region_names
-        timezones_view_page = VanillaTimezoneListPage(_("Region"), regions, region_names, self.__on_region_button_clicked, self.selected_regions, radio_buttons=False)
-        timezones_view_page.set_tag("region")
+        regions_page = VanillaTimezoneListPage(_("Region"), regions, region_names, self.__on_region_button_clicked, self.selected_regions, radio_buttons=False)
+        regions_page.set_tag("region")
 
-        return timezones_view_page
+        return regions_page
 
     def __on_region_button_clicked(self, widget, region):
         country_page = self.__build_country_page(region)
