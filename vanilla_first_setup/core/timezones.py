@@ -205,9 +205,6 @@ def __retrieve_location_thread():
 thread = threading.Thread(target=__retrieve_location_thread)
 thread.start()
 
-def user_set_timezone_callback(timezone):
-    return
-
 class TimezonesDataSource():
     def get_all_regions(self) -> list[str]:
         return all_regions

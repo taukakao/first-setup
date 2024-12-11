@@ -159,12 +159,11 @@ class VanillaDefaultLocation(Adw.Bin):
     selected_country_code = None
     selected_special = None
 
-    def __init__(self, window, special_name: str, data_source: LocationPageDataSource, finish_callback, **kwargs):
+    def __init__(self, window, special_name: str, data_source: LocationPageDataSource, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
         self.__special_name = special_name
         self.__data_source = data_source
-        self.__finish_callback = finish_callback
 
         self.navigation.connect("popped", self.__on_popped)
         self.entry_search.connect("search_changed", self.__on_search_field_changed)
@@ -198,8 +197,6 @@ class VanillaDefaultLocation(Adw.Bin):
 
     def finish(self):
         tz.set_user_preferred_location(self.selected_region, self.selected_country_code)
-        self.__finish_callback(self.selected_special)
-        # TODO: call backend with special
         return
 
     def __show_location(self, region, country_code):

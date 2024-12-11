@@ -18,6 +18,7 @@
     <file>gtk/default-network.ui</file>
     <file>gtk/default-language.ui</file>
     <file>gtk/default-location.ui</file>
+    <file>gtk/default-timezone.ui</file>
     <file>gtk/wireless-row.ui</file>
     <file>gtk/widget-language.ui</file>
     <file>gtk/widget-location-list-page.ui</file>

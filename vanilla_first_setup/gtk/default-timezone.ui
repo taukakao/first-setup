@@ -6,42 +6,10 @@
     <child>
       <object class="AdwToolbarView">
         <property name="content">
-          <object class="AdwStatusPage">
+          <object class="AdwStatusPage" id="status_page">
             <property name="icon-name">preferences-system-time-symbolic</property>
             <property name="title" translatable="true">Date &amp; Time</property>
             <property name="description" translatable="true">Select your preferred timezone</property>
-            <child>
-              <object class="AdwClamp">
-                <property name="maximum-size">600</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">1</property>
-                    <child>
-                      <object class="GtkSearchEntry" id="entry_search_timezone">
-                        <property name="hexpand">true</property>
-                        <property name="placeholder-text" translatable="true">Search timezones</property>
-                        <property name="search-delay">250</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwNavigationView" id="navigation"></object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="search_warning_label">
-                            <property name="label" translatable="yes">The search results are incomplete. Try refining your query.</property>
-                            <property name="wrap">True</property>
-                            <property name="wrap-mode">word-char</property>
-                        <property name="tooltip-text">warning</property>
-                        <property name="visible">false</property>
-                        <style>
-                          <class name="warning"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </property>
         <child type="bottom">
