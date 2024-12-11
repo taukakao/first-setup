@@ -55,7 +55,11 @@ def search_keyboards(search_term: str, limit: int) -> tuple[list[str], bool]:
         if len(keyboards_filtered) >= limit:
             list_shortened = True
             break
-        if clean_search_term in keyboard_layout_name.lower():
+        does_match = True
+        for search_term_part in clean_search_term.split(" "):
+            if search_term_part not in keyboard_layout_name.lower():
+                does_match = False
+        if does_match:
             keyboards_filtered.append(all_keyboard_layouts[index])
     return (keyboards_filtered, list_shortened)
 
@@ -63,6 +67,13 @@ def find_keyboard_layout_name_for_keyboard(keyboard: str) -> str:
     index = all_keyboard_layouts.index(keyboard)
     return all_keyboard_layout_names[index]
 
+def is_variant_of_same_layout(keyboard_layout_a: str, keyboard_layout_b: str) -> bool:
+    info_a = xkb.get_layout_info(keyboard_layout_a)
+    info_b = xkb.get_layout_info(keyboard_layout_b)
+
+    same_layout = info_a.xkb_layout == info_b.xkb_layout
+    return same_layout
+    
 for country_code in tz.all_country_codes:
     layouts = xkb.get_layouts_for_country(country_code)
     layouts.sort(key=len)

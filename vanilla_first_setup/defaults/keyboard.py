@@ -116,16 +116,22 @@ class VanillaDefaultKeyboard(Adw.Bin):
         return keyboards_page
 
     def __on_keyboard_button_clicked(self, widget, keyboard):
-        if keyboard in self.selected_keyboards:
-            self.selected_keyboards.remove(keyboard)
+        new_selected_keyboards = []
+        if keyboard not in self.selected_keyboards:
+            for keyboard_selected in self.selected_keyboards:
+                if not kbd.is_variant_of_same_layout(keyboard, keyboard_selected):
+                    new_selected_keyboards.append(keyboard_selected)
+            new_selected_keyboards.append(keyboard)
         else:
-            self.selected_keyboards.append(keyboard)
-        
+            new_selected_keyboards = self.selected_keyboards
+            new_selected_keyboards.remove(keyboard)
+
+        self.selected_keyboards = new_selected_keyboards
+
         self.__update_selected_regions_and_countries()
         self.__refresh_activated_buttons()
 
-        if len(self.selected_keyboards) > 0:
-            self.__window.set_ready()
+        self.__window.set_ready(len(self.selected_keyboards) > 0)
 
     def __on_popped(self, nag_view, page):
         if page.get_tag() == "search":
