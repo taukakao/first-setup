@@ -114,7 +114,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         tz.register_location_callback(self.__user_location_received)
 
     def set_page_active(self):
-        if tz.has_user_preferred_location():
+        if tz.has_user_preferred_location() and not self.selected_timezone:
             self.selected_region, self.selected_country_code, self.selected_timezone = tz.get_user_preferred_location()
 
         if self.selected_timezone != "":
@@ -127,7 +127,7 @@ class VanillaDefaultTimezone(Adw.Bin):
             self.current_timezone_label.set_label(self.selected_timezone)
             self.current_time_label.set_label(tz.get_timezone_preview(self.selected_timezone)[0])
         
-        if tz.has_user_preferred_location():
+        if self.selected_region:
             self.__show_location(self.selected_region, self.selected_country_code)
         
         self.__refresh_activated_buttons()
@@ -181,6 +181,8 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.navigation.push(timezones_page)
 
     def __user_location_received(self, location):
+        if self.selected_timezone:
+            return
         self.selected_region = tz.user_region
         self.selected_country_code = tz.user_country_code
         self.selected_timezone = tz.user_timezone
