@@ -111,26 +111,24 @@ class VanillaDefaultTimezone(Adw.Bin):
 
         self.navigation.connect("popped", self.__on_popped)
         self.entry_search_timezone.connect("search_changed", self.__on_search_field_changed)
-        tz.register_location_callback(self.__user_location_received)
 
     def set_page_active(self):
-        if tz.has_user_preferred_location() and not self.selected_timezone:
-            self.selected_region, self.selected_country_code, self.selected_timezone = tz.get_user_preferred_location()
-
-        if self.selected_timezone != "":
+        if self.selected_timezone:
             self.__window.set_ready(True)
-
-        region_page = self.__build_ui()
-        self.navigation.replace([region_page])
 
         if self.selected_timezone:
             self.current_timezone_label.set_label(self.selected_timezone)
             self.current_time_label.set_label(tz.get_timezone_preview(self.selected_timezone)[0])
-        
+
         if self.selected_region:
             self.__show_location(self.selected_region, self.selected_country_code)
-        
-        self.__refresh_activated_buttons()
+        elif tz.has_user_preferred_location():
+            selected_region, selected_country_code, selected_timezone = tz.get_user_preferred_location()
+            self.__show_location(selected_region, selected_country_code)
+        elif tz.user_region:
+            self.__show_location(tz.user_region, tz.user_country_code)
+        else:
+            self.__show_location(None, None)
 
     def set_page_inactive(self):
         return
@@ -170,23 +168,19 @@ class VanillaDefaultTimezone(Adw.Bin):
     #         }
 
     def __show_location(self, region, country_code):
-        if not region:
-            return
-        country_page = self.__build_country_page(region)
-        self.navigation.push(country_page)
-        
-        if not country_code:
-            return
-        timezones_page = self.__build_timezones_page(country_code)
-        self.navigation.push(timezones_page)
+        stack = []
+        regions_page = self.__build_ui()
+        stack.append(regions_page)
 
-    def __user_location_received(self, location):
-        if self.selected_timezone:
-            return
-        self.selected_region = tz.user_region
-        self.selected_country_code = tz.user_country_code
-        self.selected_timezone = tz.user_timezone
-        self.__window.set_ready(True)
+        if region:
+            country_page = self.__build_country_page(region)
+            stack.append(country_page)
+        
+        if country_code:
+            timezones_page = self.__build_timezones_page(country_code)
+            stack.append(timezones_page)
+
+        self.navigation.replace(stack)
     
     def __build_ui(self) -> VanillaTimezoneListPage:
         regions = tz.all_regions

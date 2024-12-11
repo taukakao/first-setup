@@ -94,8 +94,8 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_keyboard = VanillaDefaultKeyboard(self)
 
         self.pages.append(self.__view_welcome)
-        self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_keyboard)
+        self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_apps)
         self.pages.append(self.__view_conn_check)
         self.pages.append(self.__view_theme)

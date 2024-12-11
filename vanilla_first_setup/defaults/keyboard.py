@@ -43,26 +43,30 @@ class VanillaDefaultKeyboard(Adw.Bin):
 
         self.navigation.connect("popped", self.__on_popped)
         self.entry_search_keyboard.connect("search_changed", self.__on_search_field_changed)
-        tz.register_location_callback(self.__user_location_received)
 
     def set_page_active(self):
         if self.selected_keyboard:
             self.__window.set_ready(True)
 
-        region_page = self.__build_ui()
-        self.navigation.replace([region_page])
-        
-        if tz.has_user_preferred_location() and not self.selected_keyboard:
+        if self.selected_region:
+            self.__show_location(tz.user_region, tz.user_country_code)
+        if tz.has_user_preferred_location():
             selected_region, selected_country_code, selected_timezone = tz.get_user_preferred_location()
             if selected_region not in kbd.all_regions:
                 selected_region = ""
             if selected_country_code not in kbd.all_country_codes:
                 selected_country_code = ""
             self.__show_location(selected_region, selected_country_code)
-        elif self.selected_region:
-            self.__show_location(self.selected_region, self.selected_country_code)
-        
-        self.__refresh_activated_buttons()
+        elif tz.user_region:
+            user_region = tz.user_region
+            user_country_code = tz.user_country_code
+            if user_region not in kbd.all_regions:
+                user_region = ""
+            if user_country_code not in kbd.all_country_codes:
+                user_country_code = ""
+            self.__show_location(user_region, user_country_code)
+        else:
+            self.__show_location(None, None)
 
     def set_page_inactive(self):
         return
@@ -73,26 +77,19 @@ class VanillaDefaultKeyboard(Adw.Bin):
         return
 
     def __show_location(self, region, country_code):
-        if not region:
-            return
-        country_page = self.__build_country_page(region)
-        self.navigation.push(country_page)
-        
-        if not country_code:
-            return
-        keyboards_page = self.__build_keyboards_page(country_code)
-        self.navigation.push(keyboards_page)
+        stack = []
+        regions_page = self.__build_ui()
+        stack.append(regions_page)
 
-    def __user_location_received(self, location):
-        if self.selected_keyboard:
-            return
-        region = None
-        country_code = None
-        if tz.user_region in kbd.all_regions:
-            region = tz.user_region
-        if tz.user_country_code in kbd.all_country_codes:
-            country_code = tz.user_country_code
-        self.__show_location(region, country_code)
+        if region:
+            country_page = self.__build_country_page(region)
+            stack.append(country_page)
+        
+        if country_code:
+            keyboards_page = self.__build_keyboards_page(country_code)
+            stack.append(keyboards_page)
+
+        self.navigation.replace(stack)
     
     def __build_ui(self) -> VanillaTimezoneListPage:
         regions = kbd.all_regions
