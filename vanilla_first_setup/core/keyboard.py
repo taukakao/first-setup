@@ -122,3 +122,40 @@ for keyboard_layout in all_keyboard_layouts:
 for layout in keyboards_layouts_without_region:
     info = xkb.get_layout_info(layout)
     keyboards_layout_names_without_region.append(info.display_name)
+
+class KeyboardsDataSource():
+    def get_all_regions(self) -> list[str]:
+        return all_regions
+
+    def find_name_for_region(self, region: str) -> str:
+        index = all_regions.index(region)
+        return all_region_names[index]
+
+    def get_all_country_codes(self) -> list[str]:
+        return all_country_codes
+
+    def get_all_country_codes_by_region(self, region: str) -> list[str]:
+        return all_country_codes_by_region[region]
+
+    def find_name_for_country_code(self, country_code: str) -> str:
+        return tz.all_country_names_by_code[country_code]
+
+    def get_specials_by_country_code(self, country_code: str) -> list[str]:
+        return all_keyboard_layouts_by_country_code[country_code]
+
+    def country_code_from_special(self, special: str) -> str:
+        return country_code_from_keyboard(special)
+
+    def region_from_special(self, special: str) -> str:
+        return region_from_keyboard(special)
+
+    def search_specials(self, search_term: str, max_results: int) -> tuple[list[str], bool]:
+        timezones_filtered, shortened = search_keyboards(search_term, max_results)
+        
+        return timezones_filtered, shortened
+
+    def find_name_for_special(self, special: str) -> str|None:
+        return find_keyboard_layout_name_for_keyboard(special)
+
+    def find_description_for_special(self, special: str) -> str|None:
+        return special

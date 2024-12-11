@@ -27,6 +27,7 @@ from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
 from vanilla_first_setup.defaults.conn_check import VanillaDefaultConnCheck
 from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
 from vanilla_first_setup.defaults.timezone import VanillaDefaultTimezone
+from vanilla_first_setup.defaults.keyboard import VanillaDefaultKeyboard
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
@@ -84,7 +85,7 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __build_ui(self):
         self.__view_welcome = VanillaDefaultWelcome(self)
         self.__view_timezone = VanillaDefaultTimezone(self)
-        # self.__view_keyboard = VanillaDefaultLocation(self, _("Keyboaard"), )
+        self.__view_keyboard = VanillaDefaultKeyboard(self)
         self.__view_hostname = VanillaDefaultHostname(self)
         self.__view_user = VanillaDefaultUser(self)
         self.__view_logout = VanillaLogout(self)
@@ -93,7 +94,7 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_apps = VanillaLayoutApplications(self)
 
         self.pages.append(self.__view_welcome)
-        # self.pages.append(self.__view_keyboard)
+        self.pages.append(self.__view_keyboard)
         self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_apps)
         self.pages.append(self.__view_conn_check)

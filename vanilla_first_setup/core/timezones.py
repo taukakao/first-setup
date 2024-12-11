@@ -232,8 +232,6 @@ class TimezonesDataSource():
         return region_from_timezone(special)
 
     def search_specials(self, search_term: str, max_results: int) -> tuple[list[str], bool]:
-        '''should return a list of all specials which match search_term in some way 
-        and a bool whether the list has been shortened due to max_results'''
         timezones_filtered, shortened = search_timezones(search_term, max_results)
 
         if max_results-len(timezones_filtered) > 0:
