@@ -71,15 +71,14 @@ def retrieve_country_names_by_region(region) -> list[str]:
 __user_prefers_layout = False
 __user_preferred_region: str|None = None
 __user_preferred_country_code: str|None = None
-__user_preferred_timezone: str|None = None
 
 def has_user_preferred_location() -> bool:
     return __user_prefers_layout
 
 def get_user_preferred_location() -> tuple[str, str, str]:
-    return (__user_preferred_region, __user_preferred_country_code, __user_preferred_timezone)
+    return (__user_preferred_region, __user_preferred_country_code)
 
-def set_user_preferred_location(region, country_code=None, timezone=None):
+def set_user_preferred_location(region, country_code=None):
     if not region:
         return
     global __user_prefers_layout
@@ -88,10 +87,19 @@ def set_user_preferred_location(region, country_code=None, timezone=None):
     global __user_preferred_timezone
     __user_preferred_region = region
     __user_preferred_country_code = country_code
-    __user_preferred_timezone = timezone
     __user_prefers_layout = True
 
-__region_translations = {'Europe': _('Europe'), 'Asia': _('Asia'), 'America': _('America'), 'Africa': _('Africa'), 'Antarctica': _('Antarctica'), 'Pacific': _('Pacific Ocean'), 'Australia': _('Australia'), 'Atlantic': _('Atlantic Ocean'), 'Indian': _('Indian Ocean'), 'Arctic': _('Arctic')}
+__region_translations = {'Europe': _('Europe'),
+                         'Asia': _('Asia'),
+                         'America': _('America'),
+                         'Africa': _('Africa'),
+                         'Antarctica': _('Antarctica'),
+                         'Pacific': _('Pacific Ocean'),
+                         'Australia': _('Australia'),
+                         'Atlantic': _('Atlantic Ocean'),
+                         'Indian': _('Indian Ocean'),
+                         'Arctic': _('Arctic'),
+                         }
 __location_callbacks = []
 
 for country_code in pytz.country_timezones:
@@ -196,3 +204,49 @@ def __retrieve_location_thread():
 
 thread = threading.Thread(target=__retrieve_location_thread)
 thread.start()
+
+def user_set_timezone_callback(timezone):
+    return
+
+class TimezonesDataSource():
+    def get_all_regions(self) -> list[str]:
+        return all_regions
+
+    def find_name_for_region(self, region: str) -> str:
+        index = all_regions.index(region)
+        return all_region_names[index]
+
+    def get_all_country_codes(self) -> list[str]:
+        return all_country_codes
+
+    def get_all_country_codes_by_region(self, region: str) -> list[str]:
+        return all_country_codes_by_region[region]
+
+    def find_name_for_country_code(self, country_code: str) -> str:
+        return all_country_names_by_code[country_code]
+
+    def get_specials_by_country_code(self, country_code: str) -> list[str]:
+        return all_timezones_by_country_code[country_code]
+
+    def country_code_from_special(self, special: str) -> str:
+        return country_code_from_timezone(special)
+
+    def region_from_special(self, special: str) -> str:
+        return region_from_timezone(special)
+
+    def search_specials(self, search_term: str, max_results: int) -> tuple[list[str], bool]:
+        '''should return a list of all specials which match search_term in some way 
+        and a bool whether the list has been shortened due to max_results'''
+        timezones_filtered, shortened = search_timezones(search_term, max_results)
+
+        if max_results-len(timezones_filtered) > 0:
+            timezones_filtered_new, shortened = search_timezones_by_country(search_term, max_results-len(timezones_filtered))
+            timezones_filtered += timezones_filtered_new
+        
+        return timezones_filtered, shortened
+
+    def find_name_for_special(self, special: str) -> str|None:
+        return special.split("/")[1]
+
+    def find_description_for_special(self, special: str) -> str|None:
+        return get_timezone_preview(special)[0]

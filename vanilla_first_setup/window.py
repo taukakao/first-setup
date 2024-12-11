@@ -19,6 +19,9 @@ import threading
 from gettext import gettext as _
 from gi.repository import Gtk, Adw, GLib
 
+import vanilla_first_setup.core.timezones as tz
+import vanilla_first_setup.core.keyboard as kbd
+
 from vanilla_first_setup.views.logout import VanillaLogout
 from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
 from vanilla_first_setup.defaults.user import VanillaDefaultUser
@@ -26,8 +29,7 @@ from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
 from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
 from vanilla_first_setup.defaults.conn_check import VanillaDefaultConnCheck
 from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
-from vanilla_first_setup.defaults.timezone import VanillaDefaultTimezone
-from vanilla_first_setup.defaults.keyboard import VanillaDefaultKeyboard
+from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
@@ -84,17 +86,17 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     def __build_ui(self):
         self.__view_welcome = VanillaDefaultWelcome(self)
-        self.__view_timezone = VanillaDefaultTimezone(self)
+        self.__view_timezone = VanillaDefaultLocation(self, _("Timezone"), tz.TimezonesDataSource(), tz.user_set_timezone_callback)
+        # self.__view_keyboard = VanillaDefaultLocation(self, _("Keyboaard"), )
         self.__view_hostname = VanillaDefaultHostname(self)
         self.__view_user = VanillaDefaultUser(self)
         self.__view_logout = VanillaLogout(self)
         self.__view_theme = VanillaDefaultTheme(self)
         self.__view_conn_check = VanillaDefaultConnCheck(self)
         self.__view_apps = VanillaLayoutApplications(self)
-        self.__view_keyboard = VanillaDefaultKeyboard(self)
 
         self.pages.append(self.__view_welcome)
-        self.pages.append(self.__view_keyboard)
+        # self.pages.append(self.__view_keyboard)
         self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_apps)
         self.pages.append(self.__view_conn_check)
