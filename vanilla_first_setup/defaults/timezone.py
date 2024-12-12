@@ -27,6 +27,7 @@ class VanillaDefaultTimezone(Adw.Bin):
     __gtype_name__ = "VanillaDefaultTimezone"
 
     status_page = Gtk.Template.Child()
+    footer = Gtk.Template.Child()
     current_timezone_label = Gtk.Template.Child()
     current_time_label = Gtk.Template.Child()
 
@@ -38,16 +39,26 @@ class VanillaDefaultTimezone(Adw.Bin):
         self.status_page.set_child(self.__location_page)
 
     def set_page_active(self):
-        if not self.__location_page.selected_special and tz.user_timezone:
-            self.__location_page.selected_region = tz.user_region
-            self.__location_page.selected_country_code = tz.user_country_code
-            self.__location_page.selected_special = tz.user_timezone
+        # if not self.__location_page.selected_special and tz.user_timezone:
+            # self.__location_page.selected_region = tz.user_region
+            # self.__location_page.selected_country_code = tz.user_country_code
+            # self.__location_page.selected_special = tz.user_timezone
 
-            time_string, with_date = tz.get_timezone_preview(tz.user_timezone)
-            self.current_time_label.set_label(time_string)
-            self.current_timezone_label.set_label(tz.user_timezone)
+            # time_string, with_date = tz.get_timezone_preview(tz.user_timezone)
+            # self.current_time_label.set_label(time_string)
+            # self.current_timezone_label.set_label(tz.user_timezone)
 
         self.__location_page.set_page_active()
+
+        # TODO: Get current system timezone
+        selected_timezone = self.__location_page.selected_special
+        if selected_timezone:
+            time_string, with_date = tz.get_timezone_preview(selected_timezone)
+            self.current_time_label.set_label(time_string)
+            self.current_timezone_label.set_label(selected_timezone)
+            self.footer.set_visible(True)
+        else:
+            self.footer.set_visible(False)
 
     def set_page_inactive(self):
         self.__location_page.set_page_inactive()

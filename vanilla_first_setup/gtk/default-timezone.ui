@@ -13,7 +13,7 @@
           </object>
         </property>
         <child type="bottom">
-          <object class="GtkActionBar">
+          <object class="GtkActionBar" id="footer">
             <property name="revealed">true</property>
             <property name="valign">2</property>
             <style>
