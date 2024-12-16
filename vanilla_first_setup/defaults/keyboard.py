@@ -1,4 +1,4 @@
-# timezone.py
+# keyboard.py
 #
 # Copyright 2023 mirkobrombin
 #
