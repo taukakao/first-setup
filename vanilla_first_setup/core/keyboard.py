@@ -19,8 +19,6 @@ all_keyboard_layouts: list[str] = []
 all_keyboard_layout_names: list[str] = []
 all_keyboard_layouts_by_country_code: dict[str, list[str]] = {}
 all_keyboard_layout_names_by_country_code: dict[str, list[str]] = {}
-keyboards_layouts_without_region: list[str] = copy.deepcopy(all_keyboard_layouts)
-keyboards_layout_names_without_region: list[str] = []
 
 def region_from_keyboard(keyboard) -> str:
     return tz.region_from_country_code(country_code_from_keyboard(keyboard))
@@ -85,9 +83,6 @@ for country_code in tz.all_country_codes:
     for layout in layouts:
         info = xkb.get_layout_info(layout)
         names.append(info.display_name)
-        
-        if layout in keyboards_layouts_without_region:
-            keyboards_layouts_without_region.remove(layout)
 
     region = tz.region_from_country_code(country_code)
     if region not in all_country_codes_by_region:
@@ -117,11 +112,6 @@ all_keyboard_layouts.sort(key=len)
 for keyboard_layout in all_keyboard_layouts:
     info = xkb.get_layout_info(keyboard_layout)
     all_keyboard_layout_names.append(info.display_name)
-
-# TODO: use keyboards_layouts_without_region in keyboard page
-for layout in keyboards_layouts_without_region:
-    info = xkb.get_layout_info(layout)
-    keyboards_layout_names_without_region.append(info.display_name)
 
 class KeyboardsDataSource():
     def get_all_regions(self) -> list[str]:
