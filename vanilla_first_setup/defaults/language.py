@@ -36,11 +36,6 @@ class VanillaDefaultLanguage(Adw.Bin):
         self.status_page.set_child(self.__location_page)
 
     def set_page_active(self):
-        # if tz.user_country_code and tz.user_country_code in kbd.all_country_codes:
-        #     auto_detected_keyboard = kbd.all_keyboard_layouts_by_country_code[tz.user_country_code][0]
-        #     self.__location_page.selected_region = kbd.region_from_keyboard(auto_detected_keyboard)
-        #     self.__location_page.selected_country_code = kbd.country_code_from_keyboard(auto_detected_keyboard)
-        #     self.__location_page.selected_special = auto_detected_keyboard
         self.__location_page.set_page_active()
         return
 

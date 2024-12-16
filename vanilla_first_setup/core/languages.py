@@ -58,7 +58,6 @@ for loc in all_locales:
     filename = os.path.join('/usr/share/i18n/locales/', loc_first_part)
     if not os.path.isfile(filename):
         locale_name_by_locale[loc] = loc
-        print(loc)
         continue
     lang_name = ""
     with open(filename, 'r') as file:
