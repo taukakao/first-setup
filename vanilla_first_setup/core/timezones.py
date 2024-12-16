@@ -194,7 +194,7 @@ def __retrieve_location_thread():
             )
         nearest = world.find_nearest_city(res["lat"], res["lon"])
     except Exception as e:
-        logger.error(f"Failed to retrieve timezone: {e}")
+        logger.error(f"Failed to retrieve user location automatically.")
         nearest = None
 
     if nearest:
