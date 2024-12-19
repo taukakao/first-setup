@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="AdwStatusPage">
+    <property name="title" translatable="yes">Progress</property>
+    <property name="description" translatable="yes">Some steps still take some time</property>
+    <child>
+      <object class="AdwClamp">
+        <property name="maximum-size">600</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">1</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Setting up system</property>
+                    <child type="prefix">
+                      <object class="GtkBox">
+                        <property name="height-request">16</property>
+                        <property name="width-request">32</property>
+                      </object>
+                    </child>
+                    <child type="suffix">
+                      <object class="GtkImage">
+                        <property name="icon-name">emblem-default-symbolic</property>
+                        <style>
+                          <class name="success"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Installing Office</property>
+                    <child type="prefix">
+                      <object class="GtkImage">
+                        <property name="icon-name">x-office-presentation-symbolic</property>
+                        <property name="icon-size">2</property>
+                      </object>
+                    </child>
+                    <child type="suffix">
+                      <object class="GtkImage">
+                        <property name="icon-name">emblem-default-symbolic</property>
+                        <style>
+                          <class name="success"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Installing Clocks</property>
+                    <child type="prefix">
+                      <object class="GtkImage">
+                        <property name="icon-name">document-open-recent-symbolic</property>
+                        <property name="icon-size">2</property>
+                      </object>
+                    </child>
+                    <child type="suffix">
+                      <object class="AdwSpinner"></object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Finishing setup</property>
+                    <child type="prefix">
+                      <object class="GtkBox">
+                        <property name="height-request">16</property>
+                        <property name="width-request">32</property>
+                      </object>
+                    </child>
+                    <child type="suffix">
+                      <object class="AdwSpinner"></object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
