@@ -38,6 +38,7 @@ configure_file(
 subdir('utils')
 subdir('defaults')
 subdir('layouts')
+subdir('scripts')
 subdir('views')
 subdir('core')
 
