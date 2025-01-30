@@ -19,6 +19,8 @@ from gettext import gettext as _
 
 from gi.repository import Adw, Gtk, Gio, GLib
 
+import vanilla_first_setup.core.backend as backend
+
 logger = logging.getLogger("FirstSetup::Conn_Check")
 
 
@@ -81,5 +83,5 @@ class VanillaDefaultConnCheck(Adw.Bin):
             GLib.idle_add(self.__window.finish_step)
 
     def __on_btn_settings_clicked(self, widget):
-        # TODO: Open settings with backend
+        backend.open_network_settings()
         return

@@ -22,6 +22,7 @@ from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
 
 import vanilla_first_setup.core.keyboard as kbd
 import vanilla_first_setup.core.timezones as tz
+import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-keyboard.ui")
 class VanillaDefaultKeyboard(Adw.Bin):
@@ -37,11 +38,6 @@ class VanillaDefaultKeyboard(Adw.Bin):
         self.status_page.set_child(self.__location_page)
 
     def set_page_active(self):
-        # if tz.user_country_code and tz.user_country_code in kbd.all_country_codes:
-        #     auto_detected_keyboard = kbd.all_keyboard_layouts_by_country_code[tz.user_country_code][0]
-        #     self.__location_page.selected_region = kbd.region_from_keyboard(auto_detected_keyboard)
-        #     self.__location_page.selected_country_code = kbd.country_code_from_keyboard(auto_detected_keyboard)
-        #     self.__location_page.selected_special = auto_detected_keyboard
         self.__location_page.set_page_active()
         return
 
@@ -51,5 +47,6 @@ class VanillaDefaultKeyboard(Adw.Bin):
 
     def finish(self):
         self.__location_page.finish()
-        # TODO: call backend with keyboard
-        return
+        keyboard = self.__location_page.selected_special
+        backend.set_live_keyboard(keyboard)
+        backend.set_keyboard(keyboard)

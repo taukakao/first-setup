@@ -18,6 +18,7 @@
 import re
 from gi.repository import Gtk, Adw
 
+import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-hostname.ui")
 class VanillaDefaultHostname(Adw.Bin):
@@ -44,9 +45,7 @@ class VanillaDefaultHostname(Adw.Bin):
         return
 
     def finish(self):
-        # TODO: call backend with hostname
-        import time
-        time.sleep(0.5)
+        backend.set_hostname(self.hostname)
 
     def __on_activate(self, widget):
         self.__window.finish_step()

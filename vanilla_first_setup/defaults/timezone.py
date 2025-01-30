@@ -21,6 +21,7 @@ from gi.repository import Adw, Gtk
 from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
 
 import vanilla_first_setup.core.timezones as tz
+import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-timezone.ui")
 class VanillaDefaultTimezone(Adw.Bin):
@@ -65,34 +66,6 @@ class VanillaDefaultTimezone(Adw.Bin):
 
     def finish(self):
         self.__location_page.finish()
-        # TODO: call backend with timezone
+        timezone = self.__location_page.selected_special
+        backend.set_timezone(timezone)
         return
-    # def get_finals(self):
-    #     try:
-    #         return {
-    #             "vars": {"setTimezone": True},
-    #             "funcs": [
-    #                 {
-    #                     "if": "setTimezone",
-    #                     "type": "command",
-    #                     "commands": [
-    #                         f'echo "{self.selected_timezone["region"]}/{self.selected_timezone["zone"]}" > /etc/timezone',
-    #                         f"ln -sf /usr/share/zoneinfo/{self.selected_timezone['region']}/{self.selected_timezone['zone']} /etc/localtime",
-    #                     ],
-    #                 }
-    #             ],
-    #         }
-    #     except IndexError:
-    #         return {
-    #             "vars": {"setTimezone": True},
-    #             "funcs": [
-    #                 {
-    #                     "if": "setTimezone",
-    #                     "type": "command",
-    #                     "commands": [
-    #                         f'echo "Europe/London" > /etc/timezone',
-    #                         f"ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime",
-    #                     ],
-    #                 }
-    #             ],
-    #         }

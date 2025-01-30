@@ -6,6 +6,7 @@ sources = [
   'languages.py',
   'keymaps.py',
   'timezones.py',
+  'backend.py',
 ]
 
 install_data(sources, install_dir: coredir)

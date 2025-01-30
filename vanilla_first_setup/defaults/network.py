@@ -34,6 +34,8 @@ from vanilla_first_setup.utils.network import check_connection
 
 logger = logging.getLogger("FirstSetup::Network")
 
+# TODO: Remove this file
+
 # Dictionary mapping security types to a tuple containing
 # their pretty name and whether it is a secure protocol.
 # If security is None, it means that no padlock icon is shown.

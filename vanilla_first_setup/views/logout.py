@@ -17,6 +17,7 @@
 from gettext import gettext as _
 from gi.repository import Gtk, Adw
 
+import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/logout.ui")
 class VanillaLogout(Adw.Bin):
@@ -46,8 +47,7 @@ class VanillaLogout(Adw.Bin):
         return
 
     def __on_login_clicked(self, *args):
-        # TODO: Exit session in backend
-        # Maybe with "loginctl terminate-user <username>"
+        backend.logout()
         import sys
         sys.exit(0)
         return

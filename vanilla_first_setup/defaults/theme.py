@@ -18,6 +18,7 @@ import logging
 
 from gi.repository import Gtk, Gio, Adw, GdkPixbuf
 
+import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-theme.ui")
 class VanillaDefaultTheme(Adw.Bin):
@@ -52,13 +53,8 @@ class VanillaDefaultTheme(Adw.Bin):
         return
 
     def __set_theme(self, widget, theme: str):
-        # TODO: pass theme to backend
-        # the backend should do:
-        # pref = "prefer-dark" if theme == "dark" else "default"
-        # gtk = "Adwaita-dark" if theme == "dark" else "Adwaita"
-        # Gio.Settings.new("org.gnome.desktop.interface").set_string("color-scheme", pref)
-        # Gio.Settings.new("org.gnome.desktop.interface").set_string("gtk-theme", gtk)
-        return
+        if widget.get_active():
+            backend.set_theme(theme)
 
     def __set_wallpaper_assets(self):
         wallpaper_schema = Gio.Settings.new("org.gnome.desktop.background")

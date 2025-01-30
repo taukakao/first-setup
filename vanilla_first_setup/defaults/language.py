@@ -21,6 +21,7 @@ from gi.repository import Adw, Gtk
 from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
 
 import vanilla_first_setup.core.languages as lang
+import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-language.ui")
 class VanillaDefaultLanguage(Adw.Bin):
@@ -45,5 +46,6 @@ class VanillaDefaultLanguage(Adw.Bin):
 
     def finish(self):
         self.__location_page.finish()
-        # TODO: call backend with language
+        language = self.__location_page.selected_special
+        backend.set_locale(language)
         return

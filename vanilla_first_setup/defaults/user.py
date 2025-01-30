@@ -21,6 +21,8 @@ import subprocess
 from gi.repository import Gtk, Adw
 from gettext import gettext as _
 
+import vanilla_first_setup.core.backend as backend
+
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-user.ui")
 class VanillaDefaultUser(Adw.Bin):
     __gtype_name__ = "VanillaDefaultUser"
@@ -57,9 +59,7 @@ class VanillaDefaultUser(Adw.Bin):
         return
 
     def finish(self):
-        # TODO: call backend with user
-        import time
-        time.sleep(0.5)
+        backend.add_user(self.username, self.fullname)
 
     def __on_activate(self, widget):
         self.__window.finish_step()
