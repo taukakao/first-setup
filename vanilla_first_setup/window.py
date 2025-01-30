@@ -45,6 +45,8 @@ class VanillaWindow(Adw.ApplicationWindow):
 
     can_continue = False
 
+    __is_finishing_step = False
+
     pages = []
     __current_page_index = 0
 
@@ -62,9 +64,10 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.btn_next.set_sensitive(ready)
 
     def finish_step(self):
-        if not self.can_continue:
+        if not self.can_continue or self.__is_finishing_step:
             return
         self.can_continue = False
+        self.__is_finishing_step = True
         
         self.__loading_indicator()
         
@@ -124,6 +127,8 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.finish_step()
 
     def __on_btn_back_clicked(self, widget):
+        if self.__is_finishing_step:
+            return
         self.__last_page()
 
     def __loading_indicator(self, waiting: bool = True):
@@ -142,6 +147,7 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __next_page(self):
         target_index = self.__current_page_index + 1
         self.__scroll_page(target_index)
+        self.__is_finishing_step = False
 
     def __last_page(self):
         target_index = self.__current_page_index - 1
