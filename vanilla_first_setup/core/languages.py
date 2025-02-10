@@ -1,5 +1,4 @@
 import os
-import locale
 
 import vanilla_first_setup.core.timezones as tz
 
@@ -71,11 +70,6 @@ for loc in all_locales:
         lang_name = loc
     locale_name_by_locale[loc] = lang_name + " (" + tz.all_country_names_by_code[country_code_from_locale(loc)] + ")"
 
-
-# TODO:
-# current_language = "{}.{}".format(
-#     locale.getdefaultlocale()[0], locale.getdefaultlocale()[1]
-# )
 
 def search_locales(search_term: str, limit: int) -> tuple[list[str], bool]:
     clean_search_term = search_term.lower()
