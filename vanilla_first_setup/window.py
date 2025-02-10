@@ -103,13 +103,13 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.pages.append(self.__view_welcome)
         self.pages.append(self.__view_apps)
         self.pages.append(self.__view_language)
+        self.pages.append(self.__view_progress)
         self.pages.append(self.__view_keyboard)
         self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_conn_check)
         self.pages.append(self.__view_theme)
         self.pages.append(self.__view_hostname)
         self.pages.append(self.__view_user)
-        self.pages.append(self.__view_progress)
         self.pages.append(self.__view_logout)
 
         for page in self.pages:

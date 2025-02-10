@@ -26,9 +26,9 @@ from gi.repository import Gtk, Gdk, Gio, GLib, Adw
 import os
 import sys
 import logging
-import core.backend as backend
 from gettext import gettext as _
 from vanilla_first_setup.window import VanillaWindow
+import vanilla_first_setup.core.backend as backend
 
 logger = logging.getLogger("FirstSetup::Main")
 
