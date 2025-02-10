@@ -26,6 +26,7 @@ from gi.repository import Gtk, Gdk, Gio, GLib, Adw
 import os
 import sys
 import logging
+import core.backend as backend
 from gettext import gettext as _
 from vanilla_first_setup.window import VanillaWindow
 
@@ -134,5 +135,6 @@ class FirstSetupApplication(Adw.Application):
 
 def main(version):
     """The application's entry point."""
+    backend.setup_system_deferred()
     app = FirstSetupApplication()
     return app.run(sys.argv)

@@ -7,11 +7,13 @@ dry_run = True
 _progress_subscribers = []
 
 class ProgressState(Enum):
-    Running = 1
-    Finished = 2
-    Failed = 3
+    Initialized = 1
+    Running = 2
+    Finished = 3
+    Failed = 4
 
 def set_keyboard(keyboard: str):
+    print(keyboard)
     time.sleep(1)
 
 # sets the currently used keyboard of the desktop environment
@@ -55,44 +57,59 @@ def _install_flatpak(id: str):
     print(id)
     time.sleep(3)
 
-_deferred_setup_system_actions = []
+_deferred_actions = []
 
 def setup_system_deferred():
-    _deferred_setup_system_actions = []
+    global _deferred_actions
+    action_id = "setup_system"
     def setup_system():
-        report_progress("setup_system", ProgressState.Running)
+        report_progress(action_id, ProgressState.Running)
         try:
             _setup_system()
         except:
-            report_progress("setup_system", ProgressState.Failed)
+            report_progress(action_id, ProgressState.Failed)
         else:
-            report_progress("setup_system", ProgressState.Finished)
+            report_progress(action_id, ProgressState.Finished)
 
-    _deferred_setup_system_actions.append(setup_system)
-
-_deferred_install_flatpak_actions = []
+    _deferred_actions.append({"id": action_id, "callback": setup_system})
+    report_progress(action_id, ProgressState.Initialized)
 
 def install_flatpak_deferred(id: str, name: str):
-    _deferred_install_flatpak_actions = []
-
+    global _deferred_actions
+    action_id = "install_flatpak"
+    action_info = {"id": id, "name": name}
     def install_flatpak():
-        report_progress("install_flatpak", ProgressState.Running, {id: id, name: name})
+        report_progress(action_id, ProgressState.Running, action_info)
         try:
             _install_flatpak(id)
         except:
-            report_progress("install_flatpak", ProgressState.Failed, {id: id, name: name})
+            report_progress(action_id, ProgressState.Failed, action_info)
         else:
-            report_progress("install_flatpak", ProgressState.Finished, {id: id, name: name})
-    _deferred_install_flatpak_actions.append(install_flatpak)
-    print("deferred install of flatpak", name)
+            report_progress(action_id, ProgressState.Finished, action_info)
+    _deferred_actions.append({"id": action_id, "callback": install_flatpak, "info": action_info})
+    report_progress(action_id, ProgressState.Initialized, action_info)
+
+def clear_flatpak_deferred():
+    global _deferred_actions
+    new_list = []
+    for action in _deferred_actions:
+        if action["id"] != "install_flatpak":
+            new_list.append(action)
+    _deferred_actions = new_list
 
 def start_deferred_actions():
-    _deferred_actions = _deferred_setup_system_actions + _deferred_install_flatpak_actions
+    global _deferred_actions
     for action in _deferred_actions:
-        action()
+        action["callback"]()
 
 def subscribe_progress(callback):
+    global _deferred_actions
     _progress_subscribers.append(callback)
+    for deferred_action in _deferred_actions:
+        info = None
+        if "info" in deferred_action:
+            info = deferred_action["info"]
+        callback(deferred_action["id"], ProgressState.Initialized, info)
 
 def report_progress(id: str, state: ProgressState, info = None):
     for subscriber in _progress_subscribers:

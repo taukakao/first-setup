@@ -149,6 +149,7 @@ class VanillaLayoutApplications(Adw.Bin):
         if self.office_switch.get_active():
             enabled_categories.append("office")
 
+        backend.clear_flatpak_deferred()
         for category in enabled_categories:
             for app in self.__apps[category]:
                 if "active" not in app or app["active"]:
