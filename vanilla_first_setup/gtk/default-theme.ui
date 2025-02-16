@@ -38,6 +38,7 @@
                                 <property name="hexpand">True</property>
                                 <child>
                                   <object class="GtkToggleButton" id="btn_default">
+                                    <property name="tooltip-text" translatable="yes">Light Mode</property>
                                     <child>
                                       <object class="GtkOverlay">
                                         <child>
@@ -84,6 +85,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkToggleButton" id="btn_dark">
+                                    <property name="tooltip-text" translatable="yes">Dark Mode</property>
                                     <property name="group">btn_default</property>
                                     <child>
                                       <object class="GtkOverlay">
