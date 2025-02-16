@@ -43,8 +43,7 @@ def set_hostname(hostname: str):
 def set_theme(theme: str) -> str|None:
     return run_script("theme", [theme])
 
-# TODO: defer to not create user multiple times
-def add_user(username: str, full_name: str):
+def _add_user(username: str, full_name: str):
     return run_script("user", [username, full_name], root=True)
 
 def logout():
@@ -123,6 +122,16 @@ def setup_system_deferred():
         _run_function_with_progress(action_id, uid, None, _setup_system)
     _deferred_actions[uid] = {"action_id": action_id, "uid": uid, "callback": setup_system}
     report_progress(action_id, uid, ProgressState.Initialized)
+
+def add_user_deferred(username: str, full_name: str):
+    global _deferred_actions
+    action_id = "add_user"
+    uid = action_id
+    action_info = {"username": username, "full_name": full_name}
+    def add_user():
+        _run_function_with_progress(action_id, uid, action_info, _add_user, username, full_name)
+    _deferred_actions[uid] = {"action_id": action_id, "callback": add_user, "info": action_info}
+    report_progress(action_id, uid, ProgressState.Initialized, action_info)
 
 def install_flatpak_deferred(id: str, name: str):
     global _deferred_actions
