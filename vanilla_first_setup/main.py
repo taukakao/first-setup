@@ -123,6 +123,7 @@ class FirstSetupApplication(Adw.Application):
             win = VanillaWindow(
                 application=self,
                 pkgdatadir=self.pkgdatadir,
+                configure_system_mode=configure_system_mode,
             )
         win.present()
 

@@ -23,19 +23,6 @@ import vanilla_first_setup.core.backend as backend
 
 from vanilla_first_setup.dialog import VanillaDialog
 
-from vanilla_first_setup.views.logout import VanillaLogout
-from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
-from vanilla_first_setup.defaults.user import VanillaDefaultUser
-from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
-from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
-from vanilla_first_setup.defaults.conn_check import VanillaDefaultConnCheck
-from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
-from vanilla_first_setup.defaults.timezone import VanillaDefaultTimezone
-from vanilla_first_setup.defaults.keyboard import VanillaDefaultKeyboard
-from vanilla_first_setup.defaults.language import VanillaDefaultLanguage
-from vanilla_first_setup.views.progress import VanillaProgress
-
-
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
 class VanillaWindow(Adw.ApplicationWindow):
     __gtype_name__ = "VanillaWindow"
@@ -54,12 +41,13 @@ class VanillaWindow(Adw.ApplicationWindow):
     pages = []
     __current_page_index = 0
 
-    def __init__(self, pkgdatadir: str, **kwargs):
+    def __init__(self, pkgdatadir: str, configure_system_mode: bool, **kwargs):
         super().__init__(**kwargs)
 
         self.pkgdatadir = pkgdatadir
+        self.configure_system_mode = configure_system_mode
 
-        self.__build_ui()
+        self.__build_ui(configure_system_mode)
         self.__connect_signals()
 
         backend.subscribe_errors(self.__error_received)
@@ -103,30 +91,50 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.btn_next.connect("clicked", self.__on_btn_next_clicked)
         return
 
-    def __build_ui(self):
-        self.__view_welcome = VanillaDefaultWelcome(self)
-        self.__view_progress = VanillaProgress(self)
-        self.__view_language = VanillaDefaultLanguage(self)
-        self.__view_timezone = VanillaDefaultTimezone(self)
-        self.__view_keyboard = VanillaDefaultKeyboard(self)
-        self.__view_hostname = VanillaDefaultHostname(self)
-        self.__view_user = VanillaDefaultUser(self)
-        self.__view_logout = VanillaLogout(self)
-        self.__view_theme = VanillaDefaultTheme(self)
-        self.__view_conn_check = VanillaDefaultConnCheck(self)
-        self.__view_apps = VanillaLayoutApplications(self)
+    def __build_ui(self, configure_system_mode: bool):
 
-        self.pages.append(self.__view_welcome)
-        self.pages.append(self.__view_keyboard)
-        self.pages.append(self.__view_apps)
-        self.pages.append(self.__view_theme)
-        self.pages.append(self.__view_language)
-        self.pages.append(self.__view_timezone)
-        self.pages.append(self.__view_conn_check)
-        self.pages.append(self.__view_hostname)
-        self.pages.append(self.__view_user)
-        self.pages.append(self.__view_progress)
-        self.pages.append(self.__view_logout)
+        if configure_system_mode:
+            from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
+            from vanilla_first_setup.defaults.language import VanillaDefaultLanguage
+            from vanilla_first_setup.defaults.keyboard import VanillaDefaultKeyboard
+            from vanilla_first_setup.defaults.timezone import VanillaDefaultTimezone
+            from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
+            from vanilla_first_setup.defaults.user import VanillaDefaultUser
+            from vanilla_first_setup.views.logout import VanillaLogout
+
+            self.__view_welcome = VanillaDefaultWelcome(self)
+            self.__view_language = VanillaDefaultLanguage(self)
+            self.__view_keyboard = VanillaDefaultKeyboard(self)
+            self.__view_timezone = VanillaDefaultTimezone(self)
+            self.__view_hostname = VanillaDefaultHostname(self)
+            self.__view_user = VanillaDefaultUser(self)
+            self.__view_logout = VanillaLogout(self)
+
+            self.pages.append(self.__view_welcome)
+            self.pages.append(self.__view_language)
+            self.pages.append(self.__view_keyboard)
+            self.pages.append(self.__view_timezone)
+            self.pages.append(self.__view_hostname)
+            self.pages.append(self.__view_user)
+            self.pages.append(self.__view_logout)
+        else:
+            from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
+            from vanilla_first_setup.defaults.conn_check import VanillaDefaultConnCheck
+            from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
+            from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
+            from vanilla_first_setup.views.progress import VanillaProgress
+
+            self.__view_welcome = VanillaDefaultWelcome(self)
+            self.__view_conn_check = VanillaDefaultConnCheck(self)
+            self.__view_theme = VanillaDefaultTheme(self)
+            self.__view_apps = VanillaLayoutApplications(self)
+            self.__view_progress = VanillaProgress(self)
+
+            self.pages.append(self.__view_welcome)
+            self.pages.append(self.__view_conn_check)
+            self.pages.append(self.__view_theme)
+            self.pages.append(self.__view_apps)
+            self.pages.append(self.__view_progress)
 
         for page in self.pages:
             self.stack.add_child(page)
