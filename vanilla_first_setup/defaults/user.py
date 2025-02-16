@@ -59,7 +59,8 @@ class VanillaDefaultUser(Adw.Bin):
         return
 
     def finish(self):
-        return backend.add_user(self.username, self.fullname)
+        backend.add_user_deferred(self.username, self.fullname)
+        return True
 
     def __on_activate(self, widget):
         self.__window.finish_step()

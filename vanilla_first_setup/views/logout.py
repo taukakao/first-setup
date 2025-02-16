@@ -49,7 +49,16 @@ class VanillaLogout(Adw.Bin):
         return
 
     def __on_login_clicked(self, *args):
-        backend.logout()
+        backend.subscribe_progress(self.__deferred_progress_callback)
+        backend.start_deferred_actions()
+    
+    _deferred_actions_succeeded = True
+
+    def __deferred_progress_callback(self, id: str, uid: str, state: backend.ProgressState, info = None):
+        if state == backend.ProgressState.Failed:
+            self._deferred_actions_succeeded = False
+        if uid == "add_user" and state == backend.ProgressState.Finished and self._deferred_actions_succeeded:
+            backend.logout()
 
     def __on_logs_clicked(self, *args):
         self.btn_logs.set_visible(False)
