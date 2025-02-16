@@ -129,6 +129,7 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.__view_conn_check = VanillaDefaultConnCheck(self)
             self.__view_theme = VanillaDefaultTheme(self)
             self.__view_apps = VanillaLayoutApplications(self)
+            # TODO: remove back button somehow
             self.__view_progress = VanillaProgress(self)
 
             self.pages.append(self.__view_welcome)
