@@ -26,6 +26,7 @@ from gi.repository import Gtk, Gdk, Gio, GLib, Adw
 import os
 import sys
 import logging
+import grp
 from gettext import gettext as _
 from vanilla_first_setup.window import VanillaWindow
 import vanilla_first_setup.core.backend as backend
@@ -98,7 +99,16 @@ class FirstSetupApplication(Adw.Application):
         We raise the application's main window, creating it if
         necessary.
         """
-        backend.disable_lockscreen()
+        all_groups = [g.gr_name for g in grp.getgrall()]
+        configure_system_mode = False
+        if "vanilla-first-setup" in all_groups and os.getlogin() in grp.getgrnam("vanilla-first-setup").gr_mem:
+            print("Detected special first-setup user, running in configure system mode.")
+            configure_system_mode = True
+
+        if configure_system_mode:
+            backend.disable_lockscreen()
+        else:
+            backend.setup_system_deferred()
 
         provider = Gtk.CssProvider()
         provider.load_from_resource("/org/vanillaos/FirstSetup/style.css")
@@ -127,6 +137,5 @@ def main(version, pkgdatadir: str):
         sys.exit(1)
         return
     backend.set_script_path(os.path.join(pkgdatadir, "scripts"))
-    backend.setup_system_deferred()
     app = FirstSetupApplication(pkgdatadir)
     return app.run(sys.argv)
