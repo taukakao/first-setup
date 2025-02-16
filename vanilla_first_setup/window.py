@@ -54,9 +54,10 @@ class VanillaWindow(Adw.ApplicationWindow):
     pages = []
     __current_page_index = 0
 
-    def __init__(self, create_new_user: bool = False, **kwargs):
+    def __init__(self, create_new_user: bool = False, pkgdatadir: str = "", **kwargs):
         super().__init__(**kwargs)
 
+        self.pkgdatadir = pkgdatadir
         self.__create_new_user = create_new_user
 
         self.__build_ui()
@@ -118,11 +119,11 @@ class VanillaWindow(Adw.ApplicationWindow):
 
         self.pages.append(self.__view_welcome)
         self.pages.append(self.__view_keyboard)
+        self.pages.append(self.__view_apps)
+        self.pages.append(self.__view_progress)
         self.pages.append(self.__view_logout)
         self.pages.append(self.__view_theme)
-        self.pages.append(self.__view_apps)
         self.pages.append(self.__view_language)
-        self.pages.append(self.__view_progress)
         self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_conn_check)
         self.pages.append(self.__view_hostname)

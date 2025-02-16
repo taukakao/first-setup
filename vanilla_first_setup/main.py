@@ -35,9 +35,13 @@ logger = logging.getLogger("FirstSetup::Main")
 class FirstSetupApplication(Adw.Application):
     """The main application singleton class."""
 
-    def __init__(self, *args, **kwargs):
+    pkgdatadir = ""
+
+    def __init__(self, pkgdatadir: str, *args, **kwargs):
 
         log_path = "/tmp/first-setup.log"
+
+        self.pkgdatadir = pkgdatadir
 
         if not os.path.exists(log_path):
             try:
@@ -125,6 +129,7 @@ class FirstSetupApplication(Adw.Application):
             win = VanillaWindow(
                 application=self,
                 create_new_user=self.create_new_user,
+                pkgdatadir=self.pkgdatadir,
             )
         win.present()
 
@@ -133,10 +138,10 @@ class FirstSetupApplication(Adw.Application):
         self.quit()
 
 
-def main(version, pkgdatadir):
+def main(version, pkgdatadir: str):
     """The application's entry point."""
     # TODO: disable dry run of backend in production
     backend.set_script_path(os.path.join(pkgdatadir, "scripts"))
     backend.setup_system_deferred()
-    app = FirstSetupApplication()
+    app = FirstSetupApplication(pkgdatadir)
     return app.run(sys.argv)

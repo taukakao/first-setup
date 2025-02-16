@@ -15,14 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
+import json
+import os
 
 from gi.repository import Gtk, Adw
 from gettext import gettext as _
 
 import vanilla_first_setup.core.backend as backend
-
-# TODO: get this from file
-apps = {'core': [{'name': 'Calculator', 'id': 'org.gnome.Calculator'}, {'name': 'Calendar', 'id': 'org.gnome.Calendar'}, {'name': 'Characters', 'id': 'org.gnome.Characters'}, {'name': 'Clocks', 'id': 'org.gnome.clocks'}, {'name': 'Connections', 'id': 'org.gnome.Connections'}, {'name': 'Contacts', 'id': 'org.gnome.Contacts'}, {'name': 'Disk Usage Analyzer', 'id': 'org.gnome.baobab'}, {'name': 'Document Scanner', 'id': 'org.gnome.SimpleScan'}, {'name': 'Document Viewer', 'id': 'org.gnome.Evince'}, {'name': 'File Roller', 'id': 'org.gnome.FileRoller'}, {'name': 'Fonts', 'id': 'org.gnome.font-viewer'}, {'name': 'Image Viewer', 'id': 'org.gnome.Loupe'}, {'name': 'Logs', 'id': 'org.gnome.Logs'}, {'name': 'Maps', 'id': 'org.gnome.Maps'}, {'name': 'Music', 'id': 'org.gnome.Music'}, {'name': 'Photos', 'id': 'org.gnome.Photos'}, {'name': 'Snapshot', 'id': 'org.gnome.Snapshot'}, {'name': 'Text Editor', 'id': 'org.gnome.TextEditor'}, {'name': 'Videos', 'id': 'org.gnome.Totem'}, {'name': 'Weather', 'id': 'org.gnome.Weather'}], 'office': [{'name': 'LibreOffice', 'id': 'org.libreoffice.LibreOffice'}], 'utilities': [{'name': 'Bottles', 'id': 'com.usebottles.bottles'}, {'name': 'Extension Manager', 'id': 'com.mattjakeman.ExtensionManager'}, {'name': 'Heroic Games Launcher', 'id': 'com.heroicgameslauncher.hgl'}, {'name': 'Lutris', 'id': 'net.lutris.Lutris'}, {'name': 'Boxes', 'id': 'org.gnome.Boxes'}, {'name': 'Déjà Dup Backups', 'id': 'org.gnome.DejaDup'}, {'name': 'Flatseal', 'id': 'com.github.tchx84.Flatseal'}, {'name': 'Metadata Cleaner', 'id': 'fr.romainvigier.MetadataCleaner'}, {'name': 'Rnote', 'id': 'com.github.flxzt.rnote'}, {'name': 'Shortwave', 'id': 'de.haeckerfelix.Shortwave'}, {'name': 'Sound Recorder', 'id': 'org.gnome.SoundRecorder'}, {'name': 'Warehouse', 'id': 'io.github.flattool.Warehouse'}], 'browsers': [{'name': 'Firefox', 'id': 'org.mozilla.firefox'}, {'name': 'Google Chrome', 'id': 'com.google.Chrome', 'active': False}, {'name': 'Chromium', 'id': 'org.chromium.Chromium', 'active': False}, {'name': 'Brave Browser', 'id': 'com.brave.Browser', 'active': False}, {'name': 'Microsoft Edge', 'id': 'com.microsoft.Edge', 'active': False}, {'name': 'Vivaldi', 'id': 'com.vivaldi.Vivaldi', 'active': False}, {'name': 'GNOME Web', 'id': 'org.gnome.Epiphany', 'active': False}]}
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/applications-dialog.ui")
 class VanillaApplicationsDialog(Adw.Window):
@@ -119,7 +118,9 @@ class VanillaLayoutApplications(Adw.Bin):
         super().__init__(**kwargs)
         self.__window = window
 
-        self.__apps = apps
+        apps_file_path = os.path.join(window.pkgdatadir, "apps.json")
+        with open(apps_file_path) as file:
+            self.__apps = json.load(file)
 
         self.core_switch.connect("state-set", self.__on_core_switch_state_change)
         self.browsers_switch.connect("state-set", self.__on_browsers_switch_state_change)
