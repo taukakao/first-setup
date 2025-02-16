@@ -43,6 +43,7 @@ def set_hostname(hostname: str):
 def set_theme(theme: str) -> str|None:
     return run_script("theme", [theme])
 
+# TODO: defer to not create user multiple times
 def add_user(username: str, full_name: str):
     return run_script("user", [username, full_name], root=True)
 
