@@ -14,7 +14,6 @@
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/share/org.vanillaos.FirstSetup/vanilla_first_setup/scripts/hostname</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">TRUE</annotate>
   </action>
 
   <action id="org.vanillaos.FirstSetup.scripts.keyboard">
@@ -26,7 +25,6 @@
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/share/org.vanillaos.FirstSetup/vanilla_first_setup/scripts/keyboard</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">TRUE</annotate>
   </action>
 
   <action id="org.vanillaos.FirstSetup.scripts.locale">
@@ -38,7 +36,6 @@
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/share/org.vanillaos.FirstSetup/vanilla_first_setup/scripts/locale</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">TRUE</annotate>
   </action>
 
   <action id="org.vanillaos.FirstSetup.scripts.timezone">
@@ -50,7 +47,6 @@
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/share/org.vanillaos.FirstSetup/vanilla_first_setup/scripts/timezone</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">TRUE</annotate>
   </action>
 
   <action id="org.vanillaos.FirstSetup.scripts.user">
@@ -62,7 +58,6 @@
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/share/org.vanillaos.FirstSetup/vanilla_first_setup/scripts/user</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">TRUE</annotate>
   </action>
 
 </policyconfig>
