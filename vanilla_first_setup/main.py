@@ -62,18 +62,18 @@ class FirstSetupApplication(Adw.Application):
             flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE,
             **kwargs
         )
-        self.create_new_user = False
+        self.dry_run = True
 
         self.__register_arguments()
 
     def __register_arguments(self):
         """Register the command line arguments."""
         self.add_main_option(
-            "create-new-user",
-            ord("n"),
+            "dry-run",
+            ord("d"),
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
-            _("Create a new user and log out"),
+            _("Don't make any changes to the system."),
             None,
         )
 
@@ -81,9 +81,13 @@ class FirstSetupApplication(Adw.Application):
         """Handle command line arguments."""
         options = command_line.get_options_dict()
 
-        if options.contains("create-new-user"):
-            logger.info("Creating a new user")
-            self.create_new_user = options.lookup_value("create-new-user")
+        if options.lookup_value("dry-run"):
+            logger.info("Running in dry-run mode.")
+            self.dry_run = True
+        else:
+            self.dry_run = False
+        
+        backend.set_dry_run(self.dry_run)
             
         self.activate()
         return 0
@@ -94,28 +98,7 @@ class FirstSetupApplication(Adw.Application):
         We raise the application's main window, creating it if
         necessary.
         """
-        # TODO: maybe do this in the installer or the default user?
-        # # disable the lock screen and password for the default user
-        # if self.create_new_user:
-        #     logging.info("disabling screen saver and lock screen")
-        #     subprocess.run(
-        #         [
-        #             "/usr/bin/gsettings",
-        #             "set",
-        #             "org.gnome.desktop.lockdown",
-        #             "disable-lock-screen",
-        #             "true",
-        #         ]
-        #     )
-        #     subprocess.run(
-        #         [
-        #             "/usr/bin/gsettings",
-        #             "set",
-        #             "org.gnome.desktop.screensaver",
-        #             "lock-enabled",
-        #             "false",
-        #         ]
-        #     )
+        backend.disable_lockscreen()
 
         provider = Gtk.CssProvider()
         provider.load_from_resource("/org/vanillaos/FirstSetup/style.css")
@@ -128,7 +111,6 @@ class FirstSetupApplication(Adw.Application):
         if not win:
             win = VanillaWindow(
                 application=self,
-                create_new_user=self.create_new_user,
                 pkgdatadir=self.pkgdatadir,
             )
         win.present()
@@ -140,7 +122,10 @@ class FirstSetupApplication(Adw.Application):
 
 def main(version, pkgdatadir: str):
     """The application's entry point."""
-    # TODO: disable dry run of backend in production
+    if pkgdatadir == "":
+        print("Can't continue without a data directory.")
+        sys.exit(1)
+        return
     backend.set_script_path(os.path.join(pkgdatadir, "scripts"))
     backend.setup_system_deferred()
     app = FirstSetupApplication(pkgdatadir)

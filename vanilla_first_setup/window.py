@@ -54,11 +54,10 @@ class VanillaWindow(Adw.ApplicationWindow):
     pages = []
     __current_page_index = 0
 
-    def __init__(self, create_new_user: bool = False, pkgdatadir: str = "", **kwargs):
+    def __init__(self, pkgdatadir: str, **kwargs):
         super().__init__(**kwargs)
 
         self.pkgdatadir = pkgdatadir
-        self.__create_new_user = create_new_user
 
         self.__build_ui()
         self.__connect_signals()

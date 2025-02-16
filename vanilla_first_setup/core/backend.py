@@ -52,6 +52,9 @@ def logout():
 def open_network_settings():
     return run_script("open-network-settings", [])
 
+def disable_lockscreen():
+    return run_script("disable_lockscreen", [])
+
 def _setup_system():
     return run_script("setup-system", [])
 
@@ -62,7 +65,7 @@ def _install_flatpak(id: str):
 def run_script(name: str, args: list[str]) -> bool:
     if dry_run:
         print("dry-run", name, args)
-        time.sleep(0.5)
+        time.sleep(0.3)
         return True
     if script_base_path == None:
         print("Could not run operation", name, args, "due to missing script base path")
