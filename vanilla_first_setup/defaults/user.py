@@ -59,7 +59,7 @@ class VanillaDefaultUser(Adw.Bin):
         return
 
     def finish(self):
-        backend.add_user(self.username, self.fullname)
+        return backend.add_user(self.username, self.fullname)
 
     def __on_activate(self, widget):
         self.__window.finish_step()

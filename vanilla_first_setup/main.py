@@ -133,8 +133,10 @@ class FirstSetupApplication(Adw.Application):
         self.quit()
 
 
-def main(version):
+def main(version, pkgdatadir):
     """The application's entry point."""
+    # TODO: disable dry run of backend in production
+    backend.set_script_path(os.path.join(pkgdatadir, "scripts"))
     backend.setup_system_deferred()
     app = FirstSetupApplication()
     return app.run(sys.argv)

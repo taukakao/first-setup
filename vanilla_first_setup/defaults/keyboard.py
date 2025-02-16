@@ -48,5 +48,10 @@ class VanillaDefaultKeyboard(Adw.Bin):
     def finish(self):
         self.__location_page.finish()
         keyboard = self.__location_page.selected_special
-        backend.set_live_keyboard(keyboard)
-        backend.set_keyboard(keyboard)
+        success = backend.set_live_keyboard(keyboard)
+        if not success:
+            return False
+        success = backend.set_keyboard(keyboard)
+        if not success:
+            return False
+        return True

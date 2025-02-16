@@ -47,5 +47,4 @@ class VanillaDefaultLanguage(Adw.Bin):
     def finish(self):
         self.__location_page.finish()
         language = self.__location_page.selected_special
-        backend.set_locale(language)
-        return
+        return backend.set_locale(language)

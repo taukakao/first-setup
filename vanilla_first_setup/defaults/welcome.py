@@ -86,7 +86,7 @@ class VanillaDefaultWelcome(Adw.Bin):
         self.__stop_animation = True
 
     def finish(self):
-        return
+        return True
 
     def __start_welcome_animation(self):
         def change_langs_thread():

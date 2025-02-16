@@ -156,6 +156,7 @@ class VanillaLayoutApplications(Adw.Bin):
                     app_id = app["id"]
                     app_name = app["name"]
                     backend.install_flatpak_deferred(app_id, app_name)
+        return True
         
     
     def __on_core_switch_state_change(self, widget, state):

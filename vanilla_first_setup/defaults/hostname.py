@@ -45,7 +45,7 @@ class VanillaDefaultHostname(Adw.Bin):
         return
 
     def finish(self):
-        backend.set_hostname(self.hostname)
+        return backend.set_hostname(self.hostname)
 
     def __on_activate(self, widget):
         self.__window.finish_step()

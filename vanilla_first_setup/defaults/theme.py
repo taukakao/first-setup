@@ -50,7 +50,7 @@ class VanillaDefaultTheme(Adw.Bin):
         return
 
     def finish(self):
-        return
+        return True
 
     def __set_theme(self, widget, theme: str):
         if widget.get_active():

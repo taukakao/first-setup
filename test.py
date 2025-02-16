@@ -48,4 +48,4 @@ if __name__ == '__main__':
     resource._register()
 
     from vanilla_first_setup import main
-    sys.exit(main.main(VERSION))
+    sys.exit(main.main(VERSION, pkgdatadir))

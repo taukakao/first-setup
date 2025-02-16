@@ -19,6 +19,10 @@ import threading
 from gettext import gettext as _
 from gi.repository import Gtk, Adw, GLib
 
+import vanilla_first_setup.core.backend as backend
+
+from vanilla_first_setup.dialog import VanillaDialog
+
 from vanilla_first_setup.views.logout import VanillaLogout
 from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
 from vanilla_first_setup.defaults.user import VanillaDefaultUser
@@ -58,6 +62,8 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__build_ui()
         self.__connect_signals()
 
+        backend.subscribe_errors(self.__error_received)
+
     def set_ready(self, ready: bool = True):
         self.__loading_indicator(False)
         self.can_continue = ready
@@ -74,10 +80,20 @@ class VanillaWindow(Adw.ApplicationWindow):
         thread = threading.Thread(target=self.__finish_step_thread)
         thread.start()
 
-    def toast(self, message, timeout=3):
+    def __error_received(self, script_name: str, command: list[str], id: int):
+        GLib.idle_add(self.__error_toast, _("Setup failed: ") + script_name, id)
+
+    def __error_toast(self, message: str, id: int):
         toast = Adw.Toast.new(message)
-        toast.props.timeout = timeout
+        toast.props.timeout = 0
+        toast.props.button_label = _("Details")
+        toast.connect("button-clicked", self.__error_toast_clicked, id)
         self.toasts.add_toast(toast)
+    
+    def __error_toast_clicked(self, widget, id: int):
+        message = backend.errors[id]
+        dialog = VanillaDialog(self, _("Error log"), message)
+        dialog.present()
 
     def set_focus_on_next(self):
         self.btn_next.grab_focus()
@@ -101,16 +117,16 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.__view_apps = VanillaLayoutApplications(self)
 
         self.pages.append(self.__view_welcome)
+        self.pages.append(self.__view_keyboard)
+        self.pages.append(self.__view_logout)
+        self.pages.append(self.__view_theme)
         self.pages.append(self.__view_apps)
         self.pages.append(self.__view_language)
         self.pages.append(self.__view_progress)
-        self.pages.append(self.__view_keyboard)
         self.pages.append(self.__view_timezone)
         self.pages.append(self.__view_conn_check)
-        self.pages.append(self.__view_theme)
         self.pages.append(self.__view_hostname)
         self.pages.append(self.__view_user)
-        self.pages.append(self.__view_logout)
 
         for page in self.pages:
             self.stack.add_child(page)
@@ -141,8 +157,16 @@ class VanillaWindow(Adw.ApplicationWindow):
         self.btn_next_spinner.set_visible(waiting)
 
     def __finish_step_thread(self):
-        self.stack.get_visible_child().finish()
-        GLib.idle_add(self.__next_page)
+        success = self.stack.get_visible_child().finish()
+        if success:
+            GLib.idle_add(self.__next_page)
+        else:
+            GLib.idle_add(self.__fail)
+
+    def __fail(self):
+        self.__is_finishing_step = False
+        self.__loading_indicator(False)
+        self.set_ready(False)
 
     def __next_page(self):
         target_index = self.__current_page_index + 1

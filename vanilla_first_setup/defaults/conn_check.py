@@ -52,7 +52,7 @@ class VanillaDefaultConnCheck(Adw.Bin):
         self.__active = False
 
     def finish(self):
-        return
+        return True
 
     def __check_network_status(self, *args):
         if not self.__active:
