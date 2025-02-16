@@ -53,7 +53,7 @@ def open_network_settings():
     return run_script("open-network-settings", [])
 
 def disable_lockscreen():
-    return run_script("disable_lockscreen", [])
+    return run_script("disable-lockscreen", [])
 
 def setup_flatpak_remote():
     return run_script("setup-flatpak-remote", [])
