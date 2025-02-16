@@ -124,6 +124,7 @@ class VanillaWindow(Adw.ApplicationWindow):
             from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
             from vanilla_first_setup.views.progress import VanillaProgress
 
+            # TODO: create user welcome page
             self.__view_welcome = VanillaDefaultWelcome(self)
             self.__view_conn_check = VanillaDefaultConnCheck(self)
             self.__view_theme = VanillaDefaultTheme(self)
@@ -135,6 +136,7 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.pages.append(self.__view_theme)
             self.pages.append(self.__view_apps)
             self.pages.append(self.__view_progress)
+            # TODO: add final page
 
         for page in self.pages:
             self.stack.add_child(page)
