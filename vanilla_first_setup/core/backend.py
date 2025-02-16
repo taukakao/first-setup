@@ -113,7 +113,7 @@ def report_error(script_name: str, command: list[str], message: str):
     _error_count = _error_count + 1
     _lock_error_count = False
 
-_deferred_actions = []
+_deferred_actions = {}
 
 def setup_system_deferred():
     global _deferred_actions
@@ -121,7 +121,7 @@ def setup_system_deferred():
     uid = action_id
     def setup_system():
         _run_function_with_progress(action_id, uid, None, _setup_system)
-    _deferred_actions.append({"action_id": action_id, "uid": uid, "callback": setup_system})
+    _deferred_actions[uid] = {"action_id": action_id, "uid": uid, "callback": setup_system}
     report_progress(action_id, uid, ProgressState.Initialized)
 
 def install_flatpak_deferred(id: str, name: str):
@@ -131,7 +131,7 @@ def install_flatpak_deferred(id: str, name: str):
     action_info = {"app_id": id, "app_name": name}
     def install_flatpak():
         _run_function_with_progress(action_id, uid, action_info, _install_flatpak, id)
-    _deferred_actions.append({"action_id": action_id, "uid": uid, "callback": install_flatpak, "info": action_info})
+    _deferred_actions[uid] = {"action_id": action_id, "callback": install_flatpak, "info": action_info}
     report_progress(action_id, uid, ProgressState.Initialized, action_info)
 
 def _run_function_with_progress(action_id: str, uid: str, action_info: dict, function, *args):
@@ -144,15 +144,15 @@ def _run_function_with_progress(action_id: str, uid: str, action_info: dict, fun
 
 def clear_flatpak_deferred():
     global _deferred_actions
-    new_list = []
-    for action in _deferred_actions:
+    new_list = {}
+    for uid, action in _deferred_actions.items():
         if action["action_id"] != "install_flatpak":
-            new_list.append(action)
+            new_list[uid] = action
     _deferred_actions = new_list
 
 def start_deferred_actions():
     global _deferred_actions
-    for action in _deferred_actions:
+    for _, action in _deferred_actions.items():
         action["callback"]()
     id = "all_actions"
     report_progress(id, id, ProgressState.Finished)
@@ -161,11 +161,11 @@ def subscribe_progress(callback):
     global _deferred_actions
     global _progress_subscribers
     _progress_subscribers.append(callback)
-    for deferred_action in _deferred_actions:
+    for uid, deferred_action in _deferred_actions.items():
         info = None
         if "info" in deferred_action:
             info = deferred_action["info"]
-        callback(deferred_action["action_id"], deferred_action["uid"], ProgressState.Initialized, info)
+        callback(deferred_action["action_id"], uid, ProgressState.Initialized, info)
 
 def report_progress(id: str, uid: str, state: ProgressState, info = None):
     global _progress_subscribers
