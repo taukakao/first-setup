@@ -114,11 +114,11 @@ class VanillaLayoutApplications(Adw.Bin):
 
     __apps = {}
 
+    __already_setup_remote = False
+
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
         self.__window = window
-
-        backend.setup_flatpak_remote()
 
         apps_file_path = os.path.join(window.pkgdatadir, "apps.json")
         with open(apps_file_path) as file:
@@ -135,6 +135,9 @@ class VanillaLayoutApplications(Adw.Bin):
         self.office_button.connect("clicked", self.__on_customize_button_clicked, "office")
 
     def set_page_active(self):
+        if not self.__already_setup_remote:
+            success = backend.setup_flatpak_remote()
+            self.__already_setup_remote = success
         self.__window.set_ready(True)
         self.__window.set_focus_on_next()
 
