@@ -109,6 +109,7 @@ class FirstSetupApplication(Adw.Application):
             backend.disable_lockscreen()
         else:
             backend.setup_system_deferred()
+            backend.setup_flatpak_remote()
 
         provider = Gtk.CssProvider()
         provider.load_from_resource("/org/vanillaos/FirstSetup/style.css")
