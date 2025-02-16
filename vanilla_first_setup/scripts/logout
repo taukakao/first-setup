@@ -1,4 +1,9 @@
 #!/bin/bash
+if ! [ -z "$1" ]; then
+    echo "usage:"
+    echo "logout"
+    exit 5
+fi
 
 if [ "$UID" == "0" ]; then
     echo "this script must be run as a regular user"
