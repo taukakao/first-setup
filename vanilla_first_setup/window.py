@@ -110,6 +110,7 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.__view_user = VanillaDefaultUser(self)
             self.__view_logout = VanillaLogout(self)
 
+            # TODO: add accessibility button
             self.pages.append(self.__view_welcome)
             self.pages.append(self.__view_language)
             self.pages.append(self.__view_keyboard)
