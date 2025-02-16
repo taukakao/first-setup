@@ -25,26 +25,26 @@ def set_keyboard(keyboard: str):
     variant = ""
     if len(keyboard_parts) > 1:
         variant = keyboard_parts[1]
-    return run_script("keyboard", ["pc105", layout, variant])
+    return run_script("keyboard", ["pc105", layout, variant], root=True)
 
 # sets the currently used keyboard of the desktop environment
 def set_live_keyboard(keyboard: str):
     return run_script("live-keyboard", [keyboard])
 
 def set_locale(locale: str):
-    return run_script("locale", [locale])
+    return run_script("locale", [locale], root=True)
 
 def set_timezone(timezone: str):
-    return run_script("timezone", [timezone])
+    return run_script("timezone", [timezone], root=True)
 
 def set_hostname(hostname: str):
-    return run_script("hostname", [hostname])
+    return run_script("hostname", [hostname], root=True)
 
 def set_theme(theme: str) -> str|None:
     return run_script("theme", [theme])
 
 def add_user(username: str, full_name: str):
-    return run_script("user", [username, full_name])
+    return run_script("user", [username, full_name], root=True)
 
 def logout():
     return run_script("logout", [])
@@ -65,7 +65,7 @@ def _install_flatpak(id: str):
     return run_script("flatpak", [id])
 
 
-def run_script(name: str, args: list[str]) -> bool:
+def run_script(name: str, args: list[str], root: bool = False) -> bool:
     if dry_run:
         print("dry-run", name, args)
         time.sleep(0.3)
@@ -75,6 +75,8 @@ def run_script(name: str, args: list[str]) -> bool:
         return True
     script_path = os.path.join(script_base_path, name)
     command = [script_path] + args
+    if root:
+        command = ["pkexec"] + command
     process = subprocess.Popen(
         command,
         stdout=subprocess.PIPE,
