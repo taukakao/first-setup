@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="VanillaDefaultUser" parent="AdwBin">
+  <template class="VanillaUser" parent="AdwBin">
     <property name="hexpand">1</property>
     <property name="vexpand">1</property>
     <child>

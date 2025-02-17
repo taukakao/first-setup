@@ -16,7 +16,7 @@
 
 from gi.repository import Adw, Gtk
 
-from vanilla_first_setup.views.locations import VanillaDefaultLocation
+from vanilla_first_setup.views.locations import VanillaLocation
 
 import vanilla_first_setup.core.keyboard as kbd
 import vanilla_first_setup.core.timezones as tz
@@ -25,8 +25,8 @@ import vanilla_first_setup.core.backend as backend
 _ = __builtins__["_"]
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/keyboard.ui")
-class VanillaDefaultKeyboard(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultKeyboard"
+class VanillaKeyboard(Adw.Bin):
+    __gtype_name__ = "VanillaKeyboard"
 
     status_page = Gtk.Template.Child()
 
@@ -34,7 +34,7 @@ class VanillaDefaultKeyboard(Adw.Bin):
         super().__init__(**kwargs)
         self.__window = window
 
-        self.__location_page = VanillaDefaultLocation(window, _("Keyboard"), kbd.KeyboardsDataSource())
+        self.__location_page = VanillaLocation(window, _("Keyboard"), kbd.KeyboardsDataSource())
         self.status_page.set_child(self.__location_page)
 
     def set_page_active(self):

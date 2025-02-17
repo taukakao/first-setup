@@ -148,8 +148,8 @@ class VanillaLocationListPage(Adw.NavigationPage):
         return button
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/location.ui")
-class VanillaDefaultLocation(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultLocation"
+class VanillaLocation(Adw.Bin):
+    __gtype_name__ = "VanillaLocation"
 
     entry_search = Gtk.Template.Child()
     navigation = Gtk.Template.Child()

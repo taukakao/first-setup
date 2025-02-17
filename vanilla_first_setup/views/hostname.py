@@ -21,8 +21,8 @@ from gi.repository import Gtk, Adw
 import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/hostname.ui")
-class VanillaDefaultHostname(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultHostname"
+class VanillaHostname(Adw.Bin):
+    __gtype_name__ = "VanillaHostname"
 
     hostname_entry = Gtk.Template.Child()
     hostname_error = Gtk.Template.Child()

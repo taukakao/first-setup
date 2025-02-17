@@ -21,8 +21,8 @@ from gi.repository import Gtk, Gio, Adw, GdkPixbuf
 import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/theme.ui")
-class VanillaDefaultTheme(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultTheme"
+class VanillaTheme(Adw.Bin):
+    __gtype_name__ = "VanillaTheme"
 
     default_image = Gtk.Template.Child()
     dark_image = Gtk.Template.Child()

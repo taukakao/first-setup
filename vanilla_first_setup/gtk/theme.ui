@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="libadwaita" version="1.0" />
-  <template class="VanillaDefaultTheme" parent="AdwBin">
+  <template class="VanillaTheme" parent="AdwBin">
     <property name="hexpand">1</property>
     <property name="vexpand">1</property>
     <child>

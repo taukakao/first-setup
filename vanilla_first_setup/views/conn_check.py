@@ -25,8 +25,8 @@ logger = logging.getLogger("FirstSetup::Conn_Check")
 
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/conn-check.ui")
-class VanillaDefaultConnCheck(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultConnCheck"
+class VanillaConnCheck(Adw.Bin):
+    __gtype_name__ = "VanillaConnCheck"
 
     status_page = Gtk.Template.Child()
     btn_settings = Gtk.Template.Child()

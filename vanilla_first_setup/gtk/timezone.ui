@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="VanillaDefaultTimezone" parent="AdwBin">
+  <template class="VanillaTimezone" parent="AdwBin">
     <property name="hexpand">true</property>
     <child>
       <object class="AdwToolbarView">

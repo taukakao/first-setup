@@ -95,23 +95,23 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __build_ui(self, configure_system_mode: bool):
 
         if configure_system_mode:
-            from vanilla_first_setup.views.welcome import VanillaDefaultWelcome
-            from vanilla_first_setup.views.language import VanillaDefaultLanguage
-            from vanilla_first_setup.views.keyboard import VanillaDefaultKeyboard
-            from vanilla_first_setup.views.timezone import VanillaDefaultTimezone
-            from vanilla_first_setup.views.hostname import VanillaDefaultHostname
-            from vanilla_first_setup.views.user import VanillaDefaultUser
+            from vanilla_first_setup.views.welcome import VanillaWelcome
+            from vanilla_first_setup.views.language import VanillaLanguage
+            from vanilla_first_setup.views.keyboard import VanillaKeyboard
+            from vanilla_first_setup.views.timezone import VanillaTimezone
+            from vanilla_first_setup.views.hostname import VanillaHostname
+            from vanilla_first_setup.views.user import VanillaUser
             from vanilla_first_setup.views.logout import VanillaLogout
 
-            self.__view_welcome = VanillaDefaultWelcome(self)
+            self.__view_welcome = VanillaWelcome(self)
             self.__view_welcome.no_next_button = True
             self.__view_welcome.no_back_button = True
-            self.__view_language = VanillaDefaultLanguage(self)
+            self.__view_language = VanillaLanguage(self)
             self.__view_language.no_back_button = True
-            self.__view_keyboard = VanillaDefaultKeyboard(self)
-            self.__view_timezone = VanillaDefaultTimezone(self)
-            self.__view_hostname = VanillaDefaultHostname(self)
-            self.__view_user = VanillaDefaultUser(self)
+            self.__view_keyboard = VanillaKeyboard(self)
+            self.__view_timezone = VanillaTimezone(self)
+            self.__view_hostname = VanillaHostname(self)
+            self.__view_user = VanillaUser(self)
             self.__view_logout = VanillaLogout(self)
             self.__view_logout.no_next_button = True
 
@@ -123,19 +123,19 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.pages.append(self.__view_user)
             self.pages.append(self.__view_logout)
         else:
-            from vanilla_first_setup.views.welcome_user import VanillaDefaultWelcomeUser
-            from vanilla_first_setup.views.conn_check import VanillaDefaultConnCheck
-            from vanilla_first_setup.views.theme import VanillaDefaultTheme
+            from vanilla_first_setup.views.welcome_user import VanillaWelcomeUser
+            from vanilla_first_setup.views.conn_check import VanillaConnCheck
+            from vanilla_first_setup.views.theme import VanillaTheme
             from vanilla_first_setup.views.applications import VanillaLayoutApplications
             from vanilla_first_setup.views.progress import VanillaProgress
             from vanilla_first_setup.views.done import VanillaDone
 
-            self.__view_welcome = VanillaDefaultWelcomeUser(self)
+            self.__view_welcome = VanillaWelcomeUser(self)
             self.__view_welcome.no_next_button = True
             self.__view_welcome.no_back_button = True
-            self.__view_conn_check = VanillaDefaultConnCheck(self)
+            self.__view_conn_check = VanillaConnCheck(self)
             self.__view_conn_check.no_back_button = True
-            self.__view_theme = VanillaDefaultTheme(self)
+            self.__view_theme = VanillaTheme(self)
             self.__view_theme.no_back_button = True
             self.__view_apps = VanillaLayoutApplications(self)
             self.__view_progress = VanillaProgress(self)

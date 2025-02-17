@@ -18,14 +18,14 @@ _ = __builtins__["_"]
 
 from gi.repository import Adw, Gtk
 
-from vanilla_first_setup.views.locations import VanillaDefaultLocation
+from vanilla_first_setup.views.locations import VanillaLocation
 
 import vanilla_first_setup.core.timezones as tz
 import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/timezone.ui")
-class VanillaDefaultTimezone(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultTimezone"
+class VanillaTimezone(Adw.Bin):
+    __gtype_name__ = "VanillaTimezone"
 
     status_page = Gtk.Template.Child()
     footer = Gtk.Template.Child()
@@ -36,7 +36,7 @@ class VanillaDefaultTimezone(Adw.Bin):
         super().__init__(**kwargs)
         self.__window = window
 
-        self.__location_page = VanillaDefaultLocation(window, _("Timezone"), tz.TimezonesDataSource())
+        self.__location_page = VanillaLocation(window, _("Timezone"), tz.TimezonesDataSource())
         self.status_page.set_child(self.__location_page)
 
     def set_page_active(self):

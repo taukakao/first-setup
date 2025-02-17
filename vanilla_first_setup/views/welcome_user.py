@@ -24,8 +24,8 @@ from gi.repository import Gtk, GLib, Adw
 import vanilla_first_setup.core.backend as backend
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/welcome-user.ui")
-class VanillaDefaultWelcomeUser(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultWelcomeUser"
+class VanillaWelcomeUser(Adw.Bin):
+    __gtype_name__ = "VanillaWelcomeUser"
 
     btn_next = Gtk.Template.Child()
     btn_access = Gtk.Template.Child()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="VanillaDefaultLanguage" parent="AdwBin">
+  <template class="VanillaLanguage" parent="AdwBin">
     <child>
       <object class="AdwToolbarView">
         <property name="content">
