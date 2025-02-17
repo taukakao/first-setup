@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gettext import gettext as _
-
 from gi.repository import Adw, Gtk
 
 from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
@@ -23,6 +21,8 @@ from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
 import vanilla_first_setup.core.keyboard as kbd
 import vanilla_first_setup.core.timezones as tz
 import vanilla_first_setup.core.backend as backend
+
+_ = __builtins__["_"]
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-keyboard.ui")
 class VanillaDefaultKeyboard(Adw.Bin):
