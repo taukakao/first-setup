@@ -103,12 +103,16 @@ class VanillaWindow(Adw.ApplicationWindow):
             from vanilla_first_setup.views.logout import VanillaLogout
 
             self.__view_welcome = VanillaDefaultWelcome(self)
+            self.__view_welcome.no_next_button = True
+            self.__view_welcome.no_back_button = True
             self.__view_language = VanillaDefaultLanguage(self)
+            self.__view_language.no_back_button = True
             self.__view_keyboard = VanillaDefaultKeyboard(self)
             self.__view_timezone = VanillaDefaultTimezone(self)
             self.__view_hostname = VanillaDefaultHostname(self)
             self.__view_user = VanillaDefaultUser(self)
             self.__view_logout = VanillaLogout(self)
+            self.__view_logout.no_next_button = True
 
             # TODO: add accessibility button
             self.pages.append(self.__view_welcome)
@@ -127,12 +131,17 @@ class VanillaWindow(Adw.ApplicationWindow):
             from vanilla_first_setup.views.done import VanillaDone
 
             self.__view_welcome = VanillaDefaultWelcomeUser(self)
+            self.__view_welcome.no_next_button = True
+            self.__view_welcome.no_back_button = True
             self.__view_conn_check = VanillaDefaultConnCheck(self)
+            self.__view_conn_check.no_back_button = True
             self.__view_theme = VanillaDefaultTheme(self)
+            self.__view_theme.no_back_button = True
             self.__view_apps = VanillaLayoutApplications(self)
-            # TODO: remove back button somehow
             self.__view_progress = VanillaProgress(self)
+            self.__view_progress.no_back_button = True
             self.__view_done = VanillaDone(self)
+            self.__view_done.no_next_button = True
 
             self.pages.append(self.__view_welcome)
             self.pages.append(self.__view_conn_check)
@@ -146,6 +155,7 @@ class VanillaWindow(Adw.ApplicationWindow):
 
         self.stack.set_visible_child(self.__view_welcome)
 
+        self.__update_button_visibility(self.pages[0])
         self.__on_page_changed()
 
     def __on_page_changed(self, *args):
@@ -196,12 +206,18 @@ class VanillaWindow(Adw.ApplicationWindow):
         old_current_page = self.stack.get_visible_child()
         target_page = self.pages[target_index]
 
-        max_page_index = len(self.pages)-1
-        self.btn_back.set_visible(target_index != 0)
-        self.btn_next.set_visible(target_index != max_page_index and target_index != 0)
+        self.__update_button_visibility(target_page)
 
         self.stack.set_visible_child(target_page)
         self.__current_page_index = target_index
 
         old_current_page.set_page_inactive()
         self.__on_page_changed()
+
+    def __update_button_visibility(self, current_page):
+        no_back = getattr(current_page, "no_back_button", False)
+        no_next = getattr(current_page, "no_next_button", False)
+
+        self.btn_back.set_visible(not no_back)
+        self.btn_next.set_visible(not no_next)
+
