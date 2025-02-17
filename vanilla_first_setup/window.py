@@ -41,10 +41,10 @@ class VanillaWindow(Adw.ApplicationWindow):
     pages = []
     __current_page_index = 0
 
-    def __init__(self, pkgdatadir: str, configure_system_mode: bool, **kwargs):
+    def __init__(self, moduledir: str, configure_system_mode: bool, **kwargs):
         super().__init__(**kwargs)
 
-        self.pkgdatadir = pkgdatadir
+        self.moduledir = moduledir
         self.configure_system_mode = configure_system_mode
 
         self.__build_ui(configure_system_mode)

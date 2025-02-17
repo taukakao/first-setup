@@ -22,9 +22,9 @@ import gettext
 
 from gi.repository import Gio
 
-def main(version, pkgdatadir: str, moduledir: str, localedir: str):
+def main(version, moduledir: str, localedir: str):
     """The application's entry point."""
-    if pkgdatadir == "" or moduledir == "" or localedir == "":
+    if moduledir == "":
         print("Can't continue without a data directory.")
         sys.exit(1)
         return

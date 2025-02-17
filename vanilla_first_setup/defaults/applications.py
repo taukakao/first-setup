@@ -120,7 +120,7 @@ class VanillaLayoutApplications(Adw.Bin):
         super().__init__(**kwargs)
         self.__window = window
 
-        apps_file_path = os.path.join(window.pkgdatadir, "apps.json")
+        apps_file_path = os.path.join(window.moduledir, "apps.json")
         with open(apps_file_path) as file:
             self.__apps = json.load(file)
 

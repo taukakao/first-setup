@@ -36,13 +36,13 @@ logger = logging.getLogger("FirstSetup::Main")
 class FirstSetupApplication(Adw.Application):
     """The main application singleton class."""
 
-    pkgdatadir = ""
+    moduledir = ""
 
-    def __init__(self, pkgdatadir: str, *args, **kwargs):
+    def __init__(self, moduledir: str, *args, **kwargs):
 
         log_path = "/tmp/first-setup.log"
 
-        self.pkgdatadir = pkgdatadir
+        self.moduledir = moduledir
 
         if not os.path.exists(log_path):
             try:
@@ -146,7 +146,7 @@ class FirstSetupApplication(Adw.Application):
         if not win:
             win = VanillaWindow(
                 application=self,
-                pkgdatadir=self.pkgdatadir,
+                moduledir=self.moduledir,
                 configure_system_mode=configure_system_mode,
             )
         win.present()
