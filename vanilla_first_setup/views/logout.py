@@ -48,17 +48,26 @@ class VanillaLogout(Adw.Bin):
     def set_page_inactive(self):
         return
 
+    __already_subscribed = False
+    __deferred_actions_succeeded = True
+    __currently_running = False
+
     def __on_login_clicked(self, *args):
-        backend.subscribe_progress(self.__deferred_progress_callback)
-        backend.start_deferred_actions()
-    
-    _deferred_actions_succeeded = True
+        if not self.__already_subscribed:
+            backend.subscribe_progress(self.__deferred_progress_callback)
+            self.__already_subscribed = True
+        if not self.__currently_running:
+            self.__currently_running = True
+            backend.start_deferred_actions()
+            self.__deferred_actions_succeeded = True
 
     def __deferred_progress_callback(self, id: str, uid: str, state: backend.ProgressState, info = None):
         if state == backend.ProgressState.Failed:
-            self._deferred_actions_succeeded = False
-        if uid == "add_user" and state == backend.ProgressState.Finished and self._deferred_actions_succeeded:
-            backend.logout()
+            self.__deferred_actions_succeeded = False
+        if uid == "all_actions" and state == backend.ProgressState.Finished:
+            self.__currently_running = False
+            if self.__deferred_actions_succeeded:
+                backend.logout()
 
     def __on_logs_clicked(self, *args):
         self.btn_logs.set_visible(False)
