@@ -37,7 +37,7 @@
                   </child>
                   <child>
                     <object class="GtkButton" id="btn_exit">
-                      <property name="label">Exit</property>
+                      <property name="label" translatable="yes">Exit</property>
                       <property name="hexpand">true</property>
                       <property name="valign">center</property>
                       <style>

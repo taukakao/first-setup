@@ -7,8 +7,8 @@
         <property name="content">
           <object class="AdwStatusPage" id="status_page">
             <property name="icon-name">preferences-desktop-locale-symbolic</property>
-            <property name="title" translatable="true">Language</property>
-            <property name="description" translatable="true">Select your language</property>
+            <property name="title" translatable="yes">Language</property>
+            <property name="description" translatable="yes">Select your language</property>
           </object>
         </property>
       </object>

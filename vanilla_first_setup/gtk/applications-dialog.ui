@@ -5,7 +5,7 @@
     <template class="VanillaApplicationsDialog" parent="AdwWindow">
         <property name="default-width">500</property>
         <property name="default-height">600</property>
-        <property name="title" translatable="true">Select Applications</property>
+        <property name="title" translatable="yes">Select Applications</property>
         <property name="content">
             <object class="GtkBox">
                 <property name="orientation">1</property>
@@ -15,7 +15,7 @@
                         <property name="show-start-title-buttons">false</property>
                         <child type="end">
                             <object class="GtkButton" id="apply_button">
-                                <property name="label" translatable="true">Apply</property>
+                                <property name="label" translatable="yes">Apply</property>
                                 <style>
                                     <class name="suggested-action"/>
                                 </style>
@@ -27,7 +27,7 @@
                     <object class="AdwPreferencesPage">
                         <child>
                             <object class="AdwPreferencesGroup" id="applications_group">
-                                <property name="description" translatable="true">Select the applications you want to install</property>
+                                <property name="description" translatable="yes">Select the applications you want to install</property>
                             </object>
                         </child>
                     </object>
