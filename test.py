@@ -32,4 +32,4 @@ if __name__ == '__main__':
     subprocess.run(command, check=True)
 
     from vanilla_first_setup import main
-    sys.exit(main.main(VERSION, pkgdatadir, moduledir, localedir))
+    sys.exit(main.main(VERSION, moduledir, localedir))

@@ -27,4 +27,4 @@ sys.path.insert(1, pkgdatadir)
 
 if __name__ == '__main__':
     from vanilla_first_setup import main
-    sys.exit(main.main(VERSION, pkgdatadir, moduledir, localedir))
+    sys.exit(main.main(VERSION, moduledir, localedir))
