@@ -16,12 +16,13 @@
 
 import threading
 
-from gettext import gettext as _
 from gi.repository import Gtk, Adw, GLib
 
 import vanilla_first_setup.core.backend as backend
 
 from vanilla_first_setup.dialog import VanillaDialog
+
+_ = __builtins__["_"]
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/window.ui")
 class VanillaWindow(Adw.ApplicationWindow):
