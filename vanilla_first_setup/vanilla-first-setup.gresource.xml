@@ -22,15 +22,7 @@
 
     <file>gtk/layout-applications.ui</file>
     <file>gtk/applications-dialog.ui</file>
-  </gresource>
-  <gresource prefix="/org/vanillaos/FirstSetup/icons/scalable/actions">
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/background-app-ghost-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-package-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-container-terminal-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-puzzle-piece-symbolic.svg</file>
-    <file preprocess="xml-stripblanks">../data/icons/hicolor/symbolic/actions/vanilla-history-undo-symbolic.svg</file>
-  </gresource>
-  <gresource prefix="/org/vanillaos/FirstSetup">
+    
     <file>assets/theme-default.svg</file>
     <file>assets/theme-dark.svg</file>
     <file>assets/background_replacement.png</file>

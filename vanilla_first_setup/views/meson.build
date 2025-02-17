@@ -4,9 +4,8 @@ viewsdir = join_paths(pkgdatadir, 'vanilla_first_setup/views')
 sources = [
   '__init__.py',
   'done.py',
+  'logout.py',
   'progress.py',
-  'tour.py',
-  'post_script.py',
 ]
 
 install_data(sources, install_dir: viewsdir)

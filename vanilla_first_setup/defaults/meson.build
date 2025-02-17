@@ -3,16 +3,17 @@ defaultsdir = join_paths(pkgdatadir, 'vanilla_first_setup/defaults')
 
 sources = [
   '__init__.py',
-  'welcome.py',
-  'theme.py',
-  'user.py',
-  'hostname.py',
   'applications.py',
   'conn_check.py',
-  'network.py',
-  'language.py',
+  'hostname.py',
   'keyboard.py',
+  'language.py',
+  'locations.py',
+  'theme.py',
   'timezone.py',
+  'user.py',
+  'welcome_user.py',
+  'welcome.py',
 ]
 
 install_data(sources, install_dir: defaultsdir)
