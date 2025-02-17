@@ -77,6 +77,22 @@ class FirstSetupApplication(Adw.Application):
             _("Don't make any changes to the system."),
             None,
         )
+        self.add_main_option(
+            "force-configure-mode",
+            ord("c"),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _("Force the configure system mode, independant of group."),
+            None,
+        )
+        self.add_main_option(
+            "force-regular-mode",
+            ord("r"),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _("Force the regular mode, independant of group."),
+            None,
+        )
 
     def do_command_line(self, command_line):
         """Handle command line arguments."""
@@ -87,6 +103,9 @@ class FirstSetupApplication(Adw.Application):
             self.dry_run = True
         else:
             self.dry_run = False
+        
+        self.force_configure = bool(options.lookup_value("force-configure-mode"))
+        self.force_regular = bool(options.lookup_value("force-regular-mode"))
         
         backend.set_dry_run(self.dry_run)
             
@@ -102,12 +121,18 @@ class FirstSetupApplication(Adw.Application):
         all_groups = [g.gr_name for g in grp.getgrall()]
         configure_system_mode = False
         if "vanilla-first-setup" in all_groups and os.getlogin() in grp.getgrnam("vanilla-first-setup").gr_mem:
-            print("Detected special first-setup user, running in configure system mode.")
             configure_system_mode = True
 
+        if self.force_configure:
+            configure_system_mode = True
+        elif self.force_regular:
+            configure_system_mode = False
+
         if configure_system_mode:
+            print("Running in configure system mode.")
             backend.disable_lockscreen()
         else:
+            print("Running in regular mode.")
             backend.setup_system_deferred()
 
         provider = Gtk.CssProvider()
