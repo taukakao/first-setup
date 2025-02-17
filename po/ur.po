@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:21+0100\n"
+"POT-Creation-Date: 2025-02-17 21:48+0100\n"
 "PO-Revision-Date: 2023-01-02 12:40+0000\n"
 "Last-Translator: Mohammad saliq <darsaliq00@gmail.com>\n"
 "Language-Team: Urdu <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -340,12 +340,11 @@ msgstr ""
 msgid "Hello {}!"
 msgstr ""
 
-#. TODO: fix translations for _ stuff
-#: vanilla_first_setup/views/progress.py:92
+#: vanilla_first_setup/views/progress.py:91
 msgid "Setting up the system"
 msgstr ""
 
-#: vanilla_first_setup/views/progress.py:97
+#: vanilla_first_setup/views/progress.py:96
 msgid "Installing"
 msgstr ""
 
