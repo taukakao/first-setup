@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2024-09-04 12:59+0000\n"
 "Last-Translator: Albert Farreras <albertfarrerasaleu30@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -47,6 +47,10 @@ msgstr "Executar com usuari nou"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "El teu dispositiu està llest per fer-ho servir."
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

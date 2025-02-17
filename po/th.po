@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2023-10-31 15:43+0000\n"
 "Last-Translator: \"Toshisawa D. Daitsuku\" "
 "<65522118+Daitsuku@users.noreply.github.com>\n"
@@ -46,6 +46,10 @@ msgstr "เรียกใช้ในฐานะผู้ใช้ใหม่
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "อุปกรณ์ของคุณพร้อมใช้งานแล้ว"
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

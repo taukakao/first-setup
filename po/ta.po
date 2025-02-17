@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2024-06-01 21:52+0000\n"
 "Last-Translator: \"K.B.Dharun Krishna\" <kbdharunkrishna@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -43,6 +43,10 @@ msgstr "புதிய பயனராக இயக்கவும்"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "உங்கள் சாதனம் பயன்படுத்த தயாராக உள்ளது."
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

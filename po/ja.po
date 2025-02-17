@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2024-02-07 19:01+0000\n"
 "Last-Translator: Gnuey56 <gnuey56@proton.me>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/vanilla-os/"
@@ -47,6 +47,10 @@ msgstr "新しいユーザーとして実行"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "デバイスを使用する準備が整いました。"
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

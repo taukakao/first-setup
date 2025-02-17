@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2024-01-25 16:01+0000\n"
 "Last-Translator: lakejason0 <sunliyuan200402@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -45,6 +45,10 @@ msgstr "以新用户身份运行"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "您的设备已准备就绪。"
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

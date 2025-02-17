@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2024-01-31 16:42+0000\n"
 "Last-Translator: andrij <Kalenskuja@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/vanilla-os/"
@@ -47,6 +47,10 @@ msgstr "Запустити від імені нового користувача
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "Ваш пристрій готовий до використання."
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

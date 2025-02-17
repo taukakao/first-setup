@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2024-05-08 20:05+0000\n"
 "Last-Translator: guylamar2006 <guychronister@outlook.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -45,6 +45,10 @@ msgstr "הפעל כמשתמש חדש"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "המכשיר שלך מוכן לשימוש."
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"

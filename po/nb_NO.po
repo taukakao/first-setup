@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:34+0100\n"
+"POT-Creation-Date: 2025-02-17 20:49+0100\n"
 "PO-Revision-Date: 2023-08-14 15:04+0000\n"
 "Last-Translator: Trond Kjetil Bremnes <tk@bremnes.email>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/vanilla-"
@@ -46,6 +46,10 @@ msgstr "Kjør som ny bruker"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "Enheten din er klar til bruk."
+
+#: vanilla_first_setup/gtk/done.ui:40
+msgid "Exit"
+msgstr ""
 
 #: vanilla_first_setup/gtk/progress.ui:9
 msgid "Progress"
