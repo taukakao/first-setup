@@ -52,6 +52,9 @@ def logout():
 def open_network_settings():
     return run_script("open-network-settings", [])
 
+def open_accessibility_settings():
+    return run_script("open-accessibility-settings", [])
+
 def disable_lockscreen():
     return run_script("disable-lockscreen", [])
 

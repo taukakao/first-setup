@@ -20,11 +20,14 @@ import random
 
 from gi.repository import Gtk, GLib, Adw
 
+import vanilla_first_setup.core.backend as backend
+
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-welcome.ui")
 class VanillaDefaultWelcome(Adw.Bin):
     __gtype_name__ = "VanillaDefaultWelcome"
 
     btn_next = Gtk.Template.Child()
+    btn_access = Gtk.Template.Child()
     title_label = Gtk.Template.Child()
 
     __stop_animation = True
@@ -74,6 +77,7 @@ class VanillaDefaultWelcome(Adw.Bin):
         random.shuffle(self.welcome)
 
         self.btn_next.connect("clicked", self.__on_btn_next_clicked)
+        self.btn_access.connect("clicked", self.__on_btn_access_clicked)
 
     def set_page_active(self):
         self.__window.set_ready(True)
@@ -104,3 +108,6 @@ class VanillaDefaultWelcome(Adw.Bin):
 
     def __on_btn_next_clicked(self, widget):
         self.__window.finish_step()
+
+    def __on_btn_access_clicked(self, widget):
+        backend.open_accessibility_settings()
