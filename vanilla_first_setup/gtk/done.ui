@@ -26,7 +26,7 @@
                 <property name="spacing">12</property>
                   <child>
                     <object class="GtkButton" id="btn_tour">
-                      <property name="label">Take a tour</property>
+                      <property name="label" translatable="yes">Take a tour</property>
                       <property name="hexpand">true</property>
                       <property name="valign">center</property>
                       <style>

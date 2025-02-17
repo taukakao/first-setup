@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 20:49+0100\n"
+"POT-Creation-Date: 2025-02-17 21:21+0100\n"
 "PO-Revision-Date: 2024-02-01 06:13+0000\n"
 "Last-Translator: Michaël Tremblay "
 "<Tichael@users.noreply.hosted.weblate.org>\n"
@@ -46,6 +46,10 @@ msgstr "Exécuter en tant que nouvel utilisateur"
 #, fuzzy
 msgid "Your user account is ready to use"
 msgstr "Votre appareil est prêt à l'emploi."
+
+#: vanilla_first_setup/gtk/done.ui:29
+msgid "Take a tour"
+msgstr ""
 
 #: vanilla_first_setup/gtk/done.ui:40
 msgid "Exit"
@@ -344,11 +348,12 @@ msgstr ""
 msgid "Hello {}!"
 msgstr ""
 
-#: vanilla_first_setup/views/progress.py:91
+#. TODO: fix translations for _ stuff
+#: vanilla_first_setup/views/progress.py:92
 msgid "Setting up the system"
 msgstr ""
 
-#: vanilla_first_setup/views/progress.py:96
+#: vanilla_first_setup/views/progress.py:97
 #, fuzzy
 msgid "Installing"
 msgstr "Installation..."
