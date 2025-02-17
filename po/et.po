@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:57+0100\n"
+"POT-Creation-Date: 2025-02-17 23:23+0100\n"
 "PO-Revision-Date: 2023-03-24 18:24+0000\n"
 "Last-Translator: dogyx <aaronloit@zohomail.eu>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/vanilla-os/"
@@ -156,7 +156,7 @@ msgid ""
 msgstr ""
 
 #: vanilla_first_setup/gtk/default-language.ui:10
-#: vanilla_first_setup/defaults/language.py:36
+#: vanilla_first_setup/views/language.py:36
 msgid "Language"
 msgstr ""
 
@@ -261,15 +261,15 @@ msgstr ""
 msgid "Select the applications you want to install"
 msgstr ""
 
-#: vanilla_first_setup/window.py:72
+#: vanilla_first_setup/window.py:73
 msgid "Setup failed: "
 msgstr ""
 
-#: vanilla_first_setup/window.py:77
+#: vanilla_first_setup/window.py:78
 msgid "Details"
 msgstr ""
 
-#: vanilla_first_setup/window.py:83
+#: vanilla_first_setup/window.py:84
 msgid "Error log"
 msgstr ""
 
@@ -285,59 +285,59 @@ msgstr ""
 msgid "Force the regular mode, independant of group."
 msgstr ""
 
-#: vanilla_first_setup/defaults/conn_check.py:71
+#: vanilla_first_setup/views/conn_check.py:71
 msgid "No Internet Connection!"
 msgstr ""
 
-#: vanilla_first_setup/defaults/conn_check.py:72
+#: vanilla_first_setup/views/conn_check.py:72
 msgid "First Setup requires an active internet connection"
 msgstr ""
 
-#: vanilla_first_setup/defaults/conn_check.py:78
+#: vanilla_first_setup/views/conn_check.py:78
 msgid "Connection available"
 msgstr ""
 
-#: vanilla_first_setup/defaults/conn_check.py:79
+#: vanilla_first_setup/views/conn_check.py:79
 msgid "You have a working internet connection"
 msgstr ""
 
-#: vanilla_first_setup/defaults/keyboard.py:37
+#: vanilla_first_setup/views/keyboard.py:37
 msgid "Keyboard"
 msgstr ""
 
-#: vanilla_first_setup/defaults/user.py:118
+#: vanilla_first_setup/views/user.py:118
 msgid "Username cannot be empty."
 msgstr ""
 
-#: vanilla_first_setup/defaults/user.py:121
+#: vanilla_first_setup/views/user.py:121
 msgid "Username cannot be longer than 32 characters."
 msgstr ""
 
-#: vanilla_first_setup/defaults/user.py:124
+#: vanilla_first_setup/views/user.py:124
 msgid "Username cannot contain special characters or uppercase letters."
 msgstr ""
 
-#: vanilla_first_setup/defaults/user.py:128
+#: vanilla_first_setup/views/user.py:128
 msgid "This username is already in use."
 msgstr ""
 
-#: vanilla_first_setup/defaults/locations.py:220
+#: vanilla_first_setup/views/locations.py:220
 msgid "Region"
 msgstr ""
 
-#: vanilla_first_setup/defaults/locations.py:238
+#: vanilla_first_setup/views/locations.py:238
 msgid "Country"
 msgstr ""
 
-#: vanilla_first_setup/defaults/locations.py:327
+#: vanilla_first_setup/views/locations.py:327
 msgid "Search results"
 msgstr ""
 
-#: vanilla_first_setup/defaults/timezone.py:39
+#: vanilla_first_setup/views/timezone.py:39
 msgid "Timezone"
 msgstr ""
 
-#: vanilla_first_setup/defaults/welcome_user.py:44
+#: vanilla_first_setup/views/welcome_user.py:44
 msgid "Hello {}!"
 msgstr ""
 
