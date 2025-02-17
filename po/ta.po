@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 23:23+0100\n"
+"POT-Creation-Date: 2025-02-17 23:33+0100\n"
 "PO-Revision-Date: 2024-06-01 21:52+0000\n"
 "Last-Translator: \"K.B.Dharun Krishna\" <kbdharunkrishna@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -68,134 +68,134 @@ msgstr ""
 msgid "Showing Information"
 msgstr "தகவலைக் காட்டுகிறது"
 
-#: vanilla_first_setup/gtk/default-conn-check.ui:12
+#: vanilla_first_setup/gtk/conn-check.ui:12
 #, fuzzy
 msgid "Checking Connection"
 msgstr "இணைப்பைச் சரிபார்க்கிறது…"
 
-#: vanilla_first_setup/gtk/default-conn-check.ui:13
+#: vanilla_first_setup/gtk/conn-check.ui:13
 msgid "Please wait until the connection check is done"
 msgstr "இணைப்புச் சரிபார்ப்பு முடியும் வரை காத்திருக்கவும்"
 
-#: vanilla_first_setup/gtk/default-conn-check.ui:16
+#: vanilla_first_setup/gtk/conn-check.ui:16
 #, fuzzy
 msgid "Open Settings"
 msgstr "ப்ராக்ஸி அமைப்புகளைத் திறக்கவும்..."
 
-#: vanilla_first_setup/gtk/default-theme.ui:13
+#: vanilla_first_setup/gtk/theme.ui:13
 msgid "Color Scheme"
 msgstr "வண்ண திட்டம்"
 
-#: vanilla_first_setup/gtk/default-theme.ui:14
+#: vanilla_first_setup/gtk/theme.ui:14
 msgid "Choose a color scheme for your system"
 msgstr "உங்கள் கணினிக்கான வண்ணத் திட்டத்தைத் தேர்ந்தெடுக்கவும்"
 
-#: vanilla_first_setup/gtk/default-theme.ui:41
+#: vanilla_first_setup/gtk/theme.ui:41
 msgid "Light Mode"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-theme.ui:79
+#: vanilla_first_setup/gtk/theme.ui:79
 msgid "Light"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-theme.ui:88
+#: vanilla_first_setup/gtk/theme.ui:88
 #, fuzzy
 msgid "Dark Mode"
 msgstr "இருள்"
 
-#: vanilla_first_setup/gtk/default-theme.ui:127
+#: vanilla_first_setup/gtk/theme.ui:127
 msgid "Dark"
 msgstr "இருள்"
 
-#: vanilla_first_setup/gtk/default-welcome.ui:39
+#: vanilla_first_setup/gtk/welcome.ui:39
 #, fuzzy
 msgid "Make your choices, this wizard will take care of everything"
 msgstr "உங்கள் தேர்வுகளை செய்யுங்கள், இந்த வழிகாட்டி எல்லாவற்றையும் கவனித்துக்கொள்ளும்."
 
-#: vanilla_first_setup/gtk/default-welcome.ui:52
-#: vanilla_first_setup/gtk/default-welcome-user.ui:21
+#: vanilla_first_setup/gtk/welcome.ui:52
+#: vanilla_first_setup/gtk/welcome-user.ui:21
 msgid "Start"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-welcome.ui:62
-#: vanilla_first_setup/gtk/default-welcome-user.ui:31
+#: vanilla_first_setup/gtk/welcome.ui:62
+#: vanilla_first_setup/gtk/welcome-user.ui:31
 msgid "Accessibility"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-welcome-user.ui:13
+#: vanilla_first_setup/gtk/welcome-user.ui:13
 #, fuzzy
 msgid "Let's set up your user account"
 msgstr "உங்கள் பயனர் கணக்கிற்கான விவரங்களை வழங்கவும்"
 
-#: vanilla_first_setup/gtk/default-user.ui:23
+#: vanilla_first_setup/gtk/user.ui:23
 msgid "Create User"
 msgstr "பயனரை உருவாக்கவும்"
 
-#: vanilla_first_setup/gtk/default-user.ui:24
+#: vanilla_first_setup/gtk/user.ui:24
 msgid "Provide details for your user account"
 msgstr "உங்கள் பயனர் கணக்கிற்கான விவரங்களை வழங்கவும்"
 
-#: vanilla_first_setup/gtk/default-user.ui:31
+#: vanilla_first_setup/gtk/user.ui:31
 msgid "Name"
 msgstr "பெயர்"
 
-#: vanilla_first_setup/gtk/default-user.ui:38
+#: vanilla_first_setup/gtk/user.ui:38
 msgid "Username"
 msgstr "பயனர் பெயர்"
 
-#: vanilla_first_setup/gtk/default-hostname.ui:13
-#: vanilla_first_setup/gtk/default-hostname.ui:21
+#: vanilla_first_setup/gtk/hostname.ui:13
+#: vanilla_first_setup/gtk/hostname.ui:21
 msgid "Device Name"
 msgstr "சாதனத்தின் பெயர்"
 
-#: vanilla_first_setup/gtk/default-hostname.ui:14
+#: vanilla_first_setup/gtk/hostname.ui:14
 msgid "Provide your device name"
 msgstr "உங்கள் சாதனத்தின் பெயரை வழங்கவும்"
 
-#: vanilla_first_setup/gtk/default-hostname.ui:31
+#: vanilla_first_setup/gtk/hostname.ui:31
 msgid ""
 "Hostname can only contain up to 64 English lowercase letters with hyphens in-"
 "between."
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-language.ui:10
+#: vanilla_first_setup/gtk/language.ui:10
 #: vanilla_first_setup/views/language.py:36
 msgid "Language"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-language.ui:11
+#: vanilla_first_setup/gtk/language.ui:11
 msgid "Select your language"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-location.ui:15
+#: vanilla_first_setup/gtk/location.ui:15
 msgid "Search keyboard layouts"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-location.ui:24
+#: vanilla_first_setup/gtk/location.ui:24
 msgid "The search results are incomplete. Try refining your query."
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-timezone.ui:11
+#: vanilla_first_setup/gtk/timezone.ui:11
 msgid "Date & Time"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-timezone.ui:12
+#: vanilla_first_setup/gtk/timezone.ui:12
 msgid "Select your preferred timezone"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-timezone.ui:29
+#: vanilla_first_setup/gtk/timezone.ui:29
 msgid "Current timezone:"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-timezone.ui:34
+#: vanilla_first_setup/gtk/timezone.ui:34
 msgid "not set"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-keyboard.ui:10
+#: vanilla_first_setup/gtk/keyboard.ui:10
 msgid "Keyboard Layout"
 msgstr ""
 
-#: vanilla_first_setup/gtk/default-keyboard.ui:11
+#: vanilla_first_setup/gtk/keyboard.ui:11
 msgid "Select all your preferred keyboard layouts"
 msgstr ""
 
