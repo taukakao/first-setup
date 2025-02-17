@@ -22,6 +22,16 @@ install_data(
     install_dir: join_paths(get_option('datadir'), 'gnome-shell', 'modes')
 )
 
+install_data(
+    'org.vanillaos.FirstSetup.policy',
+    install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'polkit-1', 'actions')
+)
+
+install_data(
+    'org.vanillaos.FirstSetup.rules',
+    install_dir: join_paths(get_option('prefix'), get_option('datadir'), 'polkit-1', 'rules.d')
+)
+
 desktop_file = i18n.merge_file(
   input: 'org.vanillaos.FirstSetup.desktop.in',
   output: 'org.vanillaos.FirstSetup.desktop',
