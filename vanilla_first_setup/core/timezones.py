@@ -6,7 +6,7 @@ from datetime import datetime
 import logging
 import threading
 import copy
-from gettext import gettext as _
+_ = __builtins__["_"]
 
 import requests
 from gi.repository import GLib, GWeather

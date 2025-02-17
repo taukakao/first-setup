@@ -17,7 +17,7 @@
 import os
 import pwd
 
-from gettext import gettext as _
+_ = __builtins__["_"]
 
 from gi.repository import Gtk, GLib, Adw
 

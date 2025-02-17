@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from gettext import gettext as _
+_ = __builtins__["_"]
 
 from gi.repository import Adw, Gtk, Gio, GLib
 

@@ -19,7 +19,7 @@ import json
 import os
 
 from gi.repository import Gtk, Adw
-from gettext import gettext as _
+_ = __builtins__["_"]
 
 import vanilla_first_setup.core.backend as backend
 

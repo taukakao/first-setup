@@ -16,7 +16,7 @@
 
 import subprocess
 
-from gettext import gettext as _
+_ = __builtins__["_"]
 from gi.repository import Gtk, Adw
 
 import vanilla_first_setup.core.backend as backend

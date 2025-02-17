@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from gettext import gettext as _
+_ = __builtins__["_"]
 from gi.repository import Gtk, Adw
 
 import vanilla_first_setup.core.backend as backend

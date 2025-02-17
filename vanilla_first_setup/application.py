@@ -27,7 +27,7 @@ import os
 import sys
 import logging
 import grp
-from gettext import gettext as _
+_ = __builtins__["_"]
 from vanilla_first_setup.window import VanillaWindow
 import vanilla_first_setup.core.backend as backend
 

@@ -19,7 +19,7 @@ import vanilla_first_setup.core.backend as backend
 
 from gi.repository import Gtk, Adw, GLib
 
-from gettext import gettext as _
+_ = __builtins__["_"]
 
 @Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/progress.ui")
 class VanillaProgress(Adw.Bin):
@@ -88,7 +88,6 @@ class VanillaProgress(Adw.Bin):
         icon = None
         if id == "setup_system":
             icon = Gtk.Image.new_from_icon_name("computer")
-            # TODO: fix translations for _ stuff
             title = _("Setting up the system")
         elif id == "install_flatpak":
             icon = Gtk.Image.new_from_resource(
