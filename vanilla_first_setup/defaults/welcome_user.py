@@ -26,7 +26,7 @@ class VanillaDefaultWelcomeUser(Adw.Bin):
     __gtype_name__ = "VanillaDefaultWelcomeUser"
 
     btn_next = Gtk.Template.Child()
-    title_label = Gtk.Template.Child()
+    status_page = Gtk.Template.Child()
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -39,7 +39,7 @@ class VanillaDefaultWelcomeUser(Adw.Bin):
         
         message = _("Hello {}!").format(full_name)
 
-        self.title_label.set_label(message)
+        self.status_page.set_title(message)
 
     def set_page_active(self):
         self.__window.set_ready(True)
