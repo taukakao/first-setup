@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:48+0100\n"
+"POT-Creation-Date: 2025-02-17 21:57+0100\n"
 "PO-Revision-Date: 2024-07-27 17:09+0000\n"
 "Last-Translator: Muhammad Bahaa <muhammad.bahaa1@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -44,6 +44,10 @@ msgstr "انتهى!"
 #, fuzzy
 msgid "Login to your new user"
 msgstr "تشغيل كمستخدم جديد"
+
+#: vanilla_first_setup/gtk/logout.ui:23
+msgid "Login Now"
+msgstr ""
 
 #: vanilla_first_setup/gtk/done.ui:13
 #, fuzzy

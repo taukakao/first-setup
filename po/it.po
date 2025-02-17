@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:48+0100\n"
+"POT-Creation-Date: 2025-02-17 21:57+0100\n"
 "PO-Revision-Date: 2024-09-24 12:24+0000\n"
 "Last-Translator: Mauro Remondi <re.mauro@live.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -45,6 +45,10 @@ msgstr "Finito!"
 #, fuzzy
 msgid "Login to your new user"
 msgstr "Eseguire come nuovo utente"
+
+#: vanilla_first_setup/gtk/logout.ui:23
+msgid "Login Now"
+msgstr ""
 
 #: vanilla_first_setup/gtk/done.ui:13
 #, fuzzy

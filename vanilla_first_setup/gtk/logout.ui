@@ -20,7 +20,7 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkButton" id="btn_login">
-                <property name="label">Login Now</property>
+                <property name="label" translatable="yes">Login Now</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <style>

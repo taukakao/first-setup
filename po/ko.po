@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:48+0100\n"
+"POT-Creation-Date: 2025-02-17 21:57+0100\n"
 "PO-Revision-Date: 2024-10-11 19:28+0000\n"
 "Last-Translator: Giljae Joo <giljae@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/vanilla-os/first-"
@@ -41,6 +41,10 @@ msgstr "완료!"
 #, fuzzy
 msgid "Login to your new user"
 msgstr "새로운 사용자로 실행"
+
+#: vanilla_first_setup/gtk/logout.ui:23
+msgid "Login Now"
+msgstr ""
 
 #: vanilla_first_setup/gtk/done.ui:13
 #, fuzzy

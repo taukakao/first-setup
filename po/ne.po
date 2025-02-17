@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:48+0100\n"
+"POT-Creation-Date: 2025-02-17 21:57+0100\n"
 "PO-Revision-Date: 2023-03-29 22:56+0000\n"
 "Last-Translator: \"Mauro Henrique Dos Anjos Sousa (Mauro Henrique)\" "
 "<maurhenriq@gmail.com>\n"
@@ -37,6 +37,10 @@ msgstr ""
 
 #: vanilla_first_setup/gtk/logout.ui:13
 msgid "Login to your new user"
+msgstr ""
+
+#: vanilla_first_setup/gtk/logout.ui:23
+msgid "Login Now"
 msgstr ""
 
 #: vanilla_first_setup/gtk/done.ui:13

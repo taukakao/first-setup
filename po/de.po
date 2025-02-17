@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 21:48+0100\n"
+"POT-Creation-Date: 2025-02-17 21:57+0100\n"
 "PO-Revision-Date: 2024-06-02 16:07+0000\n"
 "Last-Translator: Experiencing A Significant Gravitas Shortfall "
 "<bedeb1@pm.me>\n"
@@ -48,6 +48,10 @@ msgstr "Fertig!"
 #: vanilla_first_setup/gtk/logout.ui:13
 msgid "Login to your new user"
 msgstr "In neuen Nutzer einloggen"
+
+#: vanilla_first_setup/gtk/logout.ui:23
+msgid "Login Now"
+msgstr ""
 
 #: vanilla_first_setup/gtk/done.ui:13
 msgid "Your user account is ready to use"
