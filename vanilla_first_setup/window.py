@@ -124,6 +124,7 @@ class VanillaWindow(Adw.ApplicationWindow):
             from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
             from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
             from vanilla_first_setup.views.progress import VanillaProgress
+            from vanilla_first_setup.views.done import VanillaDone
 
             self.__view_welcome = VanillaDefaultWelcomeUser(self)
             self.__view_conn_check = VanillaDefaultConnCheck(self)
@@ -131,13 +132,14 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.__view_apps = VanillaLayoutApplications(self)
             # TODO: remove back button somehow
             self.__view_progress = VanillaProgress(self)
+            self.__view_done = VanillaDone(self)
 
             self.pages.append(self.__view_welcome)
             self.pages.append(self.__view_conn_check)
             self.pages.append(self.__view_theme)
             self.pages.append(self.__view_apps)
             self.pages.append(self.__view_progress)
-            # TODO: add final page
+            self.pages.append(self.__view_done)
 
         for page in self.pages:
             self.stack.add_child(page)
