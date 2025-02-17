@@ -23,7 +23,7 @@ from vanilla_first_setup.views.locations import VanillaDefaultLocation
 import vanilla_first_setup.core.timezones as tz
 import vanilla_first_setup.core.backend as backend
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-timezone.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/timezone.ui")
 class VanillaDefaultTimezone(Adw.Bin):
     __gtype_name__ = "VanillaDefaultTimezone"
 

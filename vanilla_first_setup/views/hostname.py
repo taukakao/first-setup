@@ -20,7 +20,7 @@ from gi.repository import Gtk, Adw
 
 import vanilla_first_setup.core.backend as backend
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-hostname.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/hostname.ui")
 class VanillaDefaultHostname(Adw.Bin):
     __gtype_name__ = "VanillaDefaultHostname"
 

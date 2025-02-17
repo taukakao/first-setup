@@ -24,7 +24,7 @@ import vanilla_first_setup.core.backend as backend
 logger = logging.getLogger("FirstSetup::Conn_Check")
 
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-conn-check.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/conn-check.ui")
 class VanillaDefaultConnCheck(Adw.Bin):
     __gtype_name__ = "VanillaDefaultConnCheck"
 

@@ -8,16 +8,16 @@
     <file>gtk/progress.ui</file>
     <file>gtk/dialog.ui</file>
 
-    <file>gtk/default-conn-check.ui</file>
-    <file>gtk/default-theme.ui</file>
-    <file>gtk/default-welcome.ui</file>
-    <file>gtk/default-welcome-user.ui</file>
-    <file>gtk/default-user.ui</file>
-    <file>gtk/default-hostname.ui</file>
-    <file>gtk/default-language.ui</file>
-    <file>gtk/default-location.ui</file>
-    <file>gtk/default-timezone.ui</file>
-    <file>gtk/default-keyboard.ui</file>
+    <file>gtk/conn-check.ui</file>
+    <file>gtk/theme.ui</file>
+    <file>gtk/welcome.ui</file>
+    <file>gtk/welcome-user.ui</file>
+    <file>gtk/user.ui</file>
+    <file>gtk/hostname.ui</file>
+    <file>gtk/language.ui</file>
+    <file>gtk/location.ui</file>
+    <file>gtk/timezone.ui</file>
+    <file>gtk/keyboard.ui</file>
     <file>gtk/widget-location-list-page.ui</file>
 
     <file>gtk/layout-applications.ui</file>

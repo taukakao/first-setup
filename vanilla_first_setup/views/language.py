@@ -23,7 +23,7 @@ from vanilla_first_setup.views.locations import VanillaDefaultLocation
 import vanilla_first_setup.core.languages as lang
 import vanilla_first_setup.core.backend as backend
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-language.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/language.ui")
 class VanillaDefaultLanguage(Adw.Bin):
     __gtype_name__ = "VanillaDefaultLanguage"
 

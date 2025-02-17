@@ -24,7 +24,7 @@ import vanilla_first_setup.core.backend as backend
 
 _ = __builtins__["_"]
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-keyboard.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/keyboard.ui")
 class VanillaDefaultKeyboard(Adw.Bin):
     __gtype_name__ = "VanillaDefaultKeyboard"
 

@@ -23,7 +23,7 @@ _ = __builtins__["_"]
 
 import vanilla_first_setup.core.backend as backend
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-user.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/user.ui")
 class VanillaDefaultUser(Adw.Bin):
     __gtype_name__ = "VanillaDefaultUser"
 

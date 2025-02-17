@@ -22,7 +22,7 @@ from gi.repository import Gtk, GLib, Adw
 
 import vanilla_first_setup.core.backend as backend
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-welcome.ui")
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/welcome.ui")
 class VanillaDefaultWelcome(Adw.Bin):
     __gtype_name__ = "VanillaDefaultWelcome"
 
