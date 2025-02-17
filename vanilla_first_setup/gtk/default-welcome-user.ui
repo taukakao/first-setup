@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk" version="4.0"/>
+    <requires lib="libadwaita" version="1.0" />
+    <template class="VanillaDefaultWelcomeUser" parent="AdwBin">
+        <property name="halign">fill</property>
+        <property name="valign">fill</property>
+        <property name="hexpand">true</property>
+        <child>
+            <object class="AdwStatusPage">
+                <property name="icon-name">org.vanillaos.FirstSetup-flower</property>
+                <child>
+                    <object class="GtkBox">
+                        <property name="spacing">8</property>
+                        <property name="orientation">1</property>
+                        <child>
+                            <object class="GtkLabel" id="title_label">
+                                <property name="label">Welcome!</property>
+                                <style>
+                                    <class name="title-1"/>
+                                </style>
+                            </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Let's set up your user account</property>
+                            <property name="justify">2</property>
+                          </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkBox">
+                                <property name="spacing">8</property>
+                                <property name="halign">center</property>
+                                <property name="margin-top">8</property>
+                                <child>
+                                    <object class="GtkButton" id="btn_next">
+                                        <property name="label" translatable="yes">Start</property>
+                                        <property name="halign">center</property>
+                                        <style>
+                                            <class name="pill" />
+                                            <class name="suggested-action" />
+                                        </style>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

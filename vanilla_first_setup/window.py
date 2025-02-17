@@ -119,14 +119,13 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.pages.append(self.__view_user)
             self.pages.append(self.__view_logout)
         else:
-            from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
+            from vanilla_first_setup.defaults.welcome_user import VanillaDefaultWelcomeUser
             from vanilla_first_setup.defaults.conn_check import VanillaDefaultConnCheck
             from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
             from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
             from vanilla_first_setup.views.progress import VanillaProgress
 
-            # TODO: create user welcome page
-            self.__view_welcome = VanillaDefaultWelcome(self)
+            self.__view_welcome = VanillaDefaultWelcomeUser(self)
             self.__view_conn_check = VanillaDefaultConnCheck(self)
             self.__view_theme = VanillaDefaultTheme(self)
             self.__view_apps = VanillaLayoutApplications(self)
