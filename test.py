@@ -22,7 +22,7 @@ VERSION = 'testing'
 
 path_of_this_file = os.path.dirname(os.path.realpath(__file__))
 pkgdatadir = os.path.join(path_of_this_file)
-localedir = '/usr/share/locale'
+localedir = os.path.join(path_of_this_file, "build/po")
 moduledir = os.path.join(path_of_this_file, "vanilla_first_setup")
 
 if __name__ == '__main__':

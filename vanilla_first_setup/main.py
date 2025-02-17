@@ -30,9 +30,9 @@ def main(version, pkgdatadir: str, moduledir: str, localedir: str):
         return
     
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    locale.bindtextdomain('vanilla_first_setup', localedir)
-    locale.textdomain('vanilla_first_setup')
-    gettext.install('vanilla_first_setup', localedir)
+    locale.bindtextdomain('vanilla-first-setup', localedir)
+    locale.textdomain('vanilla-first-setup')
+    gettext.install('vanilla-first-setup', localedir)
 
     resource = Gio.Resource.load(os.path.join(moduledir, 'vanilla-first-setup.gresource'))
     resource._register()
