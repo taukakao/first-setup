@@ -31,6 +31,7 @@ class VanillaProgress(Adw.Bin):
 
     __not_started = True
     __finished = False
+    __already_skipped = False
 
     def __init__(self, window, **kwargs):
         super().__init__(**kwargs)
@@ -59,6 +60,7 @@ class VanillaProgress(Adw.Bin):
             if state == backend.ProgressState.Finished:
                 self.__window.set_ready(True)
                 self.__finished = True
+                self.__skip_page_once()
             return
 
         if state == backend.ProgressState.Initialized:
@@ -102,3 +104,8 @@ class VanillaProgress(Adw.Bin):
 
         self.action_list.add(row)
         self.actions[uid] = {"id": id, "info": info, "widget": row}
+
+    def __skip_page_once(self):
+        if not self.__already_skipped:
+            self.__already_skipped = True
+            self.__window.finish_step()
