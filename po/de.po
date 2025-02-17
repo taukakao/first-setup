@@ -196,7 +196,6 @@ msgid "not set"
 msgstr "nicht gesetzt"
 
 #: vanilla_first_setup/gtk/default-keyboard.ui:10
-#, fuzzy
 msgid "Keyboard Layout"
 msgstr "Tastatur"
 
