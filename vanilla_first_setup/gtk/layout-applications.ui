@@ -42,6 +42,7 @@
                                 <property name="valign">3</property>
                                 <property name="icon-name">go-next-symbolic</property>
                                 <property name="sensitive">true</property>
+                                <property name="tooltip-text" translatable="true">Customize Core Applications</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
@@ -66,6 +67,7 @@
                                 <property name="valign">3</property>
                                 <property name="icon-name">go-next-symbolic</property>
                                 <property name="sensitive">true</property>
+                                <property name="tooltip-text" translatable="true">Customize Browsers</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
@@ -90,6 +92,7 @@
                                 <property name="valign">3</property>
                                 <property name="icon-name">go-next-symbolic</property>
                                 <property name="sensitive">false</property>
+                                <property name="tooltip-text" translatable="true">Customize Utilities</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
@@ -114,6 +117,7 @@
                                 <property name="valign">3</property>
                                 <property name="icon-name">go-next-symbolic</property>
                                 <property name="sensitive">false</property>
+                                <property name="tooltip-text" translatable="true">Customize Office Applications</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
