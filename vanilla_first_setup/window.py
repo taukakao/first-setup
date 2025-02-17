@@ -114,7 +114,6 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.__view_logout = VanillaLogout(self)
             self.__view_logout.no_next_button = True
 
-            # TODO: add accessibility button
             self.pages.append(self.__view_welcome)
             self.pages.append(self.__view_language)
             self.pages.append(self.__view_keyboard)
