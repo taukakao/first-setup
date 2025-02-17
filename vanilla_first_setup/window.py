@@ -95,12 +95,12 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __build_ui(self, configure_system_mode: bool):
 
         if configure_system_mode:
-            from vanilla_first_setup.defaults.welcome import VanillaDefaultWelcome
-            from vanilla_first_setup.defaults.language import VanillaDefaultLanguage
-            from vanilla_first_setup.defaults.keyboard import VanillaDefaultKeyboard
-            from vanilla_first_setup.defaults.timezone import VanillaDefaultTimezone
-            from vanilla_first_setup.defaults.hostname import VanillaDefaultHostname
-            from vanilla_first_setup.defaults.user import VanillaDefaultUser
+            from vanilla_first_setup.views.welcome import VanillaDefaultWelcome
+            from vanilla_first_setup.views.language import VanillaDefaultLanguage
+            from vanilla_first_setup.views.keyboard import VanillaDefaultKeyboard
+            from vanilla_first_setup.views.timezone import VanillaDefaultTimezone
+            from vanilla_first_setup.views.hostname import VanillaDefaultHostname
+            from vanilla_first_setup.views.user import VanillaDefaultUser
             from vanilla_first_setup.views.logout import VanillaLogout
 
             self.__view_welcome = VanillaDefaultWelcome(self)
@@ -123,10 +123,10 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.pages.append(self.__view_user)
             self.pages.append(self.__view_logout)
         else:
-            from vanilla_first_setup.defaults.welcome_user import VanillaDefaultWelcomeUser
-            from vanilla_first_setup.defaults.conn_check import VanillaDefaultConnCheck
-            from vanilla_first_setup.defaults.theme import VanillaDefaultTheme
-            from vanilla_first_setup.defaults.applications import VanillaLayoutApplications
+            from vanilla_first_setup.views.welcome_user import VanillaDefaultWelcomeUser
+            from vanilla_first_setup.views.conn_check import VanillaDefaultConnCheck
+            from vanilla_first_setup.views.theme import VanillaDefaultTheme
+            from vanilla_first_setup.views.applications import VanillaLayoutApplications
             from vanilla_first_setup.views.progress import VanillaProgress
             from vanilla_first_setup.views.done import VanillaDone
 

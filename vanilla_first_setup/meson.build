@@ -28,7 +28,6 @@ configure_file(
 )
 
 subdir('core')
-subdir('defaults')
 subdir('scripts')
 subdir('views')
 

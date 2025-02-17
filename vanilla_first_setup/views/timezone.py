@@ -18,7 +18,7 @@ _ = __builtins__["_"]
 
 from gi.repository import Adw, Gtk
 
-from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
+from vanilla_first_setup.views.locations import VanillaDefaultLocation
 
 import vanilla_first_setup.core.timezones as tz
 import vanilla_first_setup.core.backend as backend

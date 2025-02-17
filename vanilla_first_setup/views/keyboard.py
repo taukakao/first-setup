@@ -1,4 +1,4 @@
-# language.py
+# keyboard.py
 #
 # Copyright 2023 mirkobrombin
 #
@@ -14,18 +14,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-_ = __builtins__["_"]
-
 from gi.repository import Adw, Gtk
 
-from vanilla_first_setup.defaults.locations import VanillaDefaultLocation
+from vanilla_first_setup.views.locations import VanillaDefaultLocation
 
-import vanilla_first_setup.core.languages as lang
+import vanilla_first_setup.core.keyboard as kbd
+import vanilla_first_setup.core.timezones as tz
 import vanilla_first_setup.core.backend as backend
 
-@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-language.ui")
-class VanillaDefaultLanguage(Adw.Bin):
-    __gtype_name__ = "VanillaDefaultLanguage"
+_ = __builtins__["_"]
+
+@Gtk.Template(resource_path="/org/vanillaos/FirstSetup/gtk/default-keyboard.ui")
+class VanillaDefaultKeyboard(Adw.Bin):
+    __gtype_name__ = "VanillaDefaultKeyboard"
 
     status_page = Gtk.Template.Child()
 
@@ -33,7 +34,7 @@ class VanillaDefaultLanguage(Adw.Bin):
         super().__init__(**kwargs)
         self.__window = window
 
-        self.__location_page = VanillaDefaultLocation(window, _("Language"), lang.LanguagesDataSource())
+        self.__location_page = VanillaDefaultLocation(window, _("Keyboard"), kbd.KeyboardsDataSource())
         self.status_page.set_child(self.__location_page)
 
     def set_page_active(self):
@@ -46,5 +47,11 @@ class VanillaDefaultLanguage(Adw.Bin):
 
     def finish(self):
         self.__location_page.finish()
-        language = self.__location_page.selected_special
-        return backend.set_locale(language)
+        keyboard = self.__location_page.selected_special
+        success = backend.set_live_keyboard(keyboard)
+        if not success:
+            return False
+        success = backend.set_keyboard(keyboard)
+        if not success:
+            return False
+        return True
