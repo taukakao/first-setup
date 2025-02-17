@@ -88,6 +88,7 @@ class VanillaProgress(Adw.Bin):
         icon = None
         if id == "setup_system":
             icon = Gtk.Image.new_from_icon_name("computer")
+            # TODO: fix translations for _ stuff
             title = _("Setting up the system")
         elif id == "install_flatpak":
             icon = Gtk.Image.new_from_resource(
