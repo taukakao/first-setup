@@ -7,12 +7,12 @@ Build-Depends:
             debhelper,
             python3,
             meson,
-            libadwaita-1-dev,
             gettext,
             desktop-file-utils,
             make,
-            libjpeg-dev,
-            ninja-build
+            ninja-build,
+            pkgconf,
+            libgio-2.0-dev
 Homepage: https://github.com/mirkobrombin/vanilla-first-setup/
 Vcs-Browser: hhttps://github.com/mirkobrombin/vanilla-first-setup
 Vcs-Git: https://github.com/mirkobrombin/vanilla-first-setup.git
