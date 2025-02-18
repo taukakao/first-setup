@@ -38,14 +38,25 @@ desktop_file = i18n.merge_file(
   type: 'desktop',
   po_dir: '../po',
   install: true,
-  install_dir: join_paths(get_option('datadir'), 'applications')
+  install_dir: join_paths(get_option('datadir'), 'applications'),
 )
 
-desktop_utils = find_program('desktop-file-validate', required: false)
-if desktop_utils.found()
-  test('Validate desktop file', desktop_utils,
-    args: [desktop_file]
-  )
-endif
+install_autostart = custom_target(
+  'install-autostart-desktop',
+  input: desktop_file,
+  output: 'org.vanillaos.FirstSetup.autostart.desktop',
+  command: ['cp', '@INPUT@', '@OUTPUT@'],
+  install_dir: join_paths(get_option('sysconfdir'), 'skel', '.config', 'autostart'),
+  build_by_default: true,
+  install : true,
+)
+
+desktop_validate = custom_target(
+  'validate-desktop-file',
+  command: ['desktop-file-validate', '@INPUT@'],
+  input: desktop_file,
+  output: 'desktop-file-validation',
+  build_by_default: true,
+)
 
 subdir('icons')
