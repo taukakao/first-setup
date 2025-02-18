@@ -41,7 +41,7 @@ desktop_file = i18n.merge_file(
   install_dir: join_paths(get_option('datadir'), 'applications'),
 )
 
-install_autostart = custom_target(
+custom_target(
   'install-autostart-desktop',
   input: desktop_file,
   output: 'org.vanillaos.FirstSetup.autostart.desktop',
@@ -51,7 +51,7 @@ install_autostart = custom_target(
   install : true,
 )
 
-desktop_validate = custom_target(
+custom_target(
   'validate-desktop-file',
   command: ['desktop-file-validate', '@INPUT@'],
   input: desktop_file,
