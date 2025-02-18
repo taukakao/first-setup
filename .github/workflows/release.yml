@@ -5,6 +5,8 @@ on:
     tags:
       - '*'
 
+# TODO: publish .deb to github release
+
 jobs:
   build-artifacts:
     runs-on: ubuntu-latest
