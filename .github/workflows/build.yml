@@ -24,7 +24,7 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          apt install -y debhelper python3 gettext build-essential desktop-file-utils ninja-build meson libadwaita-1-dev make libnm-dev libnma-dev libnma-gtk4-dev
+          apt install -y build-essential debhelper python3 meson libadwaita-1-dev gettext desktop-file-utils make libjpeg-dev ninja-build
 
       - name: Build .deb package
         run: |
