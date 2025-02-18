@@ -51,12 +51,11 @@ custom_target(
   install : true,
 )
 
-custom_target(
-  'validate-desktop-file',
-  command: ['desktop-file-validate', '@INPUT@'],
-  input: desktop_file,
-  output: 'desktop-file-validation',
-  build_by_default: true,
-)
+desktop_utils = find_program('desktop-file-validate', required: false)
+if desktop_utils.found()
+  test('Validate desktop file', desktop_utils,
+    args: [desktop_file]
+  )
+endif
 
 subdir('icons')
