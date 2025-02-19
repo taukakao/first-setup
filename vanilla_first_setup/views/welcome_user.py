@@ -59,5 +59,4 @@ class VanillaWelcomeUser(Adw.Bin):
         self.__window.finish_step()
 
     def __on_btn_access_clicked(self, widget):
-        # TODO: run in thread
         backend.open_accessibility_settings()

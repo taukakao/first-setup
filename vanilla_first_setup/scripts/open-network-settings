@@ -10,4 +10,6 @@ if [ "$UID" == "0" ]; then
     exit 7
 fi
 
-gnome-control-center wifi
+setsid gnome-control-center wifi
+sleep 0.3
+ps -ef | grep gnome-control-center | grep -vq grep || echo not started successfully
