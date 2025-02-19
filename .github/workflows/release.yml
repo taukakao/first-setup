@@ -20,13 +20,15 @@ jobs:
     steps:
         - uses: actions/checkout@v4
   
-        - name: Get the version
-          id: get_version
-          run: echo "{VERSION}={$(cat VERSION)}" >> $GITHUB_OUTPUT
+        - name: Set meson version by tag
+          id: set_version
+          run: |
+            sed -i 's/VTESTING/${{ github.ref_name }}/g' meson.build
   
         - name: Install build dependencies
           run: |
-            apt install -y debhelper python3 gettext build-essential desktop-file-utils ninja-build meson libadwaita-1-dev make libnm-dev libnma-dev libnma-gtk4-dev
+            apt-get update
+            apt-get build-dep -y .
   
         - name: Build .deb package
           run: |

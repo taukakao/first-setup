@@ -1,3 +1,5 @@
+# TODO: adjust readme
+
 <div align="center">
     <img src="data/icons/hicolor/scalable/apps/org.vanillaos.FirstSetup.svg">
     <h1>Vanilla OS First Setup</h1>

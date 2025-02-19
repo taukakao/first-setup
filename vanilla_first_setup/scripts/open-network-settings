@@ -1,0 +1,16 @@
+#!/bin/bash
+if ! [ -z "$1" ]; then
+    echo "usage:"
+    echo "open-network-settings"
+    exit 5
+fi
+
+if [ "$UID" == "0" ]; then
+    echo "this script must be run as a regular user"
+    exit 7
+fi
+
+# detach gcc so that it doesn't block FirstSetup
+setsid gnome-control-center wifi &
+sleep 0.3
+ps -ef | grep gnome-control-center | grep -vq grep || echo not started successfully
