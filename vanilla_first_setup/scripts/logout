@@ -10,7 +10,4 @@ if [ "$UID" == "0" ]; then
     exit 7
 fi
 
-# TODO: consider setting vanilla user to invisible for AccountsService
-# see https://github.com/Vanilla-OS/first-setup/blob/4f7f49908ff32503c995a97253af0e796f279627/__first_setup_reset_session#L3
-# and https://github.com/Vanilla-OS/first-setup/blob/4f7f49908ff32503c995a97253af0e796f279627/recipe.json#L10
 loginctl terminate-user "$USER"

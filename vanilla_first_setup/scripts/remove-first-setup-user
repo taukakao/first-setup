@@ -10,4 +10,6 @@ if ! [ "$UID" == "0" ]; then
     exit 6
 fi
 
+echo -e '[User]\nSession=firstsetup\nSystemAccount=true' > /var/lib/AccountsService/users/$(id -nu $PKEXEC_UID || echo invaliduser)
+systemctl restart accounts-daemon.service
 systemctl enable remove-first-setup-user.service
