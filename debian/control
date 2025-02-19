@@ -29,5 +29,6 @@ Depends: python3,
          gir1.2-gtk-4.0,
          gir1.2-adw-1,
          gir1.2-gweather-4.0,
-         gir1.2-gnomedesktop-4.0
+         gir1.2-gnomedesktop-4.0,
+         pkexec
 Description: This utility is meant to be used in Vanilla GNOME as a first-setup wizard.
