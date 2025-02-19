@@ -10,6 +10,7 @@ if [ "$UID" == "0" ]; then
     exit 7
 fi
 
-setsid gnome-control-center wifi
+# detach gcc so that it doesn't block FirstSetup
+setsid gnome-control-center wifi &
 sleep 0.3
 ps -ef | grep gnome-control-center | grep -vq grep || echo not started successfully
