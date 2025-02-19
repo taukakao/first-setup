@@ -42,11 +42,12 @@ class VanillaWindow(Adw.ApplicationWindow):
     pages = []
     __current_page_index = 0
 
-    def __init__(self, moduledir: str, configure_system_mode: bool, **kwargs):
+    def __init__(self, moduledir: str, configure_system_mode: bool, oem_mode: bool = False, **kwargs):
         super().__init__(**kwargs)
 
         self.moduledir = moduledir
         self.configure_system_mode = configure_system_mode
+        self.oem_mode = oem_mode
 
         self.__build_ui(configure_system_mode)
         self.__connect_signals()
@@ -95,11 +96,11 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __build_ui(self, configure_system_mode: bool):
 
         if configure_system_mode:
-            # TODO: skip pages if not OEM
             from vanilla_first_setup.views.welcome import VanillaWelcome
-            from vanilla_first_setup.views.language import VanillaLanguage
-            from vanilla_first_setup.views.keyboard import VanillaKeyboard
-            from vanilla_first_setup.views.timezone import VanillaTimezone
+            if self.oem_mode:
+                from vanilla_first_setup.views.language import VanillaLanguage
+                from vanilla_first_setup.views.keyboard import VanillaKeyboard
+                from vanilla_first_setup.views.timezone import VanillaTimezone
             from vanilla_first_setup.views.hostname import VanillaHostname
             from vanilla_first_setup.views.user import VanillaUser
             from vanilla_first_setup.views.logout import VanillaLogout
@@ -107,19 +108,24 @@ class VanillaWindow(Adw.ApplicationWindow):
             self.__view_welcome = VanillaWelcome(self)
             self.__view_welcome.no_next_button = True
             self.__view_welcome.no_back_button = True
-            self.__view_language = VanillaLanguage(self)
-            self.__view_language.no_back_button = True
-            self.__view_keyboard = VanillaKeyboard(self)
-            self.__view_timezone = VanillaTimezone(self)
-            self.__view_hostname = VanillaHostname(self)
+            if self.oem_mode:
+                self.__view_language = VanillaLanguage(self)
+                self.__view_language.no_back_button = True
+                self.__view_keyboard = VanillaKeyboard(self)
+                self.__view_timezone = VanillaTimezone(self)
+                self.__view_hostname = VanillaHostname(self)
+            else:
+                self.__view_hostname = VanillaHostname(self)
+                self.__view_hostname.no_back_button = True
             self.__view_user = VanillaUser(self)
             self.__view_logout = VanillaLogout(self)
             self.__view_logout.no_next_button = True
 
             self.pages.append(self.__view_welcome)
-            self.pages.append(self.__view_language)
-            self.pages.append(self.__view_keyboard)
-            self.pages.append(self.__view_timezone)
+            if self.oem_mode:
+                self.pages.append(self.__view_language)
+                self.pages.append(self.__view_keyboard)
+                self.pages.append(self.__view_timezone)
             self.pages.append(self.__view_hostname)
             self.pages.append(self.__view_user)
             self.pages.append(self.__view_logout)

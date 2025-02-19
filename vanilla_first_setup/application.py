@@ -92,6 +92,14 @@ class FirstSetupApplication(Adw.Application):
             _("Force the regular mode, independant of group."),
             None,
         )
+        self.add_main_option(
+            "oem-mode",
+            ord("o"),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _("Use the original equipment manufacturer mode with language, keyboard and timezone selection."),
+            None,
+        )
 
     def do_command_line(self, command_line):
         """Handle command line arguments."""
@@ -105,6 +113,7 @@ class FirstSetupApplication(Adw.Application):
         
         self.force_configure = bool(options.lookup_value("force-configure-mode"))
         self.force_regular = bool(options.lookup_value("force-regular-mode"))
+        self.oem_mode = bool(options.lookup_value("oem-mode"))
         
         backend.set_dry_run(self.dry_run)
             
@@ -147,6 +156,7 @@ class FirstSetupApplication(Adw.Application):
                 application=self,
                 moduledir=self.moduledir,
                 configure_system_mode=configure_system_mode,
+                oem_mode=self.oem_mode,
             )
         win.present()
 
