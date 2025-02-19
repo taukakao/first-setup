@@ -3,7 +3,7 @@ Description=Remove the first-setup user from the system
 
 [Service]
 ExecStart=/usr/libexec/remove-first-setup-user
-Type=simple
+Type=oneshot
 Restart=on-failure
 
 [Install]

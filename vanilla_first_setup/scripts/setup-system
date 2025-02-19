@@ -11,3 +11,4 @@ if [ "$UID" == "0" ]; then
 fi
 
 vso pico-init
+vso run echo vso subsystem set up successfully

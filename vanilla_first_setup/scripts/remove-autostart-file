@@ -10,4 +10,4 @@ if [ "$UID" == "0" ]; then
     exit 7
 fi
 
-rm "~/.config/autostart/org.vanillaos.FirstSetup.autostart.desktop"
+rm ~/.config/autostart/org.vanillaos.FirstSetup.autostart.desktop

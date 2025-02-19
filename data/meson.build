@@ -65,7 +65,7 @@ install_data(
 
 install_data(
   'remove-first-setup-user',
-  install_dir: get_option('libexecdir')
+  install_dir: join_paths(get_option('prefix'), 'libexec')
 )
 
 subdir('icons')

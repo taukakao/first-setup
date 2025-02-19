@@ -61,8 +61,8 @@
   </action>
 
   <action id="org.vanillaos.FirstSetup.scripts.removeFirstSetupUser">
-    <description>FirstSetup user script</description>
-    <message>Add a user to the system</message>
+    <description>FirstSetup remove FirstSetup user script</description>
+    <message>Remove FirstSetup user from the system</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
