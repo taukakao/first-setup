@@ -11,4 +11,9 @@ if ! [ "$UID" == "0" ]; then
 fi
 
 echo "$1" > /etc/timezone
+CODE_ONE="$?"
+rm /etc/localtime
 ln -sf "/usr/share/zoneinfo/$1" /etc/localtime
+CODE_TWO="$?"
+
+exit $(($CODE_ONE + $CODE_TWO))

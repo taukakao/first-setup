@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ -z "$1" ] || [ -z "$2" ]; then
     echo "usage:"
-    echo "keyboard <model> <layout> <variant>"
+    echo "keyboard <model> <layout> [variant]"
     exit 5
 fi
 
