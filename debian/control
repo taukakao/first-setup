@@ -13,7 +13,8 @@ Build-Depends:
             ninja-build,
             pkgconf,
             libgio-2.0-dev,
-            libxml2-utils
+            libxml2-utils,
+            gtk-update-icon-cache
 Homepage: https://github.com/mirkobrombin/vanilla-first-setup/
 Vcs-Browser: hhttps://github.com/mirkobrombin/vanilla-first-setup
 Vcs-Git: https://github.com/mirkobrombin/vanilla-first-setup.git
