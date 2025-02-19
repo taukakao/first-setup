@@ -74,7 +74,6 @@ def _install_flatpak(id: str):
     return run_script("flatpak", [id])
 
 
-# TODO: add timeout
 def run_script(name: str, args: list[str], root: bool = False) -> bool:
     if dry_run:
         print("dry-run", name, args)
@@ -94,7 +93,12 @@ def run_script(name: str, args: list[str], root: bool = False) -> bool:
         text=True
     )
 
-    result, _ = process.communicate()
+    result = ""
+    try:
+        result, _ = process.communicate(timeout=300)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        result, _ = process.communicate()
 
     if process.returncode != 0:
         report_error(name, command, result)
