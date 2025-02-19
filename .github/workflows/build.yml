@@ -18,10 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get the version
-        id: get_version
-        run: echo "{VERSION}={$(cat VERSION)}" >> $GITHUB_OUTPUT
-
       - name: Install build dependencies
         run: |
           apt-get update

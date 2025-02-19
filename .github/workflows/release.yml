@@ -5,8 +5,6 @@ on:
     tags:
       - '*'
 
-# TODO: publish .deb to github release
-
 jobs:
   build-artifacts:
     runs-on: ubuntu-latest
@@ -22,9 +20,10 @@ jobs:
     steps:
         - uses: actions/checkout@v4
   
-        - name: Get the version
-          id: get_version
-          run: echo "{VERSION}={$(cat VERSION)}" >> $GITHUB_OUTPUT
+        - name: Set meson version by tag
+          id: set_version
+          run: |
+            sed -i 's/VTESTING/${{ github.ref_name }}/g' meson.build
   
         - name: Install build dependencies
           run: |
