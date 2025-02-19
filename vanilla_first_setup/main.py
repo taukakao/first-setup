@@ -34,7 +34,6 @@ def main(version, moduledir: str, localedir: str):
     locale.textdomain('vanilla-first-setup')
     gettext.install('vanilla-first-setup', localedir)
 
-    # TODO: fix icons
     resource = Gio.Resource.load(os.path.join(moduledir, 'vanilla-first-setup.gresource'))
     resource._register()
 

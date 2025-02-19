@@ -12,7 +12,8 @@ Build-Depends:
             make,
             ninja-build,
             pkgconf,
-            libgio-2.0-dev
+            libgio-2.0-dev,
+            libxml2-utils
 Homepage: https://github.com/mirkobrombin/vanilla-first-setup/
 Vcs-Browser: hhttps://github.com/mirkobrombin/vanilla-first-setup
 Vcs-Git: https://github.com/mirkobrombin/vanilla-first-setup.git

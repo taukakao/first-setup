@@ -24,7 +24,8 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          apt install -y build-essential debhelper python3 meson gettext desktop-file-utils make ninja-build pkgconf libgio-2.0-dev
+          apt-get update
+          apt-get build-dep -y .
 
       - name: Build .deb package
         run: |

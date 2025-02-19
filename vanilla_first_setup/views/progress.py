@@ -74,7 +74,7 @@ class VanillaProgress(Adw.Bin):
             status_suffix = Gtk.Image.new_from_icon_name("emblem-default-symbolic")
             status_suffix.add_css_class("success")
         elif state == backend.ProgressState.Failed:
-            status_suffix = Gtk.Image.new_from_icon_name("dialog-warning")
+            status_suffix = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
             status_suffix.add_css_class("error")
 
         if "suffix" in self.actions[uid]:
@@ -87,12 +87,10 @@ class VanillaProgress(Adw.Bin):
         title = ""
         icon = None
         if id == "setup_system":
-            icon = Gtk.Image.new_from_icon_name("computer")
+            icon = Gtk.Image.new_from_icon_name("computer-symbolic")
             title = _("Setting up the system")
         elif id == "install_flatpak":
-            icon = Gtk.Image.new_from_resource(
-                "/org/vanillaos/FirstSetup/assets/bundle-app-icons/" + info["app_id"] + ".png"
-            )
+            icon = Gtk.Image.new_from_icon_name(info["app_id"])
             title = _("Installing") + " " + info["app_name"]
     
         row = Adw.ActionRow()

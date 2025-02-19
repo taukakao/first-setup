@@ -69,11 +69,7 @@ class VanillaApplicationsDialog(Adw.Window):
             apps_action_row = Adw.ActionRow(
                 title=app["name"],
             )
-            app_icon = Gtk.Image.new_from_resource(
-                "/org/vanillaos/FirstSetup/assets/bundle-app-icons/"
-                + app["id"]
-                + ".png"
-            )
+            app_icon = Gtk.Image.new_from_icon_name(app["id"])
             app_icon.set_icon_size(Gtk.IconSize.LARGE)
             app_icon.add_css_class("lowres-icon")
 
