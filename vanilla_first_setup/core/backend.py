@@ -74,6 +74,7 @@ def _install_flatpak(id: str):
     return run_script("flatpak", [id])
 
 
+# TODO: add timeout
 def run_script(name: str, args: list[str], root: bool = False) -> bool:
     if dry_run:
         print("dry-run", name, args)

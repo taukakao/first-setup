@@ -95,6 +95,7 @@ class VanillaWindow(Adw.ApplicationWindow):
     def __build_ui(self, configure_system_mode: bool):
 
         if configure_system_mode:
+            # TODO: skip pages if not OEM
             from vanilla_first_setup.views.welcome import VanillaWelcome
             from vanilla_first_setup.views.language import VanillaLanguage
             from vanilla_first_setup.views.keyboard import VanillaKeyboard

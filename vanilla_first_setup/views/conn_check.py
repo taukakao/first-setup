@@ -83,5 +83,6 @@ class VanillaConnCheck(Adw.Bin):
             GLib.idle_add(self.__window.finish_step)
 
     def __on_btn_settings_clicked(self, widget):
+        # TODO: run in thread
         backend.open_network_settings()
         return
