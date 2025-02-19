@@ -50,6 +50,7 @@ class VanillaProgress(Adw.Bin):
         return
 
     def finish(self):
+        backend.remove_autostart_file()
         return True
     
     def __on_items_changed_thread(self, id: str, uid: str, state: backend.ProgressState, info: dict):
