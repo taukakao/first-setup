@@ -58,4 +58,14 @@ if desktop_utils.found()
   )
 endif
 
+install_data(
+  'remove-first-setup-user.service',
+  install_dir: join_paths(get_option('prefix'), 'lib', 'systemd', 'system')
+)
+
+install_data(
+  'remove-first-setup-user',
+  install_dir: get_option('libexecdir')
+)
+
 subdir('icons')

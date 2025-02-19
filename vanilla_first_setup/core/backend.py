@@ -61,6 +61,9 @@ def disable_lockscreen():
 def setup_flatpak_remote():
     return run_script("setup-flatpak-remote", [])
 
+def remove_first_setup_user():
+    return run_script("remove-first-setup-user", [], root=True)
+
 def _setup_system():
     return run_script("setup-system", [])
 

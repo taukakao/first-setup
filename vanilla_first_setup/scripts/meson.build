@@ -16,6 +16,7 @@ sources = [
   'open-accessibility-settings',
   'setup-system',
   'user',
+  'remove-first-setup-user',
 ]
 
 install_data(sources, install_dir: scriptsdir)
