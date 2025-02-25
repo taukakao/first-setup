@@ -60,7 +60,7 @@ endif
 
 install_data(
   'remove-first-setup-user.service',
-  install_dir: join_paths(get_option('prefix'), 'lib', 'systemd', 'system')
+  install_dir: join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
 )
 
 install_data(
