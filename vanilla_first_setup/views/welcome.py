@@ -110,4 +110,5 @@ class VanillaWelcome(Adw.Bin):
         self.__window.finish_step()
 
     def __on_btn_access_clicked(self, widget):
-        backend.open_accessibility_settings()
+        thread = threading.Thread(target=backend.open_accessibility_settings)
+        thread.start()

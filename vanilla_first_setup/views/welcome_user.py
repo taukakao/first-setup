@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import threading
 import os
 import pwd
 
@@ -59,4 +60,5 @@ class VanillaWelcomeUser(Adw.Bin):
         self.__window.finish_step()
 
     def __on_btn_access_clicked(self, widget):
-        backend.open_accessibility_settings()
+        thread = threading.Thread(target=backend.open_accessibility_settings)
+        thread.start()

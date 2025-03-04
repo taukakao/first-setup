@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import threading
 import logging
 _ = __builtins__["_"]
 
@@ -83,5 +84,6 @@ class VanillaConnCheck(Adw.Bin):
             GLib.idle_add(self.__window.finish_step)
 
     def __on_btn_settings_clicked(self, widget):
-        backend.open_network_settings()
+        thread = threading.Thread(target=backend.open_network_settings)
+        thread.start()
         return
