@@ -8,6 +8,7 @@ for USER in $USERS_IN_FIRST_SETUP_GROUP; do
         if ! [ "$?" == 0 ]; then
             exit 1
         fi
+        rm "/var/lib/AccountsService/users/$USER"
     else
         echo "User $USER does not exist."
     fi
