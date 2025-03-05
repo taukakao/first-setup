@@ -76,7 +76,7 @@ These can be found here:
 ### Installing
 
 ```bash
-apt-get install ./vanilla-first-setup*.deb
+sudo apt-get install ./vanilla-first-setup*.deb
 ```
 
 or manually with meson:
