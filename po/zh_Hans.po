@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: vanilla-first-setup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 23:33+0100\n"
+"POT-Creation-Date: 2025-03-05 02:32+0100\n"
 "PO-Revision-Date: 2024-01-25 16:01+0000\n"
 "Last-Translator: lakejason0 <sunliyuan200402@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -266,46 +266,52 @@ msgstr ""
 msgid "Select the applications you want to install"
 msgstr ""
 
-#: vanilla_first_setup/window.py:73
+#: vanilla_first_setup/window.py:74
 msgid "Setup failed: "
 msgstr ""
 
-#: vanilla_first_setup/window.py:78
+#: vanilla_first_setup/window.py:79
 #, fuzzy
 msgid "Details"
 msgstr "设备详情"
 
-#: vanilla_first_setup/window.py:84
+#: vanilla_first_setup/window.py:85
 #, fuzzy
 msgid "Error log"
 msgstr "出错了！"
 
-#: vanilla_first_setup/application.py:77
+#: vanilla_first_setup/application.py:76
 msgid "Don't make any changes to the system."
 msgstr ""
 
-#: vanilla_first_setup/application.py:85
+#: vanilla_first_setup/application.py:84
 msgid "Force the configure system mode, independant of group."
 msgstr ""
 
-#: vanilla_first_setup/application.py:93
+#: vanilla_first_setup/application.py:92
 msgid "Force the regular mode, independant of group."
 msgstr ""
 
-#: vanilla_first_setup/views/conn_check.py:71
+#: vanilla_first_setup/application.py:100
+msgid ""
+"Use the original equipment manufacturer mode with language, keyboard and "
+"timezone selection."
+msgstr ""
+
+#: vanilla_first_setup/views/conn_check.py:72
 msgid "No Internet Connection!"
 msgstr "没有互联网连接！"
 
-#: vanilla_first_setup/views/conn_check.py:72
+#: vanilla_first_setup/views/conn_check.py:73
 msgid "First Setup requires an active internet connection"
 msgstr "初始设置需要有效的互联网链接"
 
-#: vanilla_first_setup/views/conn_check.py:78
+#: vanilla_first_setup/views/conn_check.py:79
 #, fuzzy
 msgid "Connection available"
 msgstr "连接失败"
 
-#: vanilla_first_setup/views/conn_check.py:79
+#: vanilla_first_setup/views/conn_check.py:80
 #, fuzzy
 msgid "You have a working internet connection"
 msgstr "没有互联网连接！"
@@ -347,15 +353,15 @@ msgstr ""
 msgid "Timezone"
 msgstr ""
 
-#: vanilla_first_setup/views/welcome_user.py:44
+#: vanilla_first_setup/views/welcome_user.py:45
 msgid "Hello {}!"
 msgstr ""
 
-#: vanilla_first_setup/views/progress.py:91
+#: vanilla_first_setup/views/progress.py:94
 msgid "Setting up the system"
 msgstr ""
 
-#: vanilla_first_setup/views/progress.py:96
+#: vanilla_first_setup/views/progress.py:97
 #, fuzzy
 msgid "Installing"
 msgstr "正在安装..."
