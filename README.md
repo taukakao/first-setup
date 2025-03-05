@@ -71,7 +71,7 @@ These can be found here:
 [debian/control](https://github.com/Vanilla-OS/first-setup/blob/main/debian/control)
 
 > [!TIP]   
-> If you use apt-get to install the .deb file it will automatically install the d dependencies### Build
+> If you use apt-get to install the .deb file it will automatically install the dependencies.
 
 ### Installing
 
