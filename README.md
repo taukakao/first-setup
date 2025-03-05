@@ -46,7 +46,7 @@ If you want to install the build dependencies manually, have a look in:
 ### Building
 
 > [!WARNING]  
-> dpkg-buildpackage places files into the parent folder.
+> dpkg-buildpackage places it's output files (Like the .deb file) into the parent folder.
 
 ```bash
 dpkg-buildpackage
