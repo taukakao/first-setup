@@ -121,4 +121,10 @@ vanilla-first-setup
 - --force-regular-mode (-r): Force the regular mode, independant of group.
 - --oem-mode (-o): Use the original equipment manufacturer mode with language, keyboard and timezone selection.
 
+## Update translation file
 
+To update the .pot file with newly added translation strings, run:
+
+```bash
+meson compile -C build vanilla-first-setup-pot
+```
